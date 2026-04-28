@@ -9,8 +9,8 @@
   // --- Cinematic page loader ---
   const loader = document.getElementById('page-loader');
   if (loader) {
-    // After the delta glare animation finishes (~2.6s), fade out the loader
-    const loaderDuration = 2800;
+    // After the delta glare animation finishes, fade out the loader
+    const loaderDuration = 2200;
     setTimeout(() => {
       loader.classList.add('done');
       // Start hero typing sequence after loader fades
