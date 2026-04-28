@@ -1,0 +1,5 @@
+/* Tailwind source file — only used if you switch from CDN to a local build.
+   See README.md "Production build" section for instructions. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

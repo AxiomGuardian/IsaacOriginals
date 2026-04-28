@@ -1,0 +1,14 @@
+{
+  "name": "isaacoriginals",
+  "version": "1.0.0",
+  "private": true,
+  "description": "IsaacOriginals.com — honest documentation of the grind, under Christ.",
+  "scripts": {
+    "dev": "tailwindcss -i ./src/input.css -o ./assets/css/tailwind.css --watch",
+    "build": "tailwindcss -i ./src/input.css -o ./assets/css/tailwind.css --minify",
+    "serve": "npx http-server . -p 5173 -c-1 -o"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.0"
+  }
+}

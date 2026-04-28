@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Apex — AI agency built with integrity · Isaac Originals</title>
+  <meta name="description" content="Apex is a Phoenix-based AI agency. Real systems for real businesses, built under Christ to fund Kingdom work." />
+  <meta name="theme-color" content="#0A0A0A" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: {
+        colors: { ink: {DEFAULT:'#F5F1EA',muted:'#6B6760'}, bg:{DEFAULT:'#0A0A0A',soft:'#111111',line:'rgba(255,255,255,0.08)'}, accent:{DEFAULT:'#FFFFFF',muted:'#B0ADA6'} },
+        fontFamily: { grotesk: ['"Space Grotesk"','system-ui','sans-serif'] },
+      }},
+    };
+  </script>
+  <link rel="stylesheet" href="/assets/css/styles.css" />
+  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg" />
+</head>
+
+<body class="font-grotesk bg-bg text-ink antialiased">
+
+  <!-- NAV — I.O mark left, centered links, glow hover -->
+  <header class="glass-nav sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center">
+      <!-- I.O Mark — left -->
+      <a href="/index.html" class="flex-shrink-0">
+        <img src="/assets/images/io-mark.png" alt="Isaac Originals" style="height:32px;width:auto;" />
+      </a>
+
+      <!-- Centered nav links -->
+      <nav class="hidden md:flex items-center justify-center gap-6 text-[0.82rem] flex-1">
+        <a data-nav="index.html"   class="nav-link text-ink/50" href="/index.html">Home</a>
+        <a data-nav="journey.html" class="nav-link text-ink/50" href="/journey.html">The Journey</a>
+        <a data-nav="apex.html"    class="nav-link text-ink/50" href="/apex.html">Apex</a>
+        <a data-nav="kit.html"     class="nav-link text-ink/50" href="/kit.html">K.I.T.</a>
+        <a data-nav="journal.html" class="nav-link text-ink/50" href="/journal.html">Journal</a>
+        <a data-nav="rules.html"   class="nav-link text-ink/50" href="/rules.html">The Rules</a>
+        <a data-nav="about.html"   class="nav-link text-ink/50" href="/about.html">About</a>
+      </nav>
+
+      <!-- Spacer to balance the logo on the left -->
+      <div class="hidden md:block flex-shrink-0 w-[100px]"></div>
+
+      <!-- Mobile menu button -->
+      <button id="menu-btn" aria-expanded="false" aria-controls="mobile-menu" class="md:hidden ml-auto p-2 text-ink" type="button">
+        <svg id="icon-open"  class="w-6 h-6"        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
+        <svg id="icon-close" class="w-6 h-6 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden border-t border-bg-line">
+      <nav class="flex flex-col px-6 py-4 gap-4 text-[0.95rem]">
+        <a class="text-ink/80 hover:text-ink" href="/index.html">Home</a>
+        <a class="text-ink/80 hover:text-ink" href="/journey.html">The Journey</a>
+        <a class="text-ink/80 hover:text-ink" href="/apex.html">Apex</a>
+        <a class="text-ink/80 hover:text-ink" href="/kit.html">K.I.T.</a>
+        <a class="text-ink/80 hover:text-ink" href="/journal.html">Journal</a>
+        <a class="text-ink/80 hover:text-ink" href="/rules.html">The Rules</a>
+        <a class="text-ink/80 hover:text-ink" href="/about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="relative hero-bg grain overflow-hidden">
+    <div class="max-w-6xl mx-auto px-6 pt-20 pb-16 md:pt-28 md:pb-24 relative">
+      <p class="eyebrow reveal">Apex</p>
+      <h1 class="h-display mt-6 text-4xl md:text-6xl max-w-4xl reveal">
+        AI agency built with integrity.<br/>
+        <span class="text-white">No snake oil. No vaporware.</span>
+      </h1>
+      <p class="mt-6 max-w-2xl text-ink/70 reveal">
+        Apex builds real AI systems for real businesses. The work pays the bills, sharpens the
+        craft, and funds the Kingdom work behind it.
+      </p>
+    </div>
+  </section>
+
+  <!-- WHAT IT IS -->
+  <section class="max-w-6xl mx-auto px-6 py-20 md:py-28">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+      <div class="lg:col-span-5 reveal">
+        <p class="eyebrow">What it is</p>
+        <h2 class="h-display text-3xl md:text-4xl mt-3">An agency, not an audience.</h2>
+      </div>
+      <div class="lg:col-span-7 space-y-5 text-ink/80 leading-relaxed reveal">
+        <p>
+          Apex is a small, founder-led AI agency in Phoenix. We design and build
+          internal tools, automations, and AI systems that move real numbers for
+          real teams — the kind you can measure in hours saved, sales closed, or
+          tickets eliminated.
+        </p>
+        <p>
+          We don't sell prompts. We don't sell hype. We sit with the problem
+          until we understand it, then we build the smallest thing that solves it.
+          Then we improve it on a schedule, not a sprint.
+        </p>
+        <p class="text-ink-muted">
+          If your "AI strategy" is a deck, you don't have one. We ship.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="max-w-6xl mx-auto px-6"><div class="rule"></div></div>
+
+  <!-- WHAT WE BUILD -->
+  <section class="max-w-6xl mx-auto px-6 py-20 md:py-28">
+    <p class="eyebrow reveal">What we build</p>
+    <h2 class="h-display text-3xl md:text-5xl mt-3 max-w-3xl reveal">Three doors in.</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-12">
+      <div class="card p-7 reveal">
+        <p class="text-white text-xs uppercase tracking-widest">01</p>
+        <h3 class="h-display text-xl mt-4">Internal AI tools</h3>
+        <p class="mt-3 text-ink/70 text-sm leading-relaxed">
+          Custom assistants and copilots wired into your data — sales, ops, support, finance. Built once, owned forever.
+        </p>
+      </div>
+      <div class="card p-7 reveal">
+        <p class="text-white text-xs uppercase tracking-widest">02</p>
+        <h3 class="h-display text-xl mt-4">Workflow automation</h3>
+        <p class="mt-3 text-ink/70 text-sm leading-relaxed">
+          The boring, profitable kind. Inbox triage, lead enrichment, document parsing — quiet wins that compound.
+        </p>
+      </div>
+      <div class="card p-7 reveal">
+        <p class="text-white text-xs uppercase tracking-widest">03</p>
+        <h3 class="h-display text-xl mt-4">Founder advisory</h3>
+        <p class="mt-3 text-ink/70 text-sm leading-relaxed">
+          For operators who want a clear-eyed AI roadmap. We tell you what to skip, what to build, and what to pay for.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="max-w-6xl mx-auto px-6"><div class="rule"></div></div>
+
+  <!-- BUILD PROGRESS -->
+  <section class="max-w-6xl mx-auto px-6 py-20 md:py-28">
+    <div class="flex items-end justify-between gap-6 mb-10">
+      <div>
+        <p class="eyebrow reveal">Current build</p>
+        <h2 class="h-display text-3xl md:text-5xl mt-3 reveal">What's actually shipping.</h2>
+      </div>
+      <p class="hidden md:block text-ink-muted text-sm max-w-xs text-right reveal">
+        Real status, not a roadmap. Updated as work moves.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="card p-6 reveal">
+        <div class="flex items-center justify-between">
+          <span class="text-xs uppercase tracking-widest text-ink-muted">Client #1</span>
+          <span class="text-xs text-white">Live</span>
+        </div>
+        <p class="mt-5 text-lg">Sales follow-up agent</p>
+        <p class="mt-2 text-sm text-ink/70">Cut response time from 2 days to 10 minutes. Six months in production.</p>
+      </div>
+      <div class="card p-6 reveal">
+        <div class="flex items-center justify-between">
+          <span class="text-xs uppercase tracking-widest text-ink-muted">Client #2</span>
+          <span class="text-xs text-white">Live</span>
+        </div>
+        <p class="mt-5 text-lg">Internal knowledge assistant</p>
+        <p class="mt-2 text-sm text-ink/70">RAG over five years of company docs. Replaces the "ask Steve" bottleneck.</p>
+      </div>
+      <div class="card p-6 reveal">
+        <div class="flex items-center justify-between">
+          <span class="text-xs uppercase tracking-widest text-ink-muted">Client #3</span>
+          <span class="text-xs text-white/60">In build</span>
+        </div>
+        <p class="mt-5 text-lg">Document intake pipeline</p>
+        <p class="mt-2 text-sm text-ink/70">Parsing + classifying inbound contracts. Targeting Q2 2026 launch.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="max-w-6xl mx-auto px-6"><div class="rule"></div></div>
+
+  <!-- WHY THIS WORK -->
+  <section class="max-w-4xl mx-auto px-6 py-24">
+    <p class="eyebrow reveal">Why this work, under Christ</p>
+    <h2 class="h-display text-3xl md:text-4xl mt-3 reveal">Skill is stewardship.</h2>
+    <div class="mt-8 space-y-5 text-ink/80 leading-relaxed reveal">
+      <p>
+        I don't separate "secular" work from Kingdom work. Building useful, honest
+        software for a business owner who's trying to feed his family is Kingdom
+        work. Doing it with excellence, on time, without lying — is worship.
+      </p>
+      <p>
+        Apex revenue funds K.I.T. The cleaner Apex runs, the more freely the next
+        thing gets built. That's the loop.
+      </p>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="max-w-6xl mx-auto px-6 pb-24">
+    <div class="card p-8 md:p-12 text-center reveal">
+      <p class="eyebrow">Get in touch</p>
+      <h3 class="h-display text-2xl md:text-3xl mt-3">Have a problem worth solving?</h3>
+      <p class="mt-3 text-ink/70 max-w-xl mx-auto">
+        I take on a small number of engagements per quarter. If your team needs
+        AI work done by someone who'll tell you the truth about it, write me.
+      </p>
+      <!-- Replace the mailto with your real intake link / form -->
+      <a href="mailto:isaac@isaacoriginals.com?subject=Apex%20engagement"
+         class="inline-flex items-center gap-2 mt-7 px-5 py-3 border border-white/30 text-white hover:bg-white hover:text-black transition text-sm tracking-wider uppercase">
+        Email Isaac
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-white/[0.06]">
+    <div class="max-w-6xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4 text-ink-muted text-sm">
+      <p>Built in obedience. &copy; <span id="year">2026</span> Isaac Originals.</p>
+      <p class="text-ink/60">Matthew 6:33 — Seek first the Kingdom.</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js" defer></script>
+</body>
+</html>

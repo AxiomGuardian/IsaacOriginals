@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About — Isaac Originals</title>
+  <meta name="description" content="Who I am. Why I document everything publicly. What I'm building under Christ." />
+  <meta name="theme-color" content="#0A0A0A" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: {
+        colors: { ink: {DEFAULT:'#F5F1EA',muted:'#6B6760'}, bg:{DEFAULT:'#0A0A0A',soft:'#111111',line:'rgba(255,255,255,0.08)'}, accent:{DEFAULT:'#FFFFFF',muted:'#B0ADA6'} },
+        fontFamily: { grotesk: ['"Space Grotesk"','system-ui','sans-serif'] },
+      }},
+    };
+  </script>
+  <link rel="stylesheet" href="/assets/css/styles.css" />
+  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg" />
+</head>
+
+<body class="font-grotesk bg-bg text-ink antialiased">
+
+  <!-- NAV — I.O mark left, centered links, glow hover -->
+  <header class="glass-nav sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center">
+      <!-- I.O Mark — left -->
+      <a href="/index.html" class="flex-shrink-0">
+        <img src="/assets/images/io-mark.png" alt="Isaac Originals" style="height:32px;width:auto;" />
+      </a>
+
+      <!-- Centered nav links -->
+      <nav class="hidden md:flex items-center justify-center gap-6 text-[0.82rem] flex-1">
+        <a data-nav="index.html"   class="nav-link text-ink/50" href="/index.html">Home</a>
+        <a data-nav="journey.html" class="nav-link text-ink/50" href="/journey.html">The Journey</a>
+        <a data-nav="apex.html"    class="nav-link text-ink/50" href="/apex.html">Apex</a>
+        <a data-nav="kit.html"     class="nav-link text-ink/50" href="/kit.html">K.I.T.</a>
+        <a data-nav="journal.html" class="nav-link text-ink/50" href="/journal.html">Journal</a>
+        <a data-nav="rules.html"   class="nav-link text-ink/50" href="/rules.html">The Rules</a>
+        <a data-nav="about.html"   class="nav-link text-ink/50" href="/about.html">About</a>
+      </nav>
+
+      <!-- Spacer to balance the logo on the left -->
+      <div class="hidden md:block flex-shrink-0 w-[100px]"></div>
+
+      <!-- Mobile menu button -->
+      <button id="menu-btn" aria-expanded="false" aria-controls="mobile-menu" class="md:hidden ml-auto p-2 text-ink" type="button">
+        <svg id="icon-open"  class="w-6 h-6"        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
+        <svg id="icon-close" class="w-6 h-6 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden border-t border-bg-line">
+      <nav class="flex flex-col px-6 py-4 gap-4 text-[0.95rem]">
+        <a class="text-ink/80 hover:text-ink" href="/index.html">Home</a>
+        <a class="text-ink/80 hover:text-ink" href="/journey.html">The Journey</a>
+        <a class="text-ink/80 hover:text-ink" href="/apex.html">Apex</a>
+        <a class="text-ink/80 hover:text-ink" href="/kit.html">K.I.T.</a>
+        <a class="text-ink/80 hover:text-ink" href="/journal.html">Journal</a>
+        <a class="text-ink/80 hover:text-ink" href="/rules.html">The Rules</a>
+        <a class="text-ink/80 hover:text-ink" href="/about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="relative hero-bg grain overflow-hidden">
+    <div class="max-w-6xl mx-auto px-6 pt-20 pb-16 md:pt-28 md:pb-24 relative">
+      <p class="eyebrow reveal">About</p>
+      <h1 class="h-display mt-6 text-4xl md:text-6xl max-w-4xl reveal">
+        I'm Isaac.<br/>
+        <span class="text-white">22. Building under Christ.</span>
+      </h1>
+    </div>
+  </section>
+
+  <!-- BIO -->
+  <section class="max-w-3xl mx-auto px-6 py-20 md:py-28">
+    <div class="space-y-6 text-ink/85 text-lg leading-relaxed">
+      <p class="reveal">
+        I'm wired to build. Christ tells me who I am — everything else is just context.
+      </p>
+      <p class="reveal">
+        I run an AI agency called <a href="/apex.html" class="accent-underline">Apex</a>. It pays the bills,
+        and the bills are honest. The longer-term vision is
+        <a href="/kit.html" class="accent-underline">K.I.T. — Kingdom Initiative Technologies</a>:
+        software built to disciple, equip, and connect the Church.
+      </p>
+      <p class="reveal">
+        I document publicly because I've noticed two things about myself: when no one is
+        watching, I drift; and when I pretend, I rot. The Journal exists to fix both. The
+        Rules exist to keep the Journal honest. The work exists because Christ has put real
+        problems in front of me, and there's no spiritual reason to dodge them.
+      </p>
+      <p class="reveal">
+        I'm not a pastor. I'm not a guru. I'm not selling a system. I'm one young man trying
+        to be obedient with what's been put in his hands. If any of this serves you — praise God.
+        If it doesn't, also praise God.
+      </p>
+    </div>
+  </section>
+
+  <div class="max-w-6xl mx-auto px-6"><div class="rule"></div></div>
+
+  <!-- QUICK FACTS -->
+  <section class="max-w-4xl mx-auto px-6 py-20">
+    <p class="eyebrow reveal">Quick facts</p>
+    <dl class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-5 text-ink/85">
+      <div class="flex justify-between border-b border-bg-line py-3 reveal"><dt class="text-ink-muted">Age</dt><dd>22</dd></div>
+      <div class="flex justify-between border-b border-bg-line py-3 reveal"><dt class="text-ink-muted">Faith</dt><dd>Follower of Jesus</dd></div>
+      <div class="flex justify-between border-b border-bg-line py-3 reveal"><dt class="text-ink-muted">Building</dt><dd>Apex · K.I.T.</dd></div>
+    </dl>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="max-w-4xl mx-auto px-6 pb-28">
+    <div class="card p-8 md:p-10 reveal">
+      <h3 class="h-display text-2xl">Reach out.</h3>
+      <p class="mt-3 text-ink/70">
+        Apex inquiries, prayer, or just a word from the Lord — I read everything.
+      </p>
+      <a href="mailto:isaac@isaacoriginals.com"
+         class="inline-flex items-center gap-2 mt-6 px-5 py-3 border border-white/30 text-white hover:bg-white hover:text-black transition text-sm tracking-wider uppercase">
+        isaac@isaacoriginals.com
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-white/[0.06]">
+    <div class="max-w-6xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4 text-ink-muted text-sm">
+      <p>Built in obedience. &copy; <span id="year">2026</span> Isaac Originals.</p>
+      <p class="text-ink/60">Matthew 6:33 — Seek first the Kingdom.</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js" defer></script>
+</body>
+</html>

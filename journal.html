@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Journal — Isaac Originals</title>
+  <meta name="description" content="Raw, chronological entries from the grind. No filters." />
+  <meta name="theme-color" content="#0A0A0A" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: {
+        colors: { ink: {DEFAULT:'#F5F1EA',muted:'#6B6760'}, bg:{DEFAULT:'#0A0A0A',soft:'#111111',line:'rgba(255,255,255,0.08)'}, accent:{DEFAULT:'#FFFFFF',muted:'#B0ADA6'} },
+        fontFamily: { grotesk: ['"Space Grotesk"','system-ui','sans-serif'] },
+      }},
+    };
+  </script>
+  <link rel="stylesheet" href="/assets/css/styles.css" />
+  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg" />
+</head>
+
+<body class="font-grotesk bg-bg text-ink antialiased">
+
+  <!-- NAV — I.O mark left, centered links, glow hover -->
+  <header class="glass-nav sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center">
+      <!-- I.O Mark — left -->
+      <a href="/index.html" class="flex-shrink-0">
+        <img src="/assets/images/io-mark.png" alt="Isaac Originals" style="height:32px;width:auto;" />
+      </a>
+
+      <!-- Centered nav links -->
+      <nav class="hidden md:flex items-center justify-center gap-6 text-[0.82rem] flex-1">
+        <a data-nav="index.html"   class="nav-link text-ink/50" href="/index.html">Home</a>
+        <a data-nav="journey.html" class="nav-link text-ink/50" href="/journey.html">The Journey</a>
+        <a data-nav="apex.html"    class="nav-link text-ink/50" href="/apex.html">Apex</a>
+        <a data-nav="kit.html"     class="nav-link text-ink/50" href="/kit.html">K.I.T.</a>
+        <a data-nav="journal.html" class="nav-link text-ink/50" href="/journal.html">Journal</a>
+        <a data-nav="rules.html"   class="nav-link text-ink/50" href="/rules.html">The Rules</a>
+        <a data-nav="about.html"   class="nav-link text-ink/50" href="/about.html">About</a>
+      </nav>
+
+      <!-- Spacer to balance the logo on the left -->
+      <div class="hidden md:block flex-shrink-0 w-[100px]"></div>
+
+      <!-- Mobile menu button -->
+      <button id="menu-btn" aria-expanded="false" aria-controls="mobile-menu" class="md:hidden ml-auto p-2 text-ink" type="button">
+        <svg id="icon-open"  class="w-6 h-6"        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
+        <svg id="icon-close" class="w-6 h-6 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden border-t border-bg-line">
+      <nav class="flex flex-col px-6 py-4 gap-4 text-[0.95rem]">
+        <a class="text-ink/80 hover:text-ink" href="/index.html">Home</a>
+        <a class="text-ink/80 hover:text-ink" href="/journey.html">The Journey</a>
+        <a class="text-ink/80 hover:text-ink" href="/apex.html">Apex</a>
+        <a class="text-ink/80 hover:text-ink" href="/kit.html">K.I.T.</a>
+        <a class="text-ink/80 hover:text-ink" href="/journal.html">Journal</a>
+        <a class="text-ink/80 hover:text-ink" href="/rules.html">The Rules</a>
+        <a class="text-ink/80 hover:text-ink" href="/about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="relative hero-bg grain overflow-hidden">
+    <div class="max-w-6xl mx-auto px-6 pt-20 pb-12 md:pt-28 md:pb-16 relative">
+      <p class="eyebrow reveal">Journal</p>
+      <h1 class="h-display mt-6 text-4xl md:text-6xl max-w-4xl reveal">
+        The raw feed.<br/>
+        <span class="text-white">What actually happened today.</span>
+      </h1>
+      <p class="mt-6 max-w-2xl text-ink/70 reveal">
+        Written in the morning or at night. Sometimes both. No editor. No polish pass.
+      </p>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       JOURNAL FEED
+       PATTERN TO COPY for new entries:
+
+       <article class="py-14 reveal">
+         <header class="flex items-center gap-4 text-xs uppercase tracking-widest text-ink-muted">
+           <time datetime="YYYY-MM-DD">{Month} {DD}, {YYYY}</time>
+           <span>·</span>
+           <span class="text-white">{TAG}</span>
+         </header>
+         <h2 class="h-display text-2xl md:text-3xl mt-3">{Entry title}</h2>
+         <div class="mt-6 space-y-4 text-ink/80 leading-relaxed">
+           <p>…</p>
+         </div>
+         <div class="mt-8 video-16x9"> … </div>
+       </article>
+
+       Keep newest at the top. Tags to use: Build · Struggle · Word · Body · Wins · Reset.
+       ========================================================= -->
+
+  <section class="max-w-3xl mx-auto px-6 py-10 md:py-14 divide-y divide-bg-line">
+
+    <article class="py-14 reveal">
+      <header class="flex items-center gap-4 text-xs uppercase tracking-widest text-ink-muted">
+        <time datetime="2026-04-19">April 19, 2026</time>
+        <span>·</span>
+        <span class="text-white">Reset</span>
+      </header>
+      <h2 class="h-display text-2xl md:text-3xl mt-3">Day 12 — the part nobody films.</h2>
+      <div class="mt-6 space-y-4 text-ink/85 leading-relaxed">
+        <p>
+          Woke up flat. Didn't want to pray. Didn't want to train. Did both anyway.
+          Opened the Apex pipeline and the client deliverable was uglier than I remembered.
+        </p>
+        <p>
+          Obedience isn't a vibe. It's showing up when the fuel tank reads empty and
+          the only honest prayer you've got is "God, I don't feel like this." He meets
+          that one every time.
+        </p>
+        <p>
+          Trained legs. Ate clean. Re-read Matthew 6 on the back porch before bed.
+          Nothing went viral today. Nothing needed to.
+        </p>
+      </div>
+
+      <div class="mt-8 video-16x9">
+        <!-- Swap this block with an <iframe> or <video>:
+             <video src="/assets/video/day-12.mp4" controls poster="/assets/images/day-12.jpg"></video>
+        -->
+        <div class="flex flex-col items-center justify-center text-ink-muted">
+          <svg class="w-9 h-9 mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M5 4l15 8-15 8z"/></svg>
+          <span class="text-xs uppercase tracking-widest">Video clip slot</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="py-14 reveal">
+      <header class="flex items-center gap-4 text-xs uppercase tracking-widest text-ink-muted">
+        <time datetime="2026-04-17">April 17, 2026</time>
+        <span>·</span>
+        <span class="text-white">Struggle</span>
+      </header>
+      <h2 class="h-display text-2xl md:text-3xl mt-3">Lust almost took the morning.</h2>
+      <div class="mt-6 space-y-4 text-ink/85 leading-relaxed">
+        <p>
+          No story to brag about. The phone almost won. I put it in the other room, poured
+          cold water on my face, walked outside until the sun hit me. Prayed out loud — not
+          pretty, but out loud.
+        </p>
+        <p>
+          I'm writing this publicly because the enemy works in private. Keeping this fight
+          in the light isn't an aesthetic choice — it's a tactical one.
+        </p>
+      </div>
+    </article>
+
+    <article class="py-14 reveal">
+      <header class="flex items-center gap-4 text-xs uppercase tracking-widest text-ink-muted">
+        <time datetime="2026-04-15">April 15, 2026</time>
+        <span>·</span>
+        <span class="text-white">Build</span>
+      </header>
+      <h2 class="h-display text-2xl md:text-3xl mt-3">Apex intake pipeline — first real commit.</h2>
+      <div class="mt-6 space-y-4 text-ink/85 leading-relaxed">
+        <p>
+          Five hours on a single parser. Client workflow shrunk from a 30-minute manual step
+          to about 12 seconds. Won't be impressive to anyone on the outside; it's the whole
+          game on the inside.
+        </p>
+        <p>
+          Reminded myself: writing boring code for one small business owner, under Christ,
+          is not a lesser calling. It is the calling this week.
+        </p>
+      </div>
+    </article>
+
+    <article class="py-14 reveal">
+      <header class="flex items-center gap-4 text-xs uppercase tracking-widest text-ink-muted">
+        <time datetime="2026-04-12">April 12, 2026</time>
+        <span>·</span>
+        <span class="text-white">Word</span>
+      </header>
+      <h2 class="h-display text-2xl md:text-3xl mt-3">Reading Proverbs 3 slowly.</h2>
+      <div class="mt-6 space-y-4 text-ink/85 leading-relaxed">
+        <p>
+          "Lean not on your own understanding." I keep getting stuck there. My own
+          understanding has built every problem I'm now trying to undo. Leaning's the
+          whole move.
+        </p>
+      </div>
+    </article>
+
+    <article class="py-14 reveal">
+      <header class="flex items-center gap-4 text-xs uppercase tracking-widest text-ink-muted">
+        <time datetime="2026-04-08">April 8, 2026</time>
+        <span>·</span>
+        <span class="text-white">Body</span>
+      </header>
+      <h2 class="h-display text-2xl md:text-3xl mt-3">Supplement stack — honest audit.</h2>
+      <div class="mt-6 space-y-4 text-ink/85 leading-relaxed">
+        <p>
+          Cut two things I was taking out of habit. Kept creatine, magnesium, fish oil,
+          vitamin D. If I can't say why it's in my body, it doesn't go in my body.
+        </p>
+        <p class="text-ink-muted">
+          This is not advice. Talk to a doctor. This is a log.
+        </p>
+      </div>
+    </article>
+
+    <article class="py-14 reveal">
+      <header class="flex items-center gap-4 text-xs uppercase tracking-widest text-ink-muted">
+        <time datetime="2026-04-05">April 5, 2026</time>
+        <span>·</span>
+        <span class="text-white">Wins</span>
+      </header>
+      <h2 class="h-display text-2xl md:text-3xl mt-3">Apex client #2 signed the SOW.</h2>
+      <div class="mt-6 space-y-4 text-ink/85 leading-relaxed">
+        <p>
+          Thanked God out loud in the truck before I even told anyone. Then I told my pastor
+          before I told Twitter. The order matters.
+        </p>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- Footer hint for more entries -->
+  <section class="max-w-3xl mx-auto px-6 pb-24">
+    <p class="text-ink-muted text-sm reveal">
+      Older entries will live here as the feed grows. Nothing gets deleted — even the
+      bad days stay on record.
+    </p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-white/[0.06]">
+    <div class="max-w-6xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4 text-ink-muted text-sm">
+      <p>Built in obedience. &copy; <span id="year">2026</span> Isaac Originals.</p>
+      <p class="text-ink/60">Matthew 6:33 — Seek first the Kingdom.</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js" defer></script>
+</body>
+</html>

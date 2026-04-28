@@ -1,0 +1,9 @@
+node_modules/
+.DS_Store
+.vercel
+
+# Dead files — delete these manually
+assets/js/earth.js
+assets/images/hero-banner.png
+assets/images/Hero Banner.png
+assets/images/Transparent White I,O-Picsart-AiImageEnhancer.png

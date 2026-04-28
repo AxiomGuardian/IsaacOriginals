@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Rules — Isaac Originals</title>
+  <meta name="description" content="The non-negotiables: the foundation and stewardship commitments." />
+  <meta name="theme-color" content="#0A0A0A" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: {
+        colors: { ink: {DEFAULT:'#F5F1EA',muted:'#6B6760'}, bg:{DEFAULT:'#0A0A0A',soft:'#111111',line:'rgba(255,255,255,0.08)'}, accent:{DEFAULT:'#FFFFFF',muted:'#B0ADA6'} },
+        fontFamily: { grotesk: ['"Space Grotesk"','system-ui','sans-serif'] },
+      }},
+    };
+  </script>
+  <link rel="stylesheet" href="/assets/css/styles.css" />
+  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg" />
+</head>
+
+<body class="font-grotesk bg-bg text-ink antialiased">
+
+  <!-- NAV — I.O mark left, centered links, glow hover -->
+  <header class="glass-nav sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center">
+      <!-- I.O Mark — left -->
+      <a href="/index.html" class="flex-shrink-0">
+        <img src="/assets/images/io-mark.png" alt="Isaac Originals" style="height:32px;width:auto;" />
+      </a>
+
+      <!-- Centered nav links -->
+      <nav class="hidden md:flex items-center justify-center gap-6 text-[0.82rem] flex-1">
+        <a data-nav="index.html"   class="nav-link text-ink/50" href="/index.html">Home</a>
+        <a data-nav="journey.html" class="nav-link text-ink/50" href="/journey.html">The Journey</a>
+        <a data-nav="apex.html"    class="nav-link text-ink/50" href="/apex.html">Apex</a>
+        <a data-nav="kit.html"     class="nav-link text-ink/50" href="/kit.html">K.I.T.</a>
+        <a data-nav="journal.html" class="nav-link text-ink/50" href="/journal.html">Journal</a>
+        <a data-nav="rules.html"   class="nav-link text-ink/50" href="/rules.html">The Rules</a>
+        <a data-nav="about.html"   class="nav-link text-ink/50" href="/about.html">About</a>
+      </nav>
+
+      <!-- Spacer to balance the logo on the left -->
+      <div class="hidden md:block flex-shrink-0 w-[100px]"></div>
+
+      <!-- Mobile menu button -->
+      <button id="menu-btn" aria-expanded="false" aria-controls="mobile-menu" class="md:hidden ml-auto p-2 text-ink" type="button">
+        <svg id="icon-open"  class="w-6 h-6"        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
+        <svg id="icon-close" class="w-6 h-6 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden border-t border-bg-line">
+      <nav class="flex flex-col px-6 py-4 gap-4 text-[0.95rem]">
+        <a class="text-ink/80 hover:text-ink" href="/index.html">Home</a>
+        <a class="text-ink/80 hover:text-ink" href="/journey.html">The Journey</a>
+        <a class="text-ink/80 hover:text-ink" href="/apex.html">Apex</a>
+        <a class="text-ink/80 hover:text-ink" href="/kit.html">K.I.T.</a>
+        <a class="text-ink/80 hover:text-ink" href="/journal.html">Journal</a>
+        <a class="text-ink/80 hover:text-ink" href="/rules.html">The Rules</a>
+        <a class="text-ink/80 hover:text-ink" href="/about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="relative hero-bg grain overflow-hidden">
+    <div class="max-w-6xl mx-auto px-6 pt-20 pb-16 md:pt-28 md:pb-24 relative">
+      <p class="eyebrow reveal">The Rules</p>
+      <h1 class="h-display mt-6 text-4xl md:text-6xl max-w-4xl reveal">
+        Non-negotiables.<br/>
+        <span class="text-white">Public so I can't hide.</span>
+      </h1>
+      <p class="mt-6 max-w-2xl text-ink/70 reveal">
+        A man without rules is a man being ruled. These are mine. They exist to keep me
+        near Christ, clear-headed, and available for the work He's put in front of me.
+      </p>
+    </div>
+  </section>
+
+  <!-- THE FOUNDATION -->
+  <section class="max-w-4xl mx-auto px-6 py-20 md:py-24">
+    <p class="eyebrow reveal">Rule 0</p>
+    <h2 class="h-display text-3xl md:text-4xl mt-3 reveal">Christ is the foundation.</h2>
+    <p class="mt-5 text-ink/80 leading-relaxed reveal">
+      Every rule below is downstream of this one. If a rule ever competes with Christ,
+      the rule loses. If I'm keeping rules to earn His favor, I'm already off.
+    </p>
+  </section>
+
+  <div class="max-w-6xl mx-auto px-6"><div class="rule"></div></div>
+
+  <!-- STEWARDSHIP -->
+  <section class="max-w-5xl mx-auto px-6 py-20 md:py-24">
+    <p class="eyebrow reveal">Rule 1</p>
+    <h2 class="h-display text-3xl md:text-4xl mt-3 reveal">Stewardship commitments.</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-10">
+      <div class="card p-7 reveal">
+        <h3 class="h-display text-xl">Body</h3>
+        <p class="mt-3 text-ink/70 text-sm leading-relaxed">Strength train 4x. Zone-2 cardio 2x. Sleep 7+ hrs. Whole foods. Supplements logged, not stacked blindly.</p>
+      </div>
+      <div class="card p-7 reveal">
+        <h3 class="h-display text-xl">Mind</h3>
+        <p class="mt-3 text-ink/70 text-sm leading-relaxed">One book a month minimum. Scripture daily. No podcast binges that replace thinking.</p>
+      </div>
+      <div class="card p-7 reveal">
+        <h3 class="h-display text-xl">Money</h3>
+        <p class="mt-3 text-ink/70 text-sm leading-relaxed">Tithe first, save second, spend last. No lifestyle creep. Every dollar is on loan from the Lord.</p>
+      </div>
+      <div class="card p-7 reveal">
+        <h3 class="h-display text-xl">Time</h3>
+        <p class="mt-3 text-ink/70 text-sm leading-relaxed">Deep work windows are sacred. Meetings only when they move something. Sabbath every week — fully off.</p>
+      </div>
+      <div class="card p-7 reveal">
+        <h3 class="h-display text-xl">Relationships</h3>
+        <p class="mt-3 text-ink/70 text-sm leading-relaxed">Local church, weekly. Call my family. Show up for friends in person. No one gets "ghosted."</p>
+      </div>
+      <div class="card p-7 reveal">
+        <h3 class="h-display text-xl">Work</h3>
+        <p class="mt-3 text-ink/70 text-sm leading-relaxed">Ship what I said I'd ship. Charge fairly. Never oversell. If it breaks, I own it publicly.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-white/[0.06]">
+    <div class="max-w-6xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4 text-ink-muted text-sm">
+      <p>Built in obedience. &copy; <span id="year">2026</span> Isaac Originals.</p>
+      <p class="text-ink/60">Matthew 6:33 — Seek first the Kingdom.</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js" defer></script>
+</body>
+</html>

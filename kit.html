@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>K.I.T. — Kingdom Initiative Technologies · Isaac Originals</title>
+  <meta name="description" content="K.I.T. is the long-game vision: software and tools to disciple, equip, and connect the Church." />
+  <meta name="theme-color" content="#0A0A0A" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: {
+        colors: { ink: {DEFAULT:'#F5F1EA',muted:'#6B6760'}, bg:{DEFAULT:'#0A0A0A',soft:'#111111',line:'rgba(255,255,255,0.08)'}, accent:{DEFAULT:'#D4A24C',deep:'#A6763C',glow:'#E8B56A'} },
+        fontFamily: { grotesk: ['"Space Grotesk"','system-ui','sans-serif'] },
+      }},
+    };
+  </script>
+  <link rel="stylesheet" href="/assets/css/styles.css" />
+  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg" />
+</head>
+
+<body class="font-grotesk bg-bg text-ink antialiased kit-theme">
+
+  <!-- NAV — I.O mark left, centered links, glow hover -->
+  <header class="glass-nav sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center">
+      <!-- I.O Mark — left -->
+      <a href="/index.html" class="flex-shrink-0">
+        <img src="/assets/images/io-mark.png" alt="Isaac Originals" style="height:32px;width:auto;" />
+      </a>
+
+      <!-- Centered nav links -->
+      <nav class="hidden md:flex items-center justify-center gap-6 text-[0.82rem] flex-1">
+        <a data-nav="index.html"   class="nav-link text-ink/50" href="/index.html">Home</a>
+        <a data-nav="journey.html" class="nav-link text-ink/50" href="/journey.html">The Journey</a>
+        <a data-nav="apex.html"    class="nav-link text-ink/50" href="/apex.html">Apex</a>
+        <a data-nav="kit.html"     class="nav-link text-ink/50" href="/kit.html">K.I.T.</a>
+        <a data-nav="journal.html" class="nav-link text-ink/50" href="/journal.html">Journal</a>
+        <a data-nav="rules.html"   class="nav-link text-ink/50" href="/rules.html">The Rules</a>
+        <a data-nav="about.html"   class="nav-link text-ink/50" href="/about.html">About</a>
+      </nav>
+
+      <!-- Spacer to balance the logo on the left -->
+      <div class="hidden md:block flex-shrink-0 w-[100px]"></div>
+
+      <!-- Mobile menu button -->
+      <button id="menu-btn" aria-expanded="false" aria-controls="mobile-menu" class="md:hidden ml-auto p-2 text-ink" type="button">
+        <svg id="icon-open"  class="w-6 h-6"        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
+        <svg id="icon-close" class="w-6 h-6 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden border-t border-bg-line">
+      <nav class="flex flex-col px-6 py-4 gap-4 text-[0.95rem]">
+        <a class="text-ink/80 hover:text-ink" href="/index.html">Home</a>
+        <a class="text-ink/80 hover:text-ink" href="/journey.html">The Journey</a>
+        <a class="text-ink/80 hover:text-ink" href="/apex.html">Apex</a>
+        <a class="text-ink/80 hover:text-ink" href="/kit.html">K.I.T.</a>
+        <a class="text-ink/80 hover:text-ink" href="/journal.html">Journal</a>
+        <a class="text-ink/80 hover:text-ink" href="/rules.html">The Rules</a>
+        <a class="text-ink/80 hover:text-ink" href="/about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="relative hero-bg grain overflow-hidden">
+    <div class="max-w-6xl mx-auto px-6 pt-20 pb-16 md:pt-28 md:pb-24 relative">
+      <p class="eyebrow reveal">K.I.T.</p>
+      <h1 class="h-display mt-6 text-4xl md:text-6xl max-w-4xl reveal">
+        Kingdom Initiative<br/>Technologies.
+      </h1>
+      <p class="mt-6 max-w-2xl text-ink/70 reveal">
+        Software and tools to disciple, equip, and connect the Church. In the listening
+        phase — not the launch phase.
+      </p>
+    </div>
+  </section>
+
+  <!-- THE VISION -->
+  <section class="max-w-6xl mx-auto px-6 py-20 md:py-28">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+      <div class="lg:col-span-5 reveal">
+        <p class="eyebrow">The vision</p>
+        <h2 class="h-display text-3xl md:text-4xl mt-3">Technology bent toward the Church.</h2>
+      </div>
+      <div class="lg:col-span-7 space-y-5 text-ink/80 leading-relaxed reveal">
+        <p>
+          The enemy has used technology to disciple a generation into anxiety,
+          distraction, and counterfeit identity. The Church doesn't need to hide from the
+          tools — she needs saints willing to rebuild them, on purpose, under Christ.
+        </p>
+        <p>
+          K.I.T. is my attempt at that. Not another Christian app. A slow, prayerful
+          body of work — built with the same standards as anything shipped at Apex,
+          but aimed at souls instead of pipelines.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="max-w-6xl mx-auto px-6"><div class="rule"></div></div>
+
+  <!-- PILLARS -->
+  <section class="max-w-6xl mx-auto px-6 py-20 md:py-28">
+    <p class="eyebrow reveal">What it could become</p>
+    <h2 class="h-display text-3xl md:text-5xl mt-3 max-w-3xl reveal">Three directions I'm praying over.</h2>
+    <p class="mt-5 text-ink/70 max-w-2xl reveal">
+      These are not products. They are possible obedience points. Whatever the Lord
+      confirms, that's what gets built.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-12">
+      <div class="card p-7 reveal">
+        <p class="text-accent text-xs uppercase tracking-widest">Disciple</p>
+        <h3 class="h-display text-xl mt-4">Tools for daily formation.</h3>
+        <p class="mt-3 text-ink/70 text-sm leading-relaxed">
+          Scripture, prayer, examen, accountability — simple rhythms, not a dopamine app.
+          Built to disappear into real life, not replace it.
+        </p>
+      </div>
+      <div class="card p-7 reveal">
+        <p class="text-accent text-xs uppercase tracking-widest">Equip</p>
+        <h3 class="h-display text-xl mt-4">Tools for local church workers.</h3>
+        <p class="mt-3 text-ink/70 text-sm leading-relaxed">
+          Lightweight software for pastors, ministry leaders, and missionaries who
+          can't afford an IT team — and who were never meant to be one.
+        </p>
+      </div>
+      <div class="card p-7 reveal">
+        <p class="text-accent text-xs uppercase tracking-widest">Connect</p>
+        <h3 class="h-display text-xl mt-4">Tools for real community.</h3>
+        <p class="mt-3 text-ink/70 text-sm leading-relaxed">
+          Anti-scroll. Anti-clout. Pro-presence. Technology that pushes believers
+          off the screen and into each other's living rooms.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="max-w-6xl mx-auto px-6"><div class="rule"></div></div>
+
+  <!-- GUARDRAILS -->
+  <section class="max-w-5xl mx-auto px-6 py-20 md:py-28">
+    <p class="eyebrow reveal">Guardrails</p>
+    <h2 class="h-display text-3xl md:text-4xl mt-3 reveal">What K.I.T. will never be.</h2>
+    <ul class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-5 text-ink/85">
+      <li class="flex items-start gap-3 reveal"><span class="mt-2 w-1.5 h-1.5 bg-accent rounded-full shrink-0"></span>An attention farm. No infinite scroll. No streaks engineered to exploit.</li>
+      <li class="flex items-start gap-3 reveal"><span class="mt-2 w-1.5 h-1.5 bg-accent rounded-full shrink-0"></span>A personality cult. The founder is not the point.</li>
+      <li class="flex items-start gap-3 reveal"><span class="mt-2 w-1.5 h-1.5 bg-accent rounded-full shrink-0"></span>A theological free-for-all. Orthodox, Christ-centered, Scripture-rooted.</li>
+      <li class="flex items-start gap-3 reveal"><span class="mt-2 w-1.5 h-1.5 bg-accent rounded-full shrink-0"></span>A VC rocketship. Slow, funded by real work, free to stay small.</li>
+      <li class="flex items-start gap-3 reveal"><span class="mt-2 w-1.5 h-1.5 bg-accent rounded-full shrink-0"></span>A substitute for the local church. Every tool points back to her.</li>
+      <li class="flex items-start gap-3 reveal"><span class="mt-2 w-1.5 h-1.5 bg-accent rounded-full shrink-0"></span>Built in secret. You'll see every brick — in the Journal.</li>
+    </ul>
+  </section>
+
+  <!-- PRAYER / CTA -->
+  <section class="max-w-4xl mx-auto px-6 py-24">
+    <blockquote class="verse text-xl md:text-2xl leading-relaxed reveal">
+      "Unless the Lord builds the house, the builders labor in vain." — Psalm 127:1.
+      K.I.T. waits on that verse. If it never ships, it was never His.
+    </blockquote>
+
+    <div class="card p-8 md:p-10 mt-10 reveal">
+      <h3 class="h-display text-xl">Want to pray for K.I.T. with me?</h3>
+      <p class="mt-3 text-ink/70">
+        I read everything that comes in. If the Lord puts a word on your heart — send it.
+      </p>
+      <a href="mailto:isaac@isaacoriginals.com?subject=Praying%20for%20K.I.T."
+         class="inline-flex items-center gap-2 mt-6 px-5 py-3 border border-accent text-accent hover:bg-accent hover:text-bg transition text-sm tracking-wider uppercase">
+        Send a word
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-bg-line">
+    <div class="max-w-6xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4 text-ink-muted text-sm">
+      <p>Built in obedience. &copy; <span id="year">2026</span> Isaac Originals.</p>
+      <p class="text-ink/60">Matthew 6:33 — Seek first the Kingdom.</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js" defer></script>
+</body>
+</html>
