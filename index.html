@@ -34,15 +34,17 @@
   </script>
 
   <link rel="stylesheet" href="/assets/css/styles.css" />
-  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/images/favicon-192.png" />
+  <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png" />
 </head>
 
 <body class="font-grotesk bg-bg text-ink antialiased">
 
-  <!-- PAGE LOADER -->
+  <!-- PAGE LOADER — cinematic Delta -->
   <div class="page-loader" id="page-loader">
     <div class="delta-loader-wrap">
-      <img src="/assets/images/delta-mark.png" alt="" />
+      <img src="/assets/images/delta-logo.png" alt="" />
     </div>
   </div>
 
@@ -50,7 +52,7 @@
   <header class="glass-nav sticky top-0 z-50">
     <div class="max-w-6xl mx-auto px-6 h-16 flex items-center">
       <a href="/index.html" class="flex-shrink-0">
-        <img src="/assets/images/io-mark.png" alt="Isaac Originals" style="height:32px;width:auto;" />
+        <img src="/assets/images/io-mark.png" alt="Isaac Originals" style="height:40px;width:auto;" />
       </a>
       <nav class="hidden md:flex items-center justify-center gap-6 text-[0.82rem] flex-1">
         <a data-nav="index.html"   class="nav-link text-ink/50" href="/index.html">Home</a>
@@ -79,6 +81,11 @@
   <!-- HERO -->
   <section class="relative overflow-hidden grain" style="background: #050505; min-height: 100vh;">
     <div id="hero-banner" style="position:absolute;inset:0;background:url('/assets/images/hero-banner.jpg') center center / cover no-repeat;"></div>
+    <style>
+      @media (max-width: 768px) and (orientation: portrait) {
+        #hero-banner { background-image: url('/assets/images/hero-banner-portrait.jpg') !important; }
+      }
+    </style>
     <div id="particles-container" style="position:absolute;inset:0;z-index:1;"></div>
     <div style="position:absolute;inset:0;z-index:2;background:linear-gradient(to bottom, transparent 40%, #0A0A0A);"></div>
     <div style="position:absolute;inset:0;z-index:2;background:linear-gradient(to top, rgba(10,10,10,0.8) 0%, transparent 50%);"></div>

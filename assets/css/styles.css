@@ -19,6 +19,21 @@
   --bg-line: rgba(212, 162, 76, 0.12);
 }
 
+/* ApexAERA cyan overrides */
+.apex-theme {
+  --bg: #0A0A0E;
+  --bg-card: rgba(255, 255, 255, 0.04);
+  --bg-line: rgba(255, 255, 255, 0.07);
+  --accent: #2DD4FF;
+  --ink-body: rgba(255, 255, 255, 0.75);
+  --ink-label: rgba(255, 255, 255, 0.35);
+}
+.apex-theme body,
+.apex-theme { background: #0A0A0E; }
+.apex-theme .text-ink\/70,
+.apex-theme .text-ink\/80,
+.apex-theme .text-ink\/85 { color: rgba(255, 255, 255, 0.75); }
+
 html { scroll-behavior: smooth; background: var(--bg); }
 
 body {
@@ -65,7 +80,7 @@ body {
   background: var(--bg-card);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
-  transition: border-color 250ms ease, transform 250ms ease;
+  transition: border-color 250ms ease, transform 250ms ease, box-shadow 250ms ease, background 250ms ease;
   position: relative;
 }
 
@@ -78,6 +93,76 @@ body {
   border-color: rgba(212, 162, 76, 0.2);
 }
 
+/* ApexAERA card overrides */
+.apex-theme .card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* ===================== AGENT CARDS ===================== */
+
+.agent-card {
+  border-left: 3px solid transparent;
+  transition: all 0.25s ease;
+}
+
+.agent-card:hover {
+  background: rgba(255, 255, 255, 0.07) !important;
+  transform: translateY(-2px);
+}
+
+.agent-card .agent-name {
+  transition: color 0.25s ease;
+}
+
+/* Sarah — AERA (#2DD4FF) */
+.agent-sarah:hover {
+  border-left-color: #2DD4FF;
+  box-shadow: 0 0 24px rgba(45, 212, 255, 0.15), 0 0 1px rgba(45, 212, 255, 0.30);
+}
+.agent-sarah:hover .agent-name { color: #2DD4FF; }
+.agent-sarah .agent-tag { color: rgba(45, 212, 255, 0.55); }
+
+/* Marcus (#F59E0B) */
+.agent-marcus:hover {
+  border-left-color: #F59E0B;
+  box-shadow: 0 0 24px rgba(245, 158, 11, 0.15), 0 0 1px rgba(245, 158, 11, 0.30);
+}
+.agent-marcus:hover .agent-name { color: #F59E0B; }
+.agent-marcus .agent-tag { color: rgba(245, 158, 11, 0.55); }
+
+/* Sophia (#A78BFA) */
+.agent-sophia:hover {
+  border-left-color: #A78BFA;
+  box-shadow: 0 0 24px rgba(167, 139, 250, 0.15), 0 0 1px rgba(167, 139, 250, 0.30);
+}
+.agent-sophia:hover .agent-name { color: #A78BFA; }
+.agent-sophia .agent-tag { color: rgba(167, 139, 250, 0.55); }
+
+/* Julian (#34D399) */
+.agent-julian:hover {
+  border-left-color: #34D399;
+  box-shadow: 0 0 24px rgba(52, 211, 153, 0.15), 0 0 1px rgba(52, 211, 153, 0.30);
+}
+.agent-julian:hover .agent-name { color: #34D399; }
+.agent-julian .agent-tag { color: rgba(52, 211, 153, 0.55); }
+
+/* Charlotte (#F472B6) */
+.agent-charlotte:hover {
+  border-left-color: #F472B6;
+  box-shadow: 0 0 24px rgba(244, 114, 182, 0.15), 0 0 1px rgba(244, 114, 182, 0.30);
+}
+.agent-charlotte:hover .agent-name { color: #F472B6; }
+.agent-charlotte .agent-tag { color: rgba(244, 114, 182, 0.55); }
+
+/* Victor Voss (#60A5FA) */
+.agent-victor:hover {
+  border-left-color: #60A5FA;
+  box-shadow: 0 0 24px rgba(96, 165, 250, 0.15), 0 0 1px rgba(96, 165, 250, 0.30);
+}
+.agent-victor:hover .agent-name { color: #60A5FA; }
+.agent-victor .agent-tag { color: rgba(96, 165, 250, 0.55); }
+
 /* ===================== LOADING SEQUENCE ===================== */
 
 .page-loader {
@@ -88,7 +173,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 600ms ease, visibility 600ms ease;
+  transition: opacity 800ms ease, visibility 800ms ease;
 }
 .page-loader.done {
   opacity: 0;
@@ -98,43 +183,95 @@ body {
 
 .delta-loader-wrap {
   position: relative;
-  width: 100px;
+  width: 120px;
   opacity: 0;
-  animation: deltaFadeIn 0.8s ease 0.2s forwards;
+  animation: deltaFadeIn 1s ease 0.3s forwards;
 }
 .delta-loader-wrap img {
   width: 100%;
   height: auto;
   display: block;
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.15));
 }
+
+/* Glow pulse behind the delta */
+.delta-loader-wrap::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%);
+  opacity: 0;
+  animation: deltaPulse 2s ease-in-out 0.5s forwards;
+  pointer-events: none;
+}
+
+/* Glare sweep across the delta */
 .delta-loader-wrap::after {
   content: "";
   position: absolute;
-  inset: -20%;
+  inset: -30%;
   background: linear-gradient(
     105deg,
     transparent 25%,
     rgba(255,255,255,0.0) 40%,
-    rgba(255,255,255,0.4) 48%,
-    rgba(255,255,255,0.6) 50%,
-    rgba(255,255,255,0.4) 52%,
+    rgba(255,255,255,0.35) 48%,
+    rgba(255,255,255,0.5) 50%,
+    rgba(255,255,255,0.35) 52%,
     rgba(255,255,255,0.0) 60%,
     transparent 75%
   );
   background-size: 300% 100%;
-  animation: glareSweep 1.4s ease-in-out 0.6s forwards;
+  animation: glareSweep 1.6s ease-in-out 0.8s forwards;
   background-position: 150% 0;
   pointer-events: none;
 }
 
 @keyframes deltaFadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  0% { opacity: 0; transform: scale(0.9); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes deltaPulse {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.2); }
 }
 
 @keyframes glareSweep {
   from { background-position: 150% 0; }
   to { background-position: -100% 0; }
+}
+
+/* ===================== BRAND LOGOS ON SUBPAGES ===================== */
+
+.brand-logo-wrap {
+  opacity: 0;
+  animation: brandLogoIn 1s ease 0.4s forwards;
+}
+
+.brand-logo-wrap img {
+  display: block;
+  max-height: 60px;
+  width: auto;
+}
+
+@keyframes brandLogoIn {
+  0% { opacity: 0; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Kit logo golden glow on load */
+.kit-theme .brand-logo-wrap img {
+  filter: drop-shadow(0 0 16px rgba(212, 162, 76, 0.25));
+}
+
+/* Apex logo cyan glow on load */
+.apex-theme .brand-logo-wrap img {
+  filter: drop-shadow(0 0 16px rgba(45, 212, 255, 0.25));
 }
 
 /* ===================== HERO ===================== */

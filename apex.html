@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ApexAERA — Intelligent Marketing Systems · Isaac Originals</title>
   <meta name="description" content="ApexAERA — Adaptive Elaborative Response Architecture. An AI-powered intelligent marketing system that runs campaigns, creates content, and scores leads." />
-  <meta name="theme-color" content="#0A0A0A" />
+  <meta name="theme-color" content="#0A0A0E" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,22 +16,24 @@
     tailwind.config = {
       darkMode: 'class',
       theme: { extend: {
-        colors: { ink: {DEFAULT:'#F5F5F5',muted:'#6B6760'}, bg:{DEFAULT:'#0A0A0A',soft:'#111111',line:'rgba(255,255,255,0.08)'}, accent:{DEFAULT:'#FFFFFF',muted:'#B0ADA6'} },
+        colors: { ink: {DEFAULT:'#F5F5F5',muted:'#6B6760'}, bg:{DEFAULT:'#0A0A0E',soft:'#111114',line:'rgba(255,255,255,0.07)'}, accent:{DEFAULT:'#2DD4FF',muted:'#B0ADA6'} },
         fontFamily: { grotesk: ['"Space Grotesk"','system-ui','sans-serif'] },
       }},
     };
   </script>
   <link rel="stylesheet" href="/assets/css/styles.css" />
-  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/images/favicon-192.png" />
+  <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png" />
 </head>
 
-<body class="font-grotesk bg-bg text-ink antialiased">
+<body class="font-grotesk bg-bg text-ink antialiased apex-theme">
 
   <!-- NAV -->
   <header class="glass-nav sticky top-0 z-50">
     <div class="max-w-6xl mx-auto px-6 h-16 flex items-center">
       <a href="/index.html" class="flex-shrink-0">
-        <img src="/assets/images/io-mark.png" alt="Isaac Originals" style="height:32px;width:auto;" />
+        <img src="/assets/images/io-mark.png" alt="Isaac Originals" style="height:40px;width:auto;" />
       </a>
       <nav class="hidden md:flex items-center justify-center gap-6 text-[0.82rem] flex-1">
         <a data-nav="index.html"   class="nav-link text-ink/50" href="/index.html">Home</a>
@@ -60,6 +62,9 @@
   <!-- HERO -->
   <section class="relative grain overflow-hidden">
     <div class="max-w-6xl mx-auto px-6 pt-20 pb-16 md:pt-28 md:pb-24 relative">
+      <div class="brand-logo-wrap mb-8 reveal">
+        <img src="/assets/images/apex-logo.png" alt="ApexAERA" style="height:64px;width:auto;" />
+      </div>
       <p class="eyebrow reveal">ApexAERA</p>
       <h1 class="h-display mt-6 text-4xl md:text-6xl max-w-4xl reveal">
         A marketing system<br/>
@@ -92,7 +97,7 @@
           and your goals — then executes on them consistently without the overhead of a full
           marketing team.
         </p>
-        <p class="text-ink-muted">
+        <p style="color: rgba(255,255,255,0.35);">
           Built for Kingdom-minded builders who want clear messaging and automation so they
           can focus on what God actually called them to do.
         </p>
@@ -105,65 +110,88 @@
   <!-- THE AGENTS -->
   <section class="max-w-6xl mx-auto px-6 py-20 md:py-28">
     <p class="eyebrow reveal">What we've built</p>
-    <h2 class="h-display text-3xl md:text-5xl mt-3 max-w-3xl reveal">One intelligence layer. Five agents.</h2>
+    <h2 class="h-display text-3xl md:text-5xl mt-3 max-w-3xl reveal">One intelligence layer. Six agents.</h2>
     <div class="mt-5 text-ink/70 max-w-2xl space-y-4 reveal">
       <p>
         We built a complete intelligent marketing system powered by one unified intelligence
         layer called AERA (Adaptive Elaborative Response Architecture).
       </p>
       <p>
-        Inside AERA work five specialized agents that collaborate like a real marketing team.
+        Inside AERA work six specialized agents that collaborate like a real marketing team.
         Each agent has a clear role and works together under AERA's direction to deliver
         excellent results:
       </p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-12">
-      <div class="card p-7 reveal">
-        <p class="text-white text-xs uppercase tracking-widest">Data Strategy</p>
-        <h3 class="h-display text-xl mt-4">Marcus</h3>
-        <p class="mt-2 text-ink-muted text-xs uppercase tracking-wider">Authoritative Data Strategist</p>
+
+      <!-- Sarah — AERA Intelligence Chair -->
+      <div class="card agent-card agent-sarah p-7 reveal">
+        <p class="agent-tag text-xs uppercase tracking-widest">Intelligence</p>
+        <h3 class="h-display text-xl mt-4 agent-name">Sarah</h3>
+        <p class="mt-2 text-xs uppercase tracking-wider" style="color: rgba(255,255,255,0.35);">AERA — Intelligence Chair</p>
+        <p class="mt-3 text-ink/70 text-sm leading-relaxed">
+          Orchestrates the entire team in real time — reviewing every agent's output,
+          ensuring brand alignment, and synthesizing campaign intelligence into clear
+          strategic direction. Sarah is the through-line in every workflow.
+        </p>
+      </div>
+
+      <!-- Marcus — Data Strategist -->
+      <div class="card agent-card agent-marcus p-7 reveal">
+        <p class="agent-tag text-xs uppercase tracking-widest">Data Strategy</p>
+        <h3 class="h-display text-xl mt-4 agent-name">Marcus</h3>
+        <p class="mt-2 text-xs uppercase tracking-wider" style="color: rgba(255,255,255,0.35);">Authoritative Data Strategist</p>
         <p class="mt-3 text-ink/70 text-sm leading-relaxed">
           Analyzes performance data, ROAS, velocity, campaign scoring, and optimization
           opportunities so decisions are always based on real numbers.
         </p>
       </div>
-      <div class="card p-7 reveal">
-        <p class="text-white text-xs uppercase tracking-widest">Trends &amp; Insight</p>
-        <h3 class="h-display text-xl mt-4">Sophia</h3>
-        <p class="mt-2 text-ink-muted text-xs uppercase tracking-wider">Strategic Trend &amp; Insight Partner</p>
+
+      <!-- Sophia — Trend & Insight -->
+      <div class="card agent-card agent-sophia p-7 reveal">
+        <p class="agent-tag text-xs uppercase tracking-widest">Trends &amp; Insight</p>
+        <h3 class="h-display text-xl mt-4 agent-name">Sophia</h3>
+        <p class="mt-2 text-xs uppercase tracking-wider" style="color: rgba(255,255,255,0.35);">Strategic Trend &amp; Insight Partner</p>
         <p class="mt-3 text-ink/70 text-sm leading-relaxed">
           Studies market trends, brand positioning, and creative opportunities to protect
           and elevate your unique voice and long-term growth.
         </p>
       </div>
-      <div class="card p-7 reveal">
-        <p class="text-white text-xs uppercase tracking-widest">Execution</p>
-        <h3 class="h-display text-xl mt-4">Julian</h3>
-        <p class="mt-2 text-ink-muted text-xs uppercase tracking-wider">Polished Execution Specialist</p>
+
+      <!-- Julian — Execution -->
+      <div class="card agent-card agent-julian p-7 reveal">
+        <p class="agent-tag text-xs uppercase tracking-widest">Execution</p>
+        <h3 class="h-display text-xl mt-4 agent-name">Julian</h3>
+        <p class="mt-2 text-xs uppercase tracking-wider" style="color: rgba(255,255,255,0.35);">Polished Execution Specialist</p>
         <p class="mt-3 text-ink/70 text-sm leading-relaxed">
           Turns strategy into clear, step-by-step campaign plans, sequences, and execution
           so nothing falls through the cracks.
         </p>
       </div>
-      <div class="card p-7 reveal">
-        <p class="text-white text-xs uppercase tracking-widest">Client Success</p>
-        <h3 class="h-display text-xl mt-4">Charlotte</h3>
-        <p class="mt-2 text-ink-muted text-xs uppercase tracking-wider">Empathetic Client Success Advisor</p>
+
+      <!-- Charlotte — Client Success -->
+      <div class="card agent-card agent-charlotte p-7 reveal">
+        <p class="agent-tag text-xs uppercase tracking-widest">Client Success</p>
+        <h3 class="h-display text-xl mt-4 agent-name">Charlotte</h3>
+        <p class="mt-2 text-xs uppercase tracking-wider" style="color: rgba(255,255,255,0.35);">Empathetic Client Success Advisor</p>
         <p class="mt-3 text-ink/70 text-sm leading-relaxed">
           Crafts professional, relationship-focused communication and nurture sequences
           so every message strengthens trust and connection.
         </p>
       </div>
-      <div class="card p-7 reveal">
-        <p class="text-white text-xs uppercase tracking-widest">Systems</p>
-        <h3 class="h-display text-xl mt-4">Victor Voss</h3>
-        <p class="mt-2 text-ink-muted text-xs uppercase tracking-wider">Systems Orchestrator</p>
+
+      <!-- Victor Voss — Systems -->
+      <div class="card agent-card agent-victor p-7 reveal">
+        <p class="agent-tag text-xs uppercase tracking-widest">Systems</p>
+        <h3 class="h-display text-xl mt-4 agent-name">Victor Voss</h3>
+        <p class="mt-2 text-xs uppercase tracking-wider" style="color: rgba(255,255,255,0.35);">Systems Orchestrator</p>
         <p class="mt-3 text-ink/70 text-sm leading-relaxed">
           Manages the technical backbone — data flow, automations, integrations, and system
           reliability — so everything runs smoothly and scalably.
         </p>
       </div>
+
     </div>
 
     <p class="mt-10 text-ink/70 max-w-2xl reveal">
@@ -183,7 +211,7 @@
         <p class="eyebrow reveal">Current build</p>
         <h2 class="h-display text-3xl md:text-5xl mt-3 reveal">What's actually shipping.</h2>
       </div>
-      <p class="hidden md:block text-ink-muted text-sm max-w-xs text-right reveal">
+      <p class="hidden md:block text-sm max-w-xs text-right reveal" style="color: rgba(255,255,255,0.35);">
         Real status, not a roadmap. Updated as work moves.
       </p>
     </div>
@@ -191,27 +219,27 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div class="card p-6 reveal">
         <div class="flex items-center justify-between">
-          <span class="text-xs uppercase tracking-widest text-ink-muted">System</span>
-          <span class="text-xs text-white">In build</span>
+          <span class="text-xs uppercase tracking-widest" style="color: rgba(255,255,255,0.35);">System</span>
+          <span class="text-xs" style="color:#2DD4FF;">In build</span>
         </div>
         <p class="mt-5 text-lg">AERA Dashboard</p>
         <p class="mt-2 text-sm text-ink/70">Client-facing dashboard with real-time KPI tracking, campaign oversight, and agent activity logs.</p>
       </div>
       <div class="card p-6 reveal">
         <div class="flex items-center justify-between">
-          <span class="text-xs uppercase tracking-widest text-ink-muted">Onboarding</span>
-          <span class="text-xs text-white">Active</span>
+          <span class="text-xs uppercase tracking-widest" style="color: rgba(255,255,255,0.35);">Onboarding</span>
+          <span class="text-xs" style="color:#2DD4FF;">Active</span>
         </div>
         <p class="mt-5 text-lg">First clients</p>
         <p class="mt-2 text-sm text-ink/70">Onboarding initial clients into the system. Building intake flows, brand voice capture, and channel setup.</p>
       </div>
       <div class="card p-6 reveal">
         <div class="flex items-center justify-between">
-          <span class="text-xs uppercase tracking-widest text-ink-muted">Infrastructure</span>
-          <span class="text-xs text-white/60">Foundation</span>
+          <span class="text-xs uppercase tracking-widest" style="color: rgba(255,255,255,0.35);">Infrastructure</span>
+          <span class="text-xs" style="color: rgba(45,212,255,0.5);">Foundation</span>
         </div>
         <p class="mt-5 text-lg">Agent orchestration</p>
-        <p class="mt-2 text-sm text-ink/70">Multi-agent coordination layer — Marcus assigns, agents execute, Julian reports. One unified loop.</p>
+        <p class="mt-2 text-sm text-ink/70">Multi-agent coordination layer — Sarah directs, agents execute, Julian reports. One unified loop.</p>
       </div>
     </div>
   </section>
@@ -251,7 +279,10 @@
         who needs marketing that runs without you — let's talk.
       </p>
       <a href="mailto:isaac@isaacoriginals.com?subject=ApexAERA%20Inquiry"
-         class="inline-flex items-center gap-2 mt-7 px-5 py-3 border border-white/30 text-white hover:bg-white hover:text-black transition text-sm tracking-wider uppercase">
+         class="inline-flex items-center gap-2 mt-7 px-5 py-3 border text-sm tracking-wider uppercase transition"
+         style="border-color: rgba(45,212,255,0.4); color: #2DD4FF;"
+         onmouseover="this.style.background='#2DD4FF';this.style.color='#0A0A0E';"
+         onmouseout="this.style.background='transparent';this.style.color='#2DD4FF';">
         Get in touch
         <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
       </a>
