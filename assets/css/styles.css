@@ -194,19 +194,20 @@ body {
 /* Delta image — centered, fades in */
 .loader-delta {
   width: auto;
-  height: 45vh;
-  max-height: 500px;
+  height: 55vh;
+  max-height: 550px;
   opacity: 0;
   display: block;
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.15))
+         drop-shadow(0 0 50px rgba(255, 255, 255, 0.05));
 }
 .loader-delta.fade-in {
   animation: deltaFadeIn 1.2s ease forwards;
 }
 
 @keyframes deltaFadeIn {
-  0% { opacity: 0; filter: brightness(0.3); }
-  70% { opacity: 1; filter: brightness(1.2); }
-  100% { opacity: 1; filter: brightness(1); }
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 /* Spinner — thin ring with rotating arc, PS5/Windows 11 style */
