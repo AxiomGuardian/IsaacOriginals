@@ -117,51 +117,51 @@ body {
 
 /* Sarah — AERA (#2DD4FF) */
 .agent-sarah:hover {
-  border-left-color: #2DD4FF;
-  box-shadow: 0 0 24px rgba(45, 212, 255, 0.15), 0 0 1px rgba(45, 212, 255, 0.30);
+  border-left-color: #2DD4FF !important;
+  box-shadow: 0 0 30px rgba(45, 212, 255, 0.25), 0 0 60px rgba(45, 212, 255, 0.10) !important;
 }
-.agent-sarah:hover .agent-name { color: #2DD4FF; }
-.agent-sarah .agent-tag { color: rgba(45, 212, 255, 0.55); }
+.agent-sarah:hover .agent-name { color: #2DD4FF !important; }
+.agent-sarah .agent-tag { color: rgba(45, 212, 255, 0.55) !important; }
 
 /* Marcus (#F59E0B) */
 .agent-marcus:hover {
-  border-left-color: #F59E0B;
-  box-shadow: 0 0 24px rgba(245, 158, 11, 0.15), 0 0 1px rgba(245, 158, 11, 0.30);
+  border-left-color: #F59E0B !important;
+  box-shadow: 0 0 30px rgba(245, 158, 11, 0.25), 0 0 60px rgba(245, 158, 11, 0.10) !important;
 }
-.agent-marcus:hover .agent-name { color: #F59E0B; }
-.agent-marcus .agent-tag { color: rgba(245, 158, 11, 0.55); }
+.agent-marcus:hover .agent-name { color: #F59E0B !important; }
+.agent-marcus .agent-tag { color: rgba(245, 158, 11, 0.55) !important; }
 
 /* Sophia (#A78BFA) */
 .agent-sophia:hover {
-  border-left-color: #A78BFA;
-  box-shadow: 0 0 24px rgba(167, 139, 250, 0.15), 0 0 1px rgba(167, 139, 250, 0.30);
+  border-left-color: #A78BFA !important;
+  box-shadow: 0 0 30px rgba(167, 139, 250, 0.25), 0 0 60px rgba(167, 139, 250, 0.10) !important;
 }
-.agent-sophia:hover .agent-name { color: #A78BFA; }
-.agent-sophia .agent-tag { color: rgba(167, 139, 250, 0.55); }
+.agent-sophia:hover .agent-name { color: #A78BFA !important; }
+.agent-sophia .agent-tag { color: rgba(167, 139, 250, 0.55) !important; }
 
 /* Julian (#34D399) */
 .agent-julian:hover {
-  border-left-color: #34D399;
-  box-shadow: 0 0 24px rgba(52, 211, 153, 0.15), 0 0 1px rgba(52, 211, 153, 0.30);
+  border-left-color: #34D399 !important;
+  box-shadow: 0 0 30px rgba(52, 211, 153, 0.25), 0 0 60px rgba(52, 211, 153, 0.10) !important;
 }
-.agent-julian:hover .agent-name { color: #34D399; }
-.agent-julian .agent-tag { color: rgba(52, 211, 153, 0.55); }
+.agent-julian:hover .agent-name { color: #34D399 !important; }
+.agent-julian .agent-tag { color: rgba(52, 211, 153, 0.55) !important; }
 
 /* Charlotte (#F472B6) */
 .agent-charlotte:hover {
-  border-left-color: #F472B6;
-  box-shadow: 0 0 24px rgba(244, 114, 182, 0.15), 0 0 1px rgba(244, 114, 182, 0.30);
+  border-left-color: #F472B6 !important;
+  box-shadow: 0 0 30px rgba(244, 114, 182, 0.25), 0 0 60px rgba(244, 114, 182, 0.10) !important;
 }
-.agent-charlotte:hover .agent-name { color: #F472B6; }
-.agent-charlotte .agent-tag { color: rgba(244, 114, 182, 0.55); }
+.agent-charlotte:hover .agent-name { color: #F472B6 !important; }
+.agent-charlotte .agent-tag { color: rgba(244, 114, 182, 0.55) !important; }
 
 /* Victor Voss (#60A5FA) */
 .agent-victor:hover {
-  border-left-color: #60A5FA;
-  box-shadow: 0 0 24px rgba(96, 165, 250, 0.15), 0 0 1px rgba(96, 165, 250, 0.30);
+  border-left-color: #60A5FA !important;
+  box-shadow: 0 0 30px rgba(96, 165, 250, 0.25), 0 0 60px rgba(96, 165, 250, 0.10) !important;
 }
-.agent-victor:hover .agent-name { color: #60A5FA; }
-.agent-victor .agent-tag { color: rgba(96, 165, 250, 0.55); }
+.agent-victor:hover .agent-name { color: #60A5FA !important; }
+.agent-victor .agent-tag { color: rgba(96, 165, 250, 0.55) !important; }
 
 /* ===================== LOADING SEQUENCE ===================== */
 
@@ -174,6 +174,7 @@ body {
   align-items: center;
   justify-content: center;
   transition: opacity 800ms ease, visibility 800ms ease;
+  overflow: hidden;
 }
 .page-loader.done {
   opacity: 0;
@@ -181,73 +182,55 @@ body {
   pointer-events: none;
 }
 
-.delta-loader-wrap {
-  position: relative;
-  width: 150px;
-  opacity: 0;
-  animation: deltaFadeIn 1.2s ease 0.3s forwards;
-}
-.delta-loader-wrap img {
-  width: 100%;
-  height: auto;
-  display: block;
-  filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.2))
-         drop-shadow(0 0 60px rgba(255, 255, 255, 0.08));
+/* Full-screen landscape Delta background */
+.delta-loader-bg {
+  animation: loaderBgFadeIn 1.5s ease 0.2s forwards;
 }
 
-/* Glow pulse behind the delta */
-.delta-loader-wrap::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 250%;
-  height: 250%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 55%);
-  opacity: 0;
-  animation: deltaPulse 2.2s ease-in-out 0.5s forwards;
-  pointer-events: none;
-}
-
-/* Glare sweep — uses drop-shadow technique to follow the mark shape, not a rectangle */
-.delta-loader-wrap::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    105deg,
-    transparent 30%,
-    rgba(255,255,255,0.0) 42%,
-    rgba(255,255,255,0.3) 48%,
-    rgba(255,255,255,0.45) 50%,
-    rgba(255,255,255,0.3) 52%,
-    rgba(255,255,255,0.0) 58%,
-    transparent 70%
-  );
-  background-size: 300% 100%;
-  animation: glareSweep 1.6s ease-in-out 1s forwards;
-  background-position: 150% 0;
-  pointer-events: none;
-  mix-blend-mode: overlay;
-  border-radius: 50%;
-}
-
-@keyframes deltaFadeIn {
-  0% { opacity: 0; transform: scale(0.9); }
+@keyframes loaderBgFadeIn {
+  0% { opacity: 0; transform: scale(1.05); }
   100% { opacity: 1; transform: scale(1); }
 }
 
-@keyframes deltaPulse {
-  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
-  50% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.2); }
+/* Shockwave rings — radial pulses expanding from center */
+.shockwave-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80px;
+  height: 80px;
+  margin-top: -40px;
+  margin-left: -40px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  pointer-events: none;
 }
 
-@keyframes glareSweep {
-  from { background-position: 150% 0; }
-  to { background-position: -100% 0; }
+.shockwave-1 {
+  animation: shockwaveExpand 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.2s forwards;
+}
+
+.shockwave-2 {
+  animation: shockwaveExpand 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.7s forwards;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+@keyframes shockwaveExpand {
+  0% {
+    opacity: 0.8;
+    transform: scale(1);
+    border-width: 1.5px;
+  }
+  50% {
+    opacity: 0.4;
+    border-width: 1px;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(25);
+    border-width: 0.5px;
+  }
 }
 
 /* ===================== BRAND LOGOS ON SUBPAGES ===================== */
@@ -261,7 +244,7 @@ body {
 
 .brand-logo-wrap img {
   display: block;
-  max-height: 80px;
+  max-height: 320px;
   width: auto;
   transition: transform 0.3s ease, filter 0.3s ease;
 }
