@@ -9,12 +9,27 @@
   // --- Cinematic page loader ---
   const loader = document.getElementById('page-loader');
   if (loader) {
-    // Delta fades in via CSS (0.3s delay + 1.2s), then hold, then fade out
-    const loaderDuration = 2800;
-    setTimeout(() => {
-      loader.classList.add('done');
-      startHeroSequence();
-    }, loaderDuration);
+    const video = document.getElementById('loader-video');
+    if (video) {
+      // When video ends, fade out loader and start hero
+      video.addEventListener('ended', () => {
+        loader.classList.add('done');
+        startHeroSequence();
+      });
+      // Fallback in case video fails to load — dismiss after 5s
+      setTimeout(() => {
+        if (!loader.classList.contains('done')) {
+          loader.classList.add('done');
+          startHeroSequence();
+        }
+      }, 5000);
+    } else {
+      // No video element — use static fallback timing
+      setTimeout(() => {
+        loader.classList.add('done');
+        startHeroSequence();
+      }, 2800);
+    }
   } else {
     // No loader — start hero immediately
     startHeroSequence();
