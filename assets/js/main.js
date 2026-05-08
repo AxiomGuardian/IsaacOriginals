@@ -6,31 +6,43 @@
 (function () {
   'use strict';
 
-  // --- Cinematic page loader ---
+  // --- Cinematic page loader (plays once per session) ---
   const loader = document.getElementById('page-loader');
   if (loader) {
-    const video = document.getElementById('loader-video');
-    if (video) {
-      // When video ends, hold for 1s then fade out loader
-      video.addEventListener('ended', () => {
+    const alreadyPlayed = sessionStorage.getItem('io-loader-played');
+
+    if (alreadyPlayed) {
+      // Already played this session — skip loader instantly
+      loader.classList.add('done');
+      startHeroSequence();
+    } else {
+      // First visit this session — play the intro
+      const video = document.getElementById('loader-video');
+      if (video) {
+        // When video ends, hold for 1s then fade out loader
+        video.addEventListener('ended', () => {
+          setTimeout(() => {
+            loader.classList.add('done');
+            sessionStorage.setItem('io-loader-played', '1');
+            startHeroSequence();
+          }, 1000);
+        });
+        // Fallback in case video fails to load — dismiss after 5s
+        setTimeout(() => {
+          if (!loader.classList.contains('done')) {
+            loader.classList.add('done');
+            sessionStorage.setItem('io-loader-played', '1');
+            startHeroSequence();
+          }
+        }, 5000);
+      } else {
+        // No video element — use static fallback timing
         setTimeout(() => {
           loader.classList.add('done');
+          sessionStorage.setItem('io-loader-played', '1');
           startHeroSequence();
-        }, 1000);
-      });
-      // Fallback in case video fails to load — dismiss after 5s
-      setTimeout(() => {
-        if (!loader.classList.contains('done')) {
-          loader.classList.add('done');
-          startHeroSequence();
-        }
-      }, 5000);
-    } else {
-      // No video element — use static fallback timing
-      setTimeout(() => {
-        loader.classList.add('done');
-        startHeroSequence();
-      }, 2800);
+        }, 2800);
+      }
     }
   } else {
     // No loader — start hero immediately

@@ -39,9 +39,20 @@
     el.addEventListener('click', () => play('tactile'));
   });
 
-  // --- Two missions cards ---
+  // --- Two missions cards (delay navigation so sound plays through) ---
   document.querySelectorAll('[data-sound="missions"]').forEach(el => {
-    el.addEventListener('click', () => play('missions'));
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      play('missions');
+      const href = el.getAttribute('href') || el.closest('a')?.getAttribute('href');
+      if (href) {
+        const s = sounds.missions;
+        // Navigate when sound ends, or after 1.5s fallback
+        const go = () => { window.location.href = href; };
+        s.addEventListener('ended', go, { once: true });
+        setTimeout(go, 1500);
+      }
+    });
   });
 
   // --- Get in touch / contact buttons ---

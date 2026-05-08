@@ -78,37 +78,47 @@ body {
 
 .card {
   background: var(--bg-card);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.10);
   border-radius: 12px;
-  transition: border-color 250ms ease, transform 250ms ease, box-shadow 250ms ease, background 250ms ease;
+  transition: border-color 300ms ease, transform 300ms ease, box-shadow 300ms ease, background 300ms ease;
   position: relative;
 }
 
 .card:hover {
-  border-color: rgba(255, 255, 255, 0.15);
-  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.45) !important;
+  transform: translateY(-4px) scale(1.025) !important;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.12), 0 0 50px rgba(255, 255, 255, 0.05) !important;
 }
 
+/* K.I.T gold card hover */
+.kit-theme .card {
+  border: 2px solid rgba(212, 162, 76, 0.12);
+}
 .kit-theme .card:hover {
-  border-color: rgba(212, 162, 76, 0.2);
+  border-color: rgba(212, 162, 76, 0.5) !important;
+  box-shadow: 0 0 20px rgba(212, 162, 76, 0.2), 0 0 50px rgba(212, 162, 76, 0.08) !important;
 }
 
 /* ApexAERA card overrides */
 .apex-theme .card {
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border: 2px solid rgba(255, 255, 255, 0.08);
+}
+.apex-theme .card:hover {
+  border-color: rgba(45, 212, 255, 0.45) !important;
+  box-shadow: 0 0 20px rgba(45, 212, 255, 0.15), 0 0 50px rgba(45, 212, 255, 0.06) !important;
 }
 
 /* ===================== AGENT CARDS ===================== */
 
 .agent-card {
   border-left: 3px solid transparent;
-  transition: all 0.25s ease;
+  transition: all 0.3s ease;
 }
 
 .agent-card:hover {
   background: rgba(255, 255, 255, 0.07) !important;
-  transform: translateY(-2px);
+  transform: translateY(-4px) scale(1.03) !important;
 }
 
 .agent-card .agent-name {
