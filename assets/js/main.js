@@ -9,13 +9,40 @@
   // --- Cinematic page loader ---
   const loader = document.getElementById('page-loader');
   if (loader) {
-    // After the shockwave animations finish, fade out the loader
-    const loaderDuration = 3800;
+    const delta = document.getElementById('loader-delta');
+    const spinner = document.getElementById('loader-spinner');
+    const content = document.getElementById('loader-content');
+
+    // Step 1: Black screen holds for 400ms
+    // Step 2: Delta fades in (1.2s)
     setTimeout(() => {
-      loader.classList.add('done');
-      // Start hero typing sequence after loader fades
-      startHeroSequence();
-    }, loaderDuration);
+      if (delta) delta.classList.add('fade-in');
+    }, 400);
+
+    // Step 3: Spinner appears once Delta is visible
+    setTimeout(() => {
+      if (spinner) spinner.classList.add('visible');
+    }, 1700);
+
+    // Step 4: Launch sequence — slow start then rockets up
+    setTimeout(() => {
+      if (content) {
+        // Hide spinner
+        if (spinner) spinner.classList.remove('visible');
+
+        // Brief hold, then launch
+        setTimeout(() => {
+          content.classList.add('launching');
+          content.style.transform = 'translateY(-120vh)';
+        }, 200);
+
+        // Fade out the loader as Delta exits
+        setTimeout(() => {
+          loader.classList.add('done');
+          startHeroSequence();
+        }, 1200);
+      }
+    }, 3600);
   } else {
     // No loader — start hero immediately
     startHeroSequence();

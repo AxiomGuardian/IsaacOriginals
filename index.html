@@ -43,9 +43,12 @@
 
   <!-- PAGE LOADER — cinematic Delta -->
   <div class="page-loader" id="page-loader">
-    <div class="delta-loader-bg" style="position:absolute;inset:0;background:url('/assets/images/delta-loader-landscape.jpg') center center / cover no-repeat;"></div>
-    <div class="shockwave-ring shockwave-1"></div>
-    <div class="shockwave-ring shockwave-2"></div>
+    <div class="loader-content" id="loader-content">
+      <img src="/assets/images/delta-loader-landscape.jpg" alt="" class="loader-delta" id="loader-delta" />
+      <div class="loader-spinner" id="loader-spinner">
+        <svg viewBox="0 0 50 50"><circle cx="25" cy="25" r="20"/></svg>
+      </div>
+    </div>
   </div>
 
   <!-- NAV -->
