@@ -184,12 +184,14 @@ body {
 
 /* Full-screen landscape Delta background */
 .delta-loader-bg {
+  opacity: 0;
   animation: loaderBgFadeIn 1.5s ease 0.2s forwards;
 }
 
 @keyframes loaderBgFadeIn {
-  0% { opacity: 0; transform: scale(1.05); }
-  100% { opacity: 1; transform: scale(1); }
+  0% { opacity: 0; transform: scale(1.05); filter: brightness(0.5); }
+  60% { opacity: 1; transform: scale(1.01); filter: brightness(1.3); }
+  100% { opacity: 1; transform: scale(1); filter: brightness(1); }
 }
 
 /* Shockwave rings — radial pulses expanding from center */
