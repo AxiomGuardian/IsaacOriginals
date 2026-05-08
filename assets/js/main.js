@@ -11,10 +11,12 @@
   if (loader) {
     const video = document.getElementById('loader-video');
     if (video) {
-      // When video ends, fade out loader and start hero
+      // When video ends, hold for 1s then fade out loader
       video.addEventListener('ended', () => {
-        loader.classList.add('done');
-        startHeroSequence();
+        setTimeout(() => {
+          loader.classList.add('done');
+          startHeroSequence();
+        }, 1000);
       });
       // Fallback in case video fails to load — dismiss after 5s
       setTimeout(() => {
