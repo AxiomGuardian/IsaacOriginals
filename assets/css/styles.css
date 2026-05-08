@@ -194,12 +194,11 @@ body {
 /* Delta image — centered, fades in */
 .loader-delta {
   width: auto;
-  height: 55vh;
-  max-height: 550px;
+  height: 28vh;
+  max-height: 280px;
   opacity: 0;
   display: block;
-  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.15))
-         drop-shadow(0 0 50px rgba(255, 255, 255, 0.05));
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.1));
 }
 .loader-delta.fade-in {
   animation: deltaFadeIn 1.2s ease forwards;
