@@ -6,35 +6,54 @@
 (function () {
   'use strict';
 
+  // --- Browser detection — adds class to <html> for CSS branching ---
+  const ua = navigator.userAgent;
+  const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+  const isChrome = /chrome/i.test(ua) && !/edg/i.test(ua);
+  const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+  const html = document.documentElement;
+  if (isSafari) html.classList.add('browser-safari');
+  if (isChrome) html.classList.add('browser-chrome');
+  if (isIOS) html.classList.add('is-ios');
+  if (isTouch) html.classList.add('is-touch');
+
   // --- Cinematic page loader (plays once per session) ---
   const loader = document.getElementById('page-loader');
   if (loader) {
     const alreadyPlayed = sessionStorage.getItem('io-loader-played');
 
     if (alreadyPlayed) {
-      // Already played this session — skip loader instantly
+      // Already played this session — skip loader instantly, no transition
+      loader.style.transition = 'none';
+      loader.style.opacity = '0';
+      loader.style.visibility = 'hidden';
+      loader.style.pointerEvents = 'none';
       loader.classList.add('done');
       startHeroSequence();
     } else {
       // First visit this session — play the intro
       const video = document.getElementById('loader-video');
+      // Chrome fires 'ended' early — give it extra hold time
+      const holdTime = isChrome ? 1800 : 1000;
       if (video) {
-        // When video ends, hold for 1s then fade out loader
+        // When video ends, hold then fade out loader
         video.addEventListener('ended', () => {
           setTimeout(() => {
             loader.classList.add('done');
             sessionStorage.setItem('io-loader-played', '1');
             startHeroSequence();
-          }, 1000);
+          }, holdTime);
         });
-        // Fallback in case video fails to load — dismiss after 5s
+        // Fallback in case video fails to load — dismiss after 6s
         setTimeout(() => {
           if (!loader.classList.contains('done')) {
             loader.classList.add('done');
             sessionStorage.setItem('io-loader-played', '1');
             startHeroSequence();
           }
-        }, 5000);
+        }, 6000);
       } else {
         // No video element — use static fallback timing
         setTimeout(() => {
@@ -44,6 +63,17 @@
         }, 2800);
       }
     }
+
+    // Handle bfcache (back/forward navigation restores page from cache)
+    window.addEventListener('pageshow', (e) => {
+      if (e.persisted && loader) {
+        loader.style.transition = 'none';
+        loader.style.opacity = '0';
+        loader.style.visibility = 'hidden';
+        loader.style.pointerEvents = 'none';
+        loader.classList.add('done');
+      }
+    });
   } else {
     // No loader — start hero immediately
     startHeroSequence();

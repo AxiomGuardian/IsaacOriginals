@@ -1,10 +1,13 @@
 /* ============================================================
    IsaacOriginals — UI Sound Effects
    Tactile audio feedback on navigation, buttons, and hovers.
+   Supports both desktop (mouseenter) and touch (tap) devices.
    ============================================================ */
 
 (function () {
   'use strict';
+
+  const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
   // Preload all sounds
   const sounds = {
@@ -15,11 +18,25 @@
     getInTouch: new Audio('/assets/audio/get-in-touch.mp3'),
   };
 
-  // Set volume (adjust as needed)
+  // Set volume
   Object.values(sounds).forEach(s => {
-    s.volume = 0.5;
+    s.volume = 0.7;
     s.preload = 'auto';
   });
+
+  // Safari audio unlock — must play a sound on first user gesture
+  let audioUnlocked = false;
+  function unlockAudio() {
+    if (audioUnlocked) return;
+    Object.values(sounds).forEach(s => {
+      s.play().then(() => { s.pause(); s.currentTime = 0; }).catch(() => {});
+    });
+    audioUnlocked = true;
+    document.removeEventListener('touchstart', unlockAudio, true);
+    document.removeEventListener('click', unlockAudio, true);
+  }
+  document.addEventListener('touchstart', unlockAudio, { capture: true, once: true });
+  document.addEventListener('click', unlockAudio, { capture: true, once: true });
 
   // Play a sound — resets to start if already playing
   function play(key) {
@@ -27,6 +44,16 @@
     if (!s) return;
     s.currentTime = 0;
     s.play().catch(() => {});
+  }
+
+  // Helper: bind both mouse and touch events for hover-type sounds
+  function bindHoverSound(el, key) {
+    // Desktop: mouseenter
+    el.addEventListener('mouseenter', () => play(key));
+    // Touch devices: play on tap (touchstart) for cards that aren't links
+    if (isTouch) {
+      el.addEventListener('touchstart', () => play(key), { passive: true });
+    }
   }
 
   // --- Nav tab clicks ---
@@ -48,7 +75,8 @@
       if (href) {
         const s = sounds.missions;
         // Navigate when sound ends, or after 1.5s fallback
-        const go = () => { window.location.href = href; };
+        let navigated = false;
+        const go = () => { if (!navigated) { navigated = true; window.location.href = href; } };
         s.addEventListener('ended', go, { once: true });
         setTimeout(go, 1500);
       }
@@ -60,9 +88,9 @@
     el.addEventListener('click', () => play('getInTouch'));
   });
 
-  // --- Hover over interactive cards ---
+  // --- Hover / tap over interactive cards ---
   document.querySelectorAll('[data-sound="hover"]').forEach(el => {
-    el.addEventListener('mouseenter', () => play('hover'));
+    bindHoverSound(el, 'hover');
   });
 
 })();

@@ -84,7 +84,8 @@ body {
   position: relative;
 }
 
-.card:hover {
+.card:hover,
+.card:active {
   border-color: rgba(255, 255, 255, 0.45) !important;
   transform: translateY(-4px) scale(1.025) !important;
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.12), 0 0 50px rgba(255, 255, 255, 0.05) !important;
@@ -94,7 +95,8 @@ body {
 .kit-theme .card {
   border: 2px solid rgba(212, 162, 76, 0.12);
 }
-.kit-theme .card:hover {
+.kit-theme .card:hover,
+.kit-theme .card:active {
   border-color: rgba(212, 162, 76, 0.5) !important;
   box-shadow: 0 0 20px rgba(212, 162, 76, 0.2), 0 0 50px rgba(212, 162, 76, 0.08) !important;
 }
@@ -104,7 +106,21 @@ body {
   background: rgba(255, 255, 255, 0.04);
   border: 2px solid rgba(255, 255, 255, 0.08);
 }
-.apex-theme .card:hover {
+.apex-theme .card:hover,
+.apex-theme .card:active {
+  border-color: rgba(45, 212, 255, 0.45) !important;
+  box-shadow: 0 0 20px rgba(45, 212, 255, 0.15), 0 0 50px rgba(45, 212, 255, 0.06) !important;
+}
+
+/* Touch device tap states — ensure glow triggers on tap */
+.is-touch .card:active {
+  transform: translateY(-4px) scale(1.025) !important;
+}
+.is-touch .kit-theme .card:active {
+  border-color: rgba(212, 162, 76, 0.5) !important;
+  box-shadow: 0 0 20px rgba(212, 162, 76, 0.2), 0 0 50px rgba(212, 162, 76, 0.08) !important;
+}
+.is-touch .apex-theme .card:active {
   border-color: rgba(45, 212, 255, 0.45) !important;
   box-shadow: 0 0 20px rgba(45, 212, 255, 0.15), 0 0 50px rgba(45, 212, 255, 0.06) !important;
 }
@@ -116,7 +132,8 @@ body {
   transition: all 0.3s ease;
 }
 
-.agent-card:hover {
+.agent-card:hover,
+.agent-card:active {
   background: rgba(255, 255, 255, 0.07) !important;
   transform: translateY(-4px) scale(1.03) !important;
 }
@@ -210,6 +227,18 @@ body {
   max-height: 320px;
   width: auto;
   transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+/* Responsive logo sizing for mobile */
+@media (max-width: 768px) {
+  .brand-logo-wrap img {
+    max-height: 180px;
+  }
+}
+@media (max-width: 480px) {
+  .brand-logo-wrap img {
+    max-height: 140px;
+  }
 }
 
 /* Glow bloom behind logo */
