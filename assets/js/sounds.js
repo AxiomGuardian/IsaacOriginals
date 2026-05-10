@@ -1,7 +1,6 @@
 /* ============================================================
    IsaacOriginals — UI Sound Effects
-   Tactile audio feedback on navigation, buttons, and hovers.
-   Supports both desktop (mouseenter) and touch (tap) devices.
+   Instant tactile audio feedback. Zero delay. All devices.
    ============================================================ */
 
 (function () {
@@ -9,36 +8,40 @@
 
   const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
-  // Preload all sounds
+  // Preload all sounds — create multiple instances for instant playback
+  function makeSound(src, vol) {
+    const a = new Audio(src);
+    a.volume = vol;
+    a.preload = 'auto';
+    return a;
+  }
+
   const sounds = {
-    tab: new Audio('/assets/audio/tab-selection.mp3'),
-    tactile: new Audio('/assets/audio/tactile-cta.mp3'),
-    missions: new Audio('/assets/audio/two-missions.mp3'),
-    hover: new Audio('/assets/audio/hover-over.mp3'),
-    getInTouch: new Audio('/assets/audio/get-in-touch.mp3'),
+    tab:        makeSound('/assets/audio/tab-selection.mp3', 0.8),
+    tactile:    makeSound('/assets/audio/tactile-cta.mp3', 0.8),
+    missions:   makeSound('/assets/audio/two-missions.mp3', 0.85),
+    hover:      makeSound('/assets/audio/hover-over.mp3', 1.0),
+    getInTouch: makeSound('/assets/audio/get-in-touch.mp3', 0.85),
   };
 
-  // Set volume
-  Object.values(sounds).forEach(s => {
-    s.volume = 0.7;
-    s.preload = 'auto';
-  });
+  // Pre-buffer: force browsers to fully load audio data
+  Object.values(sounds).forEach(s => { s.load(); });
 
-  // Safari audio unlock — must play a sound on first user gesture
+  // Safari/iOS audio unlock — silent play on first gesture to unlock audio context
   let audioUnlocked = false;
   function unlockAudio() {
     if (audioUnlocked) return;
-    Object.values(sounds).forEach(s => {
-      s.play().then(() => { s.pause(); s.currentTime = 0; }).catch(() => {});
-    });
     audioUnlocked = true;
-    document.removeEventListener('touchstart', unlockAudio, true);
-    document.removeEventListener('click', unlockAudio, true);
+    Object.values(sounds).forEach(s => {
+      const orig = s.volume;
+      s.volume = 0;
+      s.play().then(() => { s.pause(); s.currentTime = 0; s.volume = orig; }).catch(() => { s.volume = orig; });
+    });
   }
   document.addEventListener('touchstart', unlockAudio, { capture: true, once: true });
   document.addEventListener('click', unlockAudio, { capture: true, once: true });
 
-  // Play a sound — resets to start if already playing
+  // Play instantly — reset and fire
   function play(key) {
     const s = sounds[key];
     if (!s) return;
@@ -46,51 +49,51 @@
     s.play().catch(() => {});
   }
 
-  // Helper: bind both mouse and touch events for hover-type sounds
-  function bindHoverSound(el, key) {
-    // Desktop: mouseenter
-    el.addEventListener('mouseenter', () => play(key));
-    // Touch devices: play on tap (touchstart) for cards that aren't links
-    if (isTouch) {
-      el.addEventListener('touchstart', () => play(key), { passive: true });
-    }
+  // On page load: check if a sound should continue from previous page (mission card handoff)
+  const pendingSound = sessionStorage.getItem('io-sound-handoff');
+  if (pendingSound) {
+    sessionStorage.removeItem('io-sound-handoff');
+    // Small delay to let page settle, then play the carried-over sound
+    setTimeout(() => play(pendingSound), 100);
   }
 
-  // --- Nav tab clicks ---
+  // --- Nav tab clicks (instant on mousedown, not click) ---
   document.querySelectorAll('.nav-link, #mobile-menu a').forEach(el => {
-    el.addEventListener('click', () => play('tab'));
+    el.addEventListener('mousedown', () => play('tab'));
+    if (isTouch) el.addEventListener('touchstart', () => play('tab'), { passive: true });
   });
 
-  // --- Hero CTA buttons (The Journey, About Isaac) ---
+  // --- Hero CTA buttons (instant on mousedown) ---
   document.querySelectorAll('[data-sound="tactile"]').forEach(el => {
-    el.addEventListener('click', () => play('tactile'));
+    el.addEventListener('mousedown', () => play('tactile'));
+    if (isTouch) el.addEventListener('touchstart', () => play('tactile'), { passive: true });
   });
 
-  // --- Two missions cards (delay navigation so sound plays through) ---
+  // --- Two missions cards (play + navigate instantly, sound hands off to next page) ---
   document.querySelectorAll('[data-sound="missions"]').forEach(el => {
-    el.addEventListener('click', (e) => {
-      e.preventDefault();
+    el.addEventListener('mousedown', () => {
       play('missions');
-      const href = el.getAttribute('href') || el.closest('a')?.getAttribute('href');
-      if (href) {
-        const s = sounds.missions;
-        // Navigate when sound ends, or after 1.5s fallback
-        let navigated = false;
-        const go = () => { if (!navigated) { navigated = true; window.location.href = href; } };
-        s.addEventListener('ended', go, { once: true });
-        setTimeout(go, 1500);
-      }
+      sessionStorage.setItem('io-sound-handoff', 'missions');
     });
+    if (isTouch) {
+      el.addEventListener('touchstart', () => {
+        play('missions');
+        sessionStorage.setItem('io-sound-handoff', 'missions');
+      }, { passive: true });
+    }
+    // Let the link navigate normally — no preventDefault
   });
 
-  // --- Get in touch / contact buttons ---
+  // --- Get in touch / contact buttons (instant on mousedown) ---
   document.querySelectorAll('[data-sound="contact"]').forEach(el => {
-    el.addEventListener('click', () => play('getInTouch'));
+    el.addEventListener('mousedown', () => play('getInTouch'));
+    if (isTouch) el.addEventListener('touchstart', () => play('getInTouch'), { passive: true });
   });
 
   // --- Hover / tap over interactive cards ---
   document.querySelectorAll('[data-sound="hover"]').forEach(el => {
-    bindHoverSound(el, 'hover');
+    el.addEventListener('mouseenter', () => play('hover'));
+    if (isTouch) el.addEventListener('touchstart', () => play('hover'), { passive: true });
   });
 
 })();
