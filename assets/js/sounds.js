@@ -27,17 +27,24 @@
   // Pre-buffer: force browsers to fully load audio data
   Object.values(sounds).forEach(s => { s.load(); });
 
-  // Safari/iOS audio unlock — silent play on first gesture to unlock audio context
+  // Audio unlock — silent play to prime audio on this page
   let audioUnlocked = false;
   function unlockAudio() {
     if (audioUnlocked) return;
     audioUnlocked = true;
+    sessionStorage.setItem('io-audio-unlocked', '1');
     Object.values(sounds).forEach(s => {
       const orig = s.volume;
       s.volume = 0;
       s.play().then(() => { s.pause(); s.currentTime = 0; s.volume = orig; }).catch(() => { s.volume = orig; });
     });
   }
+
+  // If audio was unlocked on a previous page, unlock immediately on load
+  if (sessionStorage.getItem('io-audio-unlocked') === '1') {
+    unlockAudio();
+  }
+  // Also unlock on first gesture as fallback
   document.addEventListener('touchstart', unlockAudio, { capture: true, once: true });
   document.addEventListener('click', unlockAudio, { capture: true, once: true });
 
