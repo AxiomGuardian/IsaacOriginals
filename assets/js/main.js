@@ -109,22 +109,21 @@
   }
 
   // Welcome button click handler
+  // No Delta sound here — Chrome gets Delta auto-played during the video (ambient.js),
+  // everyone else just gets the tactile button pop (data-sound="tactile" on the button)
   var welcomeBtn = document.getElementById('welcome-btn');
   if (welcomeBtn) {
-    welcomeBtn.addEventListener('click', function () {
-      // Play Delta entrance sound (Safari/iOS fallback — Chrome already played it)
-      if (window.__IO && window.__IO.playDelta) {
-        window.__IO.playDelta();
-      }
+    var welcomeHandled = false;
+
+    function handleWelcome() {
+      if (welcomeHandled) return;
+      welcomeHandled = true;
       dismissLoader();
-    });
+    }
+
+    welcomeBtn.addEventListener('click', handleWelcome);
     if (isTouch) {
-      welcomeBtn.addEventListener('touchstart', function () {
-        if (window.__IO && window.__IO.playDelta) {
-          window.__IO.playDelta();
-        }
-        dismissLoader();
-      }, { passive: true });
+      welcomeBtn.addEventListener('touchstart', handleWelcome, { passive: true });
     }
   }
 

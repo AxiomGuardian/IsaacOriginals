@@ -1,18 +1,25 @@
 /* ============================================================
-   IsaacOriginals — Ambient Music System v3
+   IsaacOriginals — Ambient Music System v4
    ─ HYPERION ambient track · crossfade loop
    ─ Delta entrance sound (auto on Chrome, Welcome-click on Safari/iOS)
    ─ Canvas circular-ripple visualizer (sonar style)
    ─ GainNode volume control (works on iOS where audio.volume is read-only)
    ─ Smooth fade in/out via Web Audio linearRamp
+   ─ iOS-specific: higher gain for phone/tablet speakers, proper context resume
    ============================================================ */
 (function () {
   'use strict';
 
   window.__IO = window.__IO || {};
 
+  /* ── Platform detection ────────────────────────────────── */
+  var ua = navigator.userAgent;
+  var isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+  var needsIOSFix = isIOS || isSafari;
+
   /* ── Configuration ─────────────────────────────────────── */
-  var AMBIENT_VOL   = 0.10;         // target gain (works on iOS via GainNode)
+  var AMBIENT_VOL   = needsIOSFix ? 0.35 : 0.10;  // iOS speakers need higher gain
   var DELTA_VOL     = 0.55;         // delta entrance volume
   var FADE_IN_SEC   = 2.5;          // ambient fade-in (first play)
   var RESUME_FADE   = 1.2;          // faster fade when resuming across pages
@@ -108,14 +115,23 @@
     if (savedPos > 0) ambient.currentTime = savedPos;
     var fadeSec = savedPos > 0 ? RESUME_FADE : FADE_IN_SEC;
 
-    ambient.play().then(function () {
-      playing = true;
-      sessionStorage.setItem('io-music-playing', '1');
-      fadeGain(AMBIENT_VOL, fadeSec);
-      initCrossfade();
-    }).catch(function () {
-      started = false;
-    });
+    // iOS/Safari: AudioContext might still be suspended — wait for it
+    function doPlay() {
+      ambient.play().then(function () {
+        playing = true;
+        sessionStorage.setItem('io-music-playing', '1');
+        fadeGain(AMBIENT_VOL, fadeSec);
+        initCrossfade();
+      }).catch(function () {
+        started = false;
+      });
+    }
+
+    if (actx.state === 'suspended') {
+      actx.resume().then(doPlay).catch(function () { started = false; });
+    } else {
+      doPlay();
+    }
   }
 
   /* ── Delta Entrance Sound ���─────────────────────────────── */
@@ -151,13 +167,8 @@
     obs.observe(loader, { attributes: true, attributeFilter: ['class'] });
   }
 
-  // Expose Delta play for Welcome button (Safari/iOS fallback)
-  window.__IO.playDelta = function () {
-    if (!deltaPlayed) {
-      delta.play().catch(function () {});
-      deltaPlayed = true;
-    }
-  };
+  // Delta play is Chrome-only (auto-plays during loader video via handleDelta).
+  // iOS/Safari: no Delta sound — just tactile button pop on Welcome click.
 
   /* ── Persist Position Across Pages ─────────────────────── */
   window.addEventListener('beforeunload', function () {
@@ -177,8 +188,15 @@
     if (unlocked) return;
     unlocked = true;
     sessionStorage.setItem('io-audio-unlocked', '1');
-    if (actx && actx.state === 'suspended') actx.resume();
-    if (!started && enabled) startAmbient();
+    // Boot audio graph on gesture (required for iOS)
+    bootAudio();
+    if (actx && actx.state === 'suspended') {
+      actx.resume().then(function () {
+        if (!started && enabled) startAmbient();
+      });
+    } else {
+      if (!started && enabled) startAmbient();
+    }
   }
 
   document.addEventListener('click',      onGesture, { once: true });
