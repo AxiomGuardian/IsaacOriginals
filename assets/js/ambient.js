@@ -9,7 +9,7 @@
   'use strict';
 
   /* ── Configuration ─────────────────────────────────────── */
-  const AMBIENT_VOL   = 0.3;          // master volume for ambient track
+  const AMBIENT_VOL   = 0.1;          // master volume for ambient track
   const DELTA_VOL     = 0.55;         // delta entrance sound volume
   const FADE_IN_MS    = 2500;         // ambient fade-in (first play)
   const RESUME_FADE   = 1200;         // faster fade when resuming across pages
@@ -211,26 +211,34 @@
     nav.style.position = 'relative';
     nav.appendChild(vizBtn);
 
-    /* Toggle music on click */
+    /* Toggle music on click — debounced to prevent rapid-tap glitch */
+    var toggling = false;
+
     vizBtn.addEventListener('click', function (e) {
       e.stopPropagation();
+      if (toggling) return;       // ignore taps while fading
+      toggling = true;
+
       enabled = !enabled;
       sessionStorage.setItem('io-music-enabled', String(enabled));
 
       if (enabled) {
         if (!started) {
           startAmbient();
+          setTimeout(function () { toggling = false; }, 1600);
         } else {
           ambient.play();
-          fadeIn(ambient, AMBIENT_VOL, 1000);
+          fadeIn(ambient, AMBIENT_VOL, 1500);
           playing = true;
           sessionStorage.setItem('io-music-playing', '1');
+          setTimeout(function () { toggling = false; }, 1600);
         }
       } else {
-        fadeOut(ambient, 1000).then(() => {
+        fadeOut(ambient, 1500).then(function () {
           ambient.pause();
           playing = false;
           sessionStorage.setItem('io-music-playing', '0');
+          toggling = false;
         });
       }
     });
