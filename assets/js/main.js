@@ -112,10 +112,17 @@
   var welcomeBtn = document.getElementById('welcome-btn');
   if (welcomeBtn) {
     welcomeBtn.addEventListener('click', function () {
+      // Play Delta entrance sound (Safari/iOS fallback — Chrome already played it)
+      if (window.__IO && window.__IO.playDelta) {
+        window.__IO.playDelta();
+      }
       dismissLoader();
     });
     if (isTouch) {
       welcomeBtn.addEventListener('touchstart', function () {
+        if (window.__IO && window.__IO.playDelta) {
+          window.__IO.playDelta();
+        }
         dismissLoader();
       }, { passive: true });
     }
