@@ -1,31 +1,51 @@
 /* ============================================================
-   IsaacOriginals — main.js
-   Cinematic page loader, typing effects, parallax, reveals.
+   IsaacOriginals — main.js v5
+   Loader, welcome gate, hero sequence, reveals, parallax.
+   Exposes __IO globals for SPA reinit.
    ============================================================ */
 
 (function () {
   'use strict';
 
-  // --- Browser detection — adds class to <html> for CSS branching ---
-  const ua = navigator.userAgent;
-  const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
-  const isChrome = /chrome/i.test(ua) && !/edg/i.test(ua);
-  const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  // --- Global namespace for SPA reinit ---
+  window.__IO = window.__IO || {};
 
-  const html = document.documentElement;
+  // --- Browser detection ---
+  var ua = navigator.userAgent;
+  var isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+  var isChrome = /chrome/i.test(ua) && !/edg/i.test(ua);
+  var isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+  var html = document.documentElement;
   if (isSafari) html.classList.add('browser-safari');
   if (isChrome) html.classList.add('browser-chrome');
   if (isIOS) html.classList.add('is-ios');
   if (isTouch) html.classList.add('is-touch');
 
-  // --- Cinematic page loader (plays once per session) ---
-  const loader = document.getElementById('page-loader');
+  // --- Hero sequence ---
+  function startHeroSequence() {
+    var heroElements = ['hero-eyebrow', 'hero-line-1', 'hero-line-2', 'hero-desc', 'hero-cta'];
+    var delay = 200;
+    heroElements.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) {
+        setTimeout(function () { el.classList.add('typed'); }, delay);
+        delay += 350;
+      }
+    });
+  }
+
+  // Expose for SPA
+  window.__IO.initHero = startHeroSequence;
+
+  // --- Cinematic loader + Welcome gate ---
+  var loader = document.getElementById('page-loader');
   if (loader) {
-    const alreadyPlayed = sessionStorage.getItem('io-loader-played');
+    var alreadyPlayed = sessionStorage.getItem('io-loader-played');
 
     if (alreadyPlayed) {
-      // Already played this session — skip loader instantly, no transition
+      // Already played — skip instantly
       loader.style.transition = 'none';
       loader.style.opacity = '0';
       loader.style.visibility = 'hidden';
@@ -33,39 +53,30 @@
       loader.classList.add('done');
       startHeroSequence();
     } else {
-      // First visit this session — play the intro
-      const video = document.getElementById('loader-video');
-      // Chrome fires 'ended' early — give it extra hold time
-      const holdTime = isChrome ? 1800 : 1000;
+      var video = document.getElementById('loader-video');
+      var holdTime = isChrome ? 1800 : 1000;
+
       if (video) {
-        // When video ends, hold then fade out loader
-        video.addEventListener('ended', () => {
-          setTimeout(() => {
-            loader.classList.add('done');
-            sessionStorage.setItem('io-loader-played', '1');
-            startHeroSequence();
+        video.addEventListener('ended', function () {
+          setTimeout(function () {
+            showWelcomeGate();
           }, holdTime);
         });
-        // Fallback in case video fails to load — dismiss after 6s
-        setTimeout(() => {
+        // Fallback if video fails
+        setTimeout(function () {
           if (!loader.classList.contains('done')) {
-            loader.classList.add('done');
-            sessionStorage.setItem('io-loader-played', '1');
-            startHeroSequence();
+            showWelcomeGate();
           }
         }, 6000);
       } else {
-        // No video element — use static fallback timing
-        setTimeout(() => {
-          loader.classList.add('done');
-          sessionStorage.setItem('io-loader-played', '1');
-          startHeroSequence();
+        setTimeout(function () {
+          showWelcomeGate();
         }, 2800);
       }
     }
 
-    // Handle bfcache (back/forward navigation restores page from cache)
-    window.addEventListener('pageshow', (e) => {
+    // bfcache handler
+    window.addEventListener('pageshow', function (e) {
       if (e.persisted && loader) {
         loader.style.transition = 'none';
         loader.style.opacity = '0';
@@ -75,112 +86,126 @@
       }
     });
   } else {
-    // No loader — start hero immediately
     startHeroSequence();
   }
 
-  function startHeroSequence() {
-    const heroElements = [
-      'hero-eyebrow',
-      'hero-line-1',
-      'hero-line-2',
-      'hero-desc',
-      'hero-cta'
-    ];
+  // --- Welcome gate ---
+  function showWelcomeGate() {
+    var gate = document.getElementById('welcome-gate');
+    if (gate) {
+      gate.classList.add('visible');
+    } else {
+      // No welcome gate element — dismiss loader directly (non-index pages)
+      dismissLoader();
+    }
+  }
 
-    let delay = 200;
-    heroElements.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) {
-        setTimeout(() => {
-          el.classList.add('typed');
-        }, delay);
-        delay += 350;
-      }
+  function dismissLoader() {
+    if (loader && !loader.classList.contains('done')) {
+      loader.classList.add('done');
+      sessionStorage.setItem('io-loader-played', '1');
+      startHeroSequence();
+    }
+  }
+
+  // Welcome button click handler
+  var welcomeBtn = document.getElementById('welcome-btn');
+  if (welcomeBtn) {
+    welcomeBtn.addEventListener('click', function () {
+      dismissLoader();
     });
+    if (isTouch) {
+      welcomeBtn.addEventListener('touchstart', function () {
+        dismissLoader();
+      }, { passive: true });
+    }
   }
 
   // --- Mobile nav toggle ---
-  const btn = document.getElementById('menu-btn');
-  const menu = document.getElementById('mobile-menu');
-  const iconOpen = document.getElementById('icon-open');
-  const iconClose = document.getElementById('icon-close');
+  var btn = document.getElementById('menu-btn');
+  var menu = document.getElementById('mobile-menu');
+  var iconOpen = document.getElementById('icon-open');
+  var iconClose = document.getElementById('icon-close');
 
   if (btn && menu) {
-    btn.addEventListener('click', () => {
-      const isHidden = menu.classList.toggle('hidden');
+    btn.addEventListener('click', function () {
+      var isHidden = menu.classList.toggle('hidden');
       btn.setAttribute('aria-expanded', String(!isHidden));
       if (iconOpen && iconClose) {
         iconOpen.classList.toggle('hidden', !isHidden);
         iconClose.classList.toggle('hidden', isHidden);
       }
     });
-    menu.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => {
-        menu.classList.add('hidden');
-        btn.setAttribute('aria-expanded', 'false');
-        if (iconOpen && iconClose) {
-          iconOpen.classList.remove('hidden');
-          iconClose.classList.add('hidden');
-        }
-      });
-    });
   }
 
-  // --- Highlight active nav link ---
-  const path = window.location.pathname.split('/').pop() || 'index.html';
-  document.querySelectorAll('[data-nav]').forEach(link => {
-    if (link.getAttribute('data-nav') === path) {
-      link.classList.remove('text-ink/50');
-      link.classList.add('text-ink');
-      link.setAttribute('aria-current', 'page');
-    }
-  });
-
-  // --- Hero banner parallax (mouse-driven) ---
-  const heroBanner = document.getElementById('hero-banner');
-  if (heroBanner) {
-    document.addEventListener('mousemove', (e) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 2;
-      const y = (e.clientY / window.innerHeight - 0.5) * 2;
-      heroBanner.style.transform = `translate(${x * -8}px, ${y * -5}px) scale(1.05)`;
-    });
-  }
-
-  // --- Enhanced reveal on scroll ---
-  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  const revealObserver = ('IntersectionObserver' in window && !prefersReduced)
-    ? new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            const delay = e.target.dataset.revealDelay || 0;
-            setTimeout(() => {
-              e.target.classList.add('is-visible');
-            }, parseInt(delay));
-            revealObserver.unobserve(e.target);
-          }
-        });
-      }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' })
-    : null;
-
-  document.querySelectorAll('.reveal').forEach((el) => {
-    if (revealObserver) {
-      if (!el.dataset.revealDelay) {
-        const parent = el.parentElement;
-        const siblings = parent ? parent.querySelectorAll('.reveal') : [];
-        const sibIndex = Array.from(siblings).indexOf(el);
-        if (sibIndex > 0) {
-          el.dataset.revealDelay = sibIndex * 100;
-        }
+  // --- Active nav link ---
+  function updateNavHighlight() {
+    var path = window.location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('[data-nav]').forEach(function (link) {
+      link.classList.remove('text-ink');
+      link.classList.add('text-ink/50');
+      link.removeAttribute('aria-current');
+      if (link.getAttribute('data-nav') === path) {
+        link.classList.remove('text-ink/50');
+        link.classList.add('text-ink');
+        link.setAttribute('aria-current', 'page');
       }
-      revealObserver.observe(el);
+    });
+  }
+  updateNavHighlight();
+
+  // --- Hero parallax ---
+  var heroBanner = document.getElementById('hero-banner');
+  if (heroBanner) {
+    document.addEventListener('mousemove', function (e) {
+      var x = (e.clientX / window.innerWidth - 0.5) * 2;
+      var y = (e.clientY / window.innerHeight - 0.5) * 2;
+      heroBanner.style.transform = 'translate(' + (x * -8) + 'px, ' + (y * -5) + 'px) scale(1.05)';
+    });
+  }
+
+  // --- Reveal on scroll ---
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var revealObserver = null;
+
+  function initReveals() {
+    var elements = document.querySelectorAll('.reveal:not(.is-visible)');
+    if (!elements.length) return;
+
+    if ('IntersectionObserver' in window && !prefersReduced) {
+      if (!revealObserver) {
+        revealObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) {
+              var delay = e.target.dataset.revealDelay || 0;
+              setTimeout(function () {
+                e.target.classList.add('is-visible');
+              }, parseInt(delay));
+              revealObserver.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+      }
+
+      elements.forEach(function (el) {
+        if (!el.dataset.revealDelay) {
+          var parent = el.parentElement;
+          var siblings = parent ? parent.querySelectorAll('.reveal') : [];
+          var sibIndex = Array.from(siblings).indexOf(el);
+          if (sibIndex > 0) el.dataset.revealDelay = sibIndex * 100;
+        }
+        revealObserver.observe(el);
+      });
     } else {
-      el.classList.add('is-visible');
+      elements.forEach(function (el) { el.classList.add('is-visible'); });
     }
-  });
+  }
+
+  initReveals();
+  window.__IO.initReveals = initReveals;
 
   // --- Year stamp ---
-  const yearEl = document.getElementById('year');
+  var yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
+
 })();
