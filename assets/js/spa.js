@@ -139,6 +139,11 @@
     var yearEl = document.getElementById('year');
     if (yearEl) yearEl.textContent = new Date().getFullYear();
 
+    // Re-apply language translations to new content
+    if (window.__IO && window.__IO.applyLanguage) {
+      window.__IO.applyLanguage();
+    }
+
     // Re-attach SPA listeners to new content links
     attachLinkListeners();
   }

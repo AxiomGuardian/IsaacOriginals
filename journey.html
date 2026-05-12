@@ -36,13 +36,13 @@
         <img src="/assets/images/io-mark.png" alt="Isaac Originals" style="height:96px;width:auto;" />
       </a>
       <nav class="hidden md:flex items-center justify-center gap-6 text-[1rem] flex-1">
-        <a data-nav="index.html"   class="nav-link text-ink/50" href="/index.html">Home</a>
-        <a data-nav="journey.html" class="nav-link text-ink/50" href="/journey.html">The Journey</a>
-        <a data-nav="apex.html"    class="nav-link text-ink/50" href="/apex.html">ApexAERA</a>
-        <a data-nav="kit.html"     class="nav-link text-ink/50" href="/kit.html">K.I.T</a>
-        <a data-nav="about.html"   class="nav-link text-ink/50" href="/about.html">About</a>
+        <a data-nav="index.html"   class="nav-link text-ink/50" href="/index.html" data-i18n="nav.home">Home</a>
+        <a data-nav="journey.html" class="nav-link text-ink/50" href="/journey.html" data-i18n="nav.journey">The Journey</a>
+        <a data-nav="apex.html"    class="nav-link text-ink/50" href="/apex.html" data-i18n="nav.apex">ApexAERA</a>
+        <a data-nav="kit.html"     class="nav-link text-ink/50" href="/kit.html" data-i18n="nav.kit">K.I.T</a>
+        <a data-nav="about.html"   class="nav-link text-ink/50" href="/about.html" data-i18n="nav.about">About</a>
       </nav>
-      <div class="hidden md:block flex-shrink-0 w-[100px]"></div>
+      <div class="hidden md:block flex-shrink-0 w-[130px]"></div>
       <button id="menu-btn" aria-expanded="false" aria-controls="mobile-menu" class="md:hidden ml-auto p-2 text-ink" type="button">
         <svg id="icon-open"  class="w-6 h-6"        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
         <svg id="icon-close" class="w-6 h-6 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
@@ -50,11 +50,11 @@
     </div>
     <div id="mobile-menu" class="hidden md:hidden border-t border-bg-line">
       <nav class="flex flex-col px-6 py-4 gap-4 text-[0.95rem]">
-        <a class="text-ink/80 hover:text-ink" href="/index.html">Home</a>
-        <a class="text-ink/80 hover:text-ink" href="/journey.html">The Journey</a>
-        <a class="text-ink/80 hover:text-ink" href="/apex.html">ApexAERA</a>
-        <a class="text-ink/80 hover:text-ink" href="/kit.html">K.I.T</a>
-        <a class="text-ink/80 hover:text-ink" href="/about.html">About</a>
+        <a class="text-ink/80 hover:text-ink" href="/index.html" data-i18n="nav.home">Home</a>
+        <a class="text-ink/80 hover:text-ink" href="/journey.html" data-i18n="nav.journey">The Journey</a>
+        <a class="text-ink/80 hover:text-ink" href="/apex.html" data-i18n="nav.apex">ApexAERA</a>
+        <a class="text-ink/80 hover:text-ink" href="/kit.html" data-i18n="nav.kit">K.I.T</a>
+        <a class="text-ink/80 hover:text-ink" href="/about.html" data-i18n="nav.about">About</a>
       </nav>
     </div>
   </header>
@@ -64,10 +64,10 @@
   <!-- HERO -->
   <section class="relative grain overflow-hidden">
     <div class="max-w-6xl mx-auto px-6 pt-20 pb-16 md:pt-28 md:pb-24 relative">
-      <p class="eyebrow reveal">The Journey</p>
+      <p class="eyebrow reveal" data-i18n="journey.eyebrow">The Journey</p>
       <h1 class="h-display mt-6 text-4xl md:text-6xl max-w-4xl reveal">
-        Three phases.<br/>
-        <span class="text-white">One God through all of them.</span>
+        <span data-i18n="journey.hero.1">Three phases.</span><br/>
+        <span class="text-white" data-i18n="journey.hero.2">One God through all of them.</span>
       </h1>
     </div>
   </section>
@@ -79,44 +79,44 @@
       <!-- Phase 1 -->
       <div class="card p-8 md:p-10 reveal" data-sound="hover">
         <div class="flex items-center gap-4 mb-6">
-          <span class="text-xs uppercase tracking-widest text-ink-muted">Phase 1</span>
-          <span class="text-xs uppercase tracking-widest text-white/60">2021 – 2024</span>
+          <span class="text-xs uppercase tracking-widest text-ink-muted" data-i18n="journey.p1.label">Phase 1</span>
+          <span class="text-xs uppercase tracking-widest text-white/60" data-i18n="journey.p1.date">2021 – 2024</span>
         </div>
-        <h2 class="h-display text-2xl md:text-3xl">Learning &amp; Breaking</h2>
+        <h2 class="h-display text-2xl md:text-3xl" data-i18n="journey.p1.title">Learning &amp; Breaking</h2>
         <p class="mt-4 text-ink/70 leading-relaxed max-w-2xl">
-          Identity formation, pain, failure, and the beginning lessons in discipline.
+          <span data-i18n="journey.p1.desc">Identity formation, pain, failure, and the beginning lessons in discipline.
           This was the season of chasing things that didn't last — success, money, approval —
           and slowly realizing none of it filled the hole. God used the breaking to get my
-          attention.
+          attention.</span>
         </p>
       </div>
 
       <!-- Phase 2 -->
       <div class="card p-8 md:p-10 reveal" data-sound="hover">
         <div class="flex items-center gap-4 mb-6">
-          <span class="text-xs uppercase tracking-widest text-ink-muted">Phase 2</span>
-          <span class="text-xs uppercase tracking-widest text-white/60">2025</span>
+          <span class="text-xs uppercase tracking-widest text-ink-muted" data-i18n="journey.p2.label">Phase 2</span>
+          <span class="text-xs uppercase tracking-widest text-white/60" data-i18n="journey.p2.date">2025</span>
         </div>
-        <h2 class="h-display text-2xl md:text-3xl">Discipline &amp; Return</h2>
+        <h2 class="h-display text-2xl md:text-3xl" data-i18n="journey.p2.title">Discipline &amp; Return</h2>
         <p class="mt-4 text-ink/70 leading-relaxed max-w-2xl">
-          Returning to God, rebuilding habits, and learning to steward what was given.
+          <span data-i18n="journey.p2.desc">Returning to God, rebuilding habits, and learning to steward what was given.
           This is where the daily rhythms started to form — prayer, work, honesty, rest.
-          Not perfection. Just consistent, imperfect obedience.
+          Not perfection. Just consistent, imperfect obedience.</span>
         </p>
       </div>
 
       <!-- Phase 3 -->
       <div class="card p-8 md:p-10 reveal" data-sound="hover">
         <div class="flex items-center gap-4 mb-6">
-          <span class="text-xs uppercase tracking-widest text-ink-muted">Phase 3</span>
-          <span class="text-xs uppercase tracking-widest text-white/60">2026 – Present</span>
+          <span class="text-xs uppercase tracking-widest text-ink-muted" data-i18n="journey.p3.label">Phase 3</span>
+          <span class="text-xs uppercase tracking-widest text-white/60" data-i18n="journey.p3.date">2026 – Present</span>
         </div>
-        <h2 class="h-display text-2xl md:text-3xl">Execution &amp; Building</h2>
+        <h2 class="h-display text-2xl md:text-3xl" data-i18n="journey.p3.title">Execution &amp; Building</h2>
         <p class="mt-4 text-ink/70 leading-relaxed max-w-2xl">
-          Taking obedient action — building K.I.T, ApexAERA, and walking out the assignment
+          <span data-i18n="journey.p3.desc">Taking obedient action — building K.I.T, ApexAERA, and walking out the assignment
           with clarity and consistency. This is the season of putting the lessons to work.
           Still learning. Still failing forward. But now with tools in hand and a foundation
-          under my feet.
+          under my feet.</span>
         </p>
       </div>
 
@@ -126,8 +126,8 @@
   <!-- FOOTER -->
   <footer class="border-t border-white/[0.06]">
     <div class="max-w-6xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4 text-ink-muted text-sm">
-      <p>Built in obedience. &copy; <span id="year">2026</span> Isaac Originals.</p>
-      <p class="text-ink/60">Matthew 6:33 — Seek first the Kingdom.</p>
+      <p><span data-i18n="footer.built">Built in obedience.</span> &copy; <span id="year">2026</span> Isaac Originals.</p>
+      <p class="text-ink/60" data-i18n="footer.verse">Matthew 6:33 — Seek first the Kingdom.</p>
     </div>
   </footer>
 
@@ -138,6 +138,7 @@
   <script src="/assets/js/main.js?v=7"></script>
   <script src="/assets/js/sounds.js?v=6"></script>
   <script src="/assets/js/ambient.js?v=5"></script>
-  <script src="/assets/js/spa.js?v=1"></script>
+  <script src="/assets/js/i18n.js?v=1"></script>
+  <script src="/assets/js/spa.js?v=2"></script>
 </body>
 </html>
