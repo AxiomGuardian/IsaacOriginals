@@ -165,8 +165,15 @@
 
     wrap.appendChild(btn);
     wrap.appendChild(dropdown);
-    nav.style.position = 'relative';
-    nav.appendChild(wrap);
+
+    // On mobile: insert before hamburger so it flows to its left
+    var menuBtn = document.getElementById('menu-btn');
+    if (menuBtn && menuBtn.parentNode === nav) {
+      nav.insertBefore(wrap, menuBtn);
+    } else {
+      nav.style.position = 'relative';
+      nav.appendChild(wrap);
+    }
 
     // Toggle dropdown
     var isOpen = false;
