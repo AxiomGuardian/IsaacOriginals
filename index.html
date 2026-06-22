@@ -95,8 +95,12 @@
   <section class="relative overflow-hidden grain" style="background: #050505; min-height: 100vh;">
     <div id="hero-banner" style="position:absolute;inset:0;background:url('/assets/images/hero-banner.jpg') center center / cover no-repeat;"></div>
     <style>
-      @media (max-width: 768px) and (orientation: portrait) {
+      /* Any portrait-orientation viewport (phones AND rotated monitors) uses the tall banner */
+      @media (orientation: portrait) {
         #hero-banner { background-image: url('/assets/images/hero-banner-portrait.jpg') !important; }
+      }
+      /* Phone-only spacing tweak */
+      @media (max-width: 768px) and (orientation: portrait) {
         #hero-cta { margin-top: 6rem !important; }
       }
     </style>
