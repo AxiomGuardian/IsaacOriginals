@@ -199,6 +199,26 @@
     }
     @keyframes caretBlink{0%,49%{opacity:1}50%,100%{opacity:0}}
 
+    /* Photo backdrop, PERSONAL door only. Deliberately not a page background:
+       the streaks need empty black to read, and body text over a mid-tone sky
+       loses contrast. Confined to one card it becomes a signal instead of noise
+       — one door is the man, the other is the work. Dim at rest, lifts on touch. */
+    .door-photo{
+      position:absolute; inset:0; z-index:0; pointer-events:none;
+      background:url('/assets/images/isaac-door.jpg') center 22% / cover no-repeat;
+      opacity:.26; transition:opacity .5s ease, transform .6s ease;
+      transform:scale(1.02);
+    }
+    .door-photo::after{
+      content:""; position:absolute; inset:0;
+      background:
+        radial-gradient(ellipse 78% 52% at 50% 52%, rgba(10,10,10,.92) 0%, rgba(10,10,10,.55) 60%, transparent 100%),
+        linear-gradient(to top, rgba(10,10,10,.88) 0%, rgba(10,10,10,.25) 55%, transparent 100%);
+    }
+    .door:hover .door-photo,.door:active .door-photo,.door.lit .door-photo{
+      opacity:.60; transform:scale(1.06);
+    }
+
     /* I.O insignia, stamped into the corner. Fills the empty space without shouting. */
     .door-mark{
       position:absolute; right:1.05rem; bottom:.9rem;
@@ -402,6 +422,7 @@
     <section class="view active" id="view-home">
       <div class="doors">
         <button class="door" type="button" data-go="personal">
+          <span class="door-photo" aria-hidden="true"></span>
           <img class="door-mark" src="/assets/images/io-insignia.png" alt="" aria-hidden="true" />
           <span class="door-body">
             <span class="label" data-type="Personal"></span>
@@ -461,10 +482,14 @@
         </a>
       </div>
 
-      <button class="save" type="button" id="save-contact">
+      <!-- Isaac's real card, exported from his iPhone, served as a static file.
+           A plain link beats a JS blob here: iOS opens it straight into Contacts,
+           Android downloads and hands it to the contacts app. And the 218KB
+           (it has his photo embedded) never touches page load. -->
+      <a class="save" href="/assets/isaac-rodriguez.vcf" download="Isaac-Rodriguez.vcf" type="text/vcard">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v12M7 11l5 5 5-5M4 20h16"/></svg>
-        <span id="save-label">Save Contact</span>
-      </button>
+        <span>Save Contact</span>
+      </a>
     </section>
 
     <!-- ---------- BUSINESS ---------- -->
@@ -534,7 +559,7 @@
 
   /* Build stamp. If Safari shows you something stale, check the console:
      the number below tells you which version you're actually looking at. */
-  var BUILD = '2026-08-11.9';
+  var BUILD = '2026-08-11.10';
   try { console.log('%cIsaac Originals /connect build ' + BUILD, 'color:#2DD4FF'); } catch(e){}
 
   /* ================================================================
@@ -848,42 +873,6 @@
   // Deep link support: /connect#business goes straight to the ventures.
   var initial = (location.hash || '').replace('#','');
   if (initial === 'personal' || initial === 'business') go(initial, false);
-
-  /* ---------- SAVE CONTACT (vCard) ---------- */
-  // NOTE — Isaac: change EMAIL below to whichever address you want on the card.
-  var EMAIL = 'guardian.v.artemis@gmail.com';
-
-  var VCARD = [
-    'BEGIN:VCARD',
-    'VERSION:3.0',
-    'N:;Isaac;;;',
-    'FN:Isaac',
-    'NICKNAME:Isaac Originals',
-    'ORG:Isaac Originals',
-    'TITLE:Founder',
-    'EMAIL;TYPE=INTERNET:' + EMAIL,
-    'URL:https://isaacoriginals.com/connect',
-    'URL;TYPE=Omnis Connect:https://www.omnisconnect.com',
-    'URL;TYPE=YouTube:https://www.youtube.com/@IsaacOriginals',
-    'URL;TYPE=Instagram:https://www.instagram.com/isaacoriginals',
-    'URL;TYPE=X:https://x.com/IsaacOriginals',
-    'NOTE:Seek first the Kingdom of God and His righteousness. Matthew 6:33',
-    'END:VCARD'
-  ].join('\r\n');
-
-  document.getElementById('save-contact').addEventListener('click', function(){
-    var blob = new Blob([VCARD], {type:'text/vcard;charset=utf-8'});
-    var url  = URL.createObjectURL(blob);
-    var a    = document.createElement('a');
-    a.href = url; a.download = 'Isaac-Originals.vcf';
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    setTimeout(function(){ URL.revokeObjectURL(url); }, 1500);
-
-    var lbl = document.getElementById('save-label');
-    var was = lbl.textContent;
-    lbl.textContent = 'Saved';
-    setTimeout(function(){ lbl.textContent = was; }, 2200);
-  });
 
   // Start the type-in the moment the intro clears, not before.
   if (revealed) typeLabels();
