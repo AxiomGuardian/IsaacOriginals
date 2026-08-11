@@ -8,6 +8,12 @@
   <meta name="theme-color" content="#0A0A0A" />
   <meta name="robots" content="index, follow" />
 
+  <!-- Never cache this page. The real enforcement is the Cache-Control header
+       in vercel.json; these are belt-and-braces for browsers that honour them. -->
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+
   <meta property="og:title" content="Isaac Originals | Connect" />
   <meta property="og:description" content="Seek first the Kingdom of God and His righteousness. Matthew 6:33" />
   <meta property="og:type" content="website" />
@@ -64,6 +70,10 @@
     #fx{
       position:fixed; inset:0; z-index:0; pointer-events:none;
       opacity:0; transition:opacity 1.4s ease;
+      /* Force it onto its own compositor layer. A full-screen fixed canvas over
+         a scrolling page otherwise makes iOS Safari repaint the lot on scroll. */
+      transform:translateZ(0);
+      -webkit-backface-visibility:hidden; backface-visibility:hidden;
     }
     #fx.on{opacity:1}
 
@@ -78,13 +88,21 @@
     #app.in{opacity:1}
 
     .brandhead{text-align:center; margin-bottom:2.75rem}
-    .brandhead img{
-      height:118px;width:auto;display:block;margin:0 auto 1.35rem;
-      animation:breathe 7s ease-in-out infinite;
+    /* The breathing glow is a separate layer animating OPACITY only.
+       Animating filter:drop-shadow on the image forced a full repaint every
+       frame, which is what was cooking Chrome on iOS. Opacity is compositor-only. */
+    .delta-wrap{position:relative;display:inline-block;margin-bottom:1.35rem}
+    .delta-glow{
+      position:absolute; left:50%; top:52%; transform:translate(-50%,-50%);
+      width:210%; height:210%; border-radius:50%; pointer-events:none;
+      background:radial-gradient(circle, rgba(255,255,255,.20) 0%, rgba(255,255,255,.05) 38%, transparent 66%);
+      animation:glowPulse 7s ease-in-out infinite;
+      will-change:opacity;
     }
-    @keyframes breathe{
-      0%,100%{filter:drop-shadow(0 0 22px rgba(255,255,255,.16)) drop-shadow(0 0 55px rgba(255,255,255,.04))}
-      50%    {filter:drop-shadow(0 0 34px rgba(255,255,255,.34)) drop-shadow(0 0 90px rgba(255,255,255,.11))}
+    @keyframes glowPulse{0%,100%{opacity:.35}50%{opacity:1}}
+    .brandhead img{
+      height:118px;width:auto;display:block;position:relative;z-index:1;
+      filter:drop-shadow(0 0 18px rgba(255,255,255,.14));
     }
     .wordmark{
       font-size:1.02rem; font-weight:600; letter-spacing:.36em;
@@ -109,30 +127,42 @@
     .row::before,
     .vent:not(.forge)::before{
       content:""; position:absolute; inset:0; border-radius:inherit;
-      padding:1.5px; pointer-events:none; opacity:0;
+      padding:2px; pointer-events:none; opacity:0;
       transition:opacity .3s ease;
+      filter:drop-shadow(0 0 7px var(--auraC, #ffffff))
+             drop-shadow(0 0 16px var(--auraGlow, rgba(255,255,255,.45)));
       background:conic-gradient(from var(--aura),
         transparent 0deg,
-        rgba(255,255,255,.04) 24deg,
-        var(--auraC, #ffffff) 62deg,
-        rgba(255,255,255,.04) 104deg,
-        transparent 132deg,
+        var(--auraC, #ffffff) 18deg,
+        #ffffff 46deg,
+        var(--auraC, #ffffff) 74deg,
+        rgba(255,255,255,.06) 108deg,
+        transparent 146deg,
         transparent 360deg);
       -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
               mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
       -webkit-mask-composite:xor; mask-composite:exclude;
     }
-    .door:hover::before, .door:active::before,
-    .row:hover::before,  .row:active::before,
-    .vent:not(.forge):hover::before, .vent:not(.forge):active::before{
+    .door:hover::before, .door:active::before, .door.lit::before,
+    .row:hover::before,  .row:active::before,  .row.lit::before,
+    .vent:not(.forge):hover::before,
+    .vent:not(.forge):active::before,
+    .vent:not(.forge).lit::before{
       opacity:1;
-      animation:auraSpin 2.6s linear infinite;
+      animation:auraSpin 2.2s linear infinite;
     }
     @keyframes auraSpin{ to{ --aura:360deg } }
 
-    /* Each venture's trim carries its own colour. */
-    .vent.apex{--auraC:#2DD4FF}
-    .vent.kit{--auraC:#D4A24C}
+    /* On touch, drop the two drop-shadow passes on the ring. The coloured ring
+       plus the card's own box-shadow still reads, at a fraction of the cost. */
+    @media (hover: none){
+      .door::before, .row::before, .vent:not(.forge)::before{ filter:none }
+    }
+
+    /* Each venture's trim carries its own colour.
+       Omnis Connect stays white on purpose: see the note in the ventures block. */
+    .vent.apex{--auraC:#2DD4FF; --auraGlow:rgba(45,212,255,.55)}
+    .vent.kit {--auraC:#D4A24C; --auraGlow:rgba(212,162,76,.55)}
 
     /* ================= VIEWS ================= */
     .view{display:none; flex:1; animation:viewIn .45s cubic-bezier(.16,1,.3,1) both}
@@ -149,7 +179,7 @@
       cursor:pointer; font-family:inherit; color:inherit;
       transition:border-color .3s ease, transform .3s ease, box-shadow .3s ease, background .3s ease;
     }
-    .door:hover,.door:active{
+    .door:hover,.door:active,.door.lit{
       border-color:rgba(255,255,255,.42);
       transform:translateY(-3px);
       box-shadow:0 0 22px rgba(255,255,255,.10), 0 0 55px rgba(255,255,255,.04);
@@ -176,14 +206,14 @@
       opacity:.085; pointer-events:none; z-index:1;
       transition:opacity .4s ease;
     }
-    .door:hover .door-mark,.door:active .door-mark{opacity:.24}
+    .door:hover .door-mark,.door:active .door-mark,.door.lit .door-mark{opacity:.24}
 
     .door-arrow{
       position:absolute; top:1.3rem; right:1.3rem; z-index:2;
       width:19px;height:19px;color:var(--muted);
       transition:color .3s ease,transform .3s ease;
     }
-    .door:hover .door-arrow{color:#fff;transform:translateX(3px)}
+    .door:hover .door-arrow,.door.lit .door-arrow{color:#fff;transform:translateX(3px)}
 
     /* ================= BACK ================= */
     .back{
@@ -209,7 +239,7 @@
       border-radius:10px; padding:1.05rem 1.2rem;
       transition:border-color .28s ease, transform .28s ease, background .28s ease;
     }
-    .row:hover,.row:active{
+    .row:hover,.row:active,.row.lit{
       border-color:rgba(255,255,255,.35); transform:translateY(-2px);
       background:#181818;
     }
@@ -227,7 +257,7 @@
       border-radius:12px; padding:1.35rem 1.4rem;
       transition:border-color .3s ease, transform .3s ease, box-shadow .3s ease;
     }
-    .vent:hover,.vent:active{transform:translateY(-3px)}
+    .vent:hover,.vent:active,.vent.lit{transform:translateY(-3px)}
     .vent .top{display:flex;align-items:center;justify-content:space-between;gap:1rem}
     .vent .name{font-size:1.02rem;font-weight:600;letter-spacing:.01em}
     .vent .desc{font-size:.78rem;color:var(--muted);margin-top:.5rem;line-height:1.55}
@@ -243,11 +273,25 @@
     .dot{width:6px;height:6px;border-radius:999px;background:#fff;box-shadow:0 0 7px rgba(255,255,255,.5)}
 
     /* per-venture accent on hover only — restraint by default */
-    .vent.omnis:hover{border-color:rgba(255,255,255,.42);box-shadow:0 0 22px rgba(255,255,255,.09)}
-    .vent.apex:hover{border-color:rgba(45,212,255,.45);box-shadow:0 0 22px rgba(45,212,255,.14)}
-    .vent.apex:hover .name{color:var(--cyan)}
-    .vent.kit:hover{border-color:rgba(212,162,76,.45);box-shadow:0 0 22px rgba(212,162,76,.16)}
-    .vent.kit:hover .name{color:var(--gold)}
+    .vent.omnis:hover,.vent.omnis:active,.vent.omnis.lit{
+      border-color:rgba(255,255,255,.5);
+      box-shadow:0 0 30px rgba(255,255,255,.16), 0 0 70px rgba(255,255,255,.06);
+    }
+    .vent.apex:hover,.vent.apex:active,.vent.apex.lit{
+      border-color:rgba(45,212,255,.55);
+      box-shadow:0 0 34px rgba(45,212,255,.30), 0 0 80px rgba(45,212,255,.12);
+    }
+    .vent.apex:hover .name,.vent.apex:active .name,.vent.apex.lit .name{
+      color:var(--cyan); text-shadow:0 0 18px rgba(45,212,255,.6);
+    }
+    .vent.kit:hover,.vent.kit:active,.vent.kit.lit{
+      border-color:rgba(212,162,76,.55);
+      box-shadow:0 0 34px rgba(212,162,76,.34), 0 0 80px rgba(212,162,76,.14);
+    }
+    .vent.kit:hover .name,.vent.kit:active .name,.vent.kit.lit .name{
+      color:var(--gold); text-shadow:0 0 18px rgba(212,162,76,.65);
+    }
+    .vent .name{transition:color .3s ease, text-shadow .3s ease}
 
     /* Rodriguez Forge: in development. Faded, gradient wash, NOT clickable.
        No link, no aura, no hover lift. It reads as a placeholder, not a door. */
@@ -346,7 +390,10 @@
   <div id="app">
 
     <div class="brandhead">
-      <img src="/assets/images/delta-connect.png" alt="Isaac Originals" />
+      <span class="delta-wrap">
+        <span class="delta-glow" aria-hidden="true"></span>
+        <img src="/assets/images/delta-connect.png" alt="Isaac Originals" />
+      </span>
       <div class="wordmark">Isaac Originals</div>
       <div class="verse">Matthew 6:33</div>
     </div>
@@ -430,6 +477,9 @@
 
       <div class="vents">
 
+        <!-- Omnis Connect keeps the WHITE trim deliberately. Its own site is cyan,
+             but ApexAERA already owns cyan here; two cyan cards side by side would
+             kill the colour-as-wayfinding system. White = the flagship. -->
         <a class="vent omnis" href="https://www.omnisconnect.com/" target="_blank" rel="noopener">
           <div class="top">
             <span class="name">Omnis Connect</span>
@@ -480,6 +530,11 @@
 (function(){
   'use strict';
 
+  /* Build stamp. If Safari shows you something stale, check the console:
+     the number below tells you which version you're actually looking at. */
+  var BUILD = '2026-08-11.8';
+  try { console.log('%cIsaac Originals /connect build ' + BUILD, 'color:#2DD4FF'); } catch(e){}
+
   /* ================================================================
      LIGHT-SPEED STREAKS
      Sparse diagonal light trails, like something passing at speed.
@@ -496,26 +551,43 @@
     var W, H, dpr;
     var streaks = [];
     var running = true;
+    var dirty = false;
+
+    var TOUCH = matchMedia('(hover: none)').matches;
+    var MAX   = TOUCH ? 4 : 9;   // fewer trails on a phone GPU
 
     // Travel direction: up-left to down-right, shallow diagonal.
     var ANG = 28 * Math.PI / 180;
     var UX  = Math.cos(ANG), UY = Math.sin(ANG);
 
+    var lastW = 0, resizeTimer = null;
+
     function size(){
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      // Cap the backing store. Full 3x on a phone is a lot of pixels to clear 60x/sec.
+      dpr = Math.min(window.devicePixelRatio || 1, TOUCH ? 1.25 : 2);
       W = cv.width  = Math.floor(innerWidth  * dpr);
       H = cv.height = Math.floor(innerHeight * dpr);
       cv.style.width  = innerWidth  + 'px';
       cv.style.height = innerHeight + 'px';
+      lastW = innerWidth;
     }
     size();
-    addEventListener('resize', size);
+
+    // Mobile browsers fire resize every time the URL bar slides. Reallocating a
+    // full-resolution canvas on each of those is what locks the page up, so we
+    // debounce and ignore height-only changes entirely.
+    addEventListener('resize', function(){
+      if (innerWidth === lastW) return;
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(size, 220);
+    }, {passive:true});
 
     function spawn(){
       // Enter from the top / upper-left, exit bottom-right. Spread wide enough
       // that streaks cross the middle of the screen, not just the corner.
       var len   = (160 + Math.random() * 340) * dpr;
       var speed = (9 + Math.random() * 13) * dpr;
+      var seed  = Math.random();
 
       streaks.push({
         x: (-1.15 + Math.random() * 2.05) * W,
@@ -523,21 +595,22 @@
         len: len,
         sp: speed,
         w: (Math.random() < 0.28 ? 2.1 : 1.15) * dpr,
-        a: 0.30 + Math.random() * 0.50,
+        // Gold reads dimmer than white on black, so it gets a little more alpha.
+        a: (function(r){ return (r < 0.34 && r >= 0.20 ? 0.42 : 0.30) + Math.random() * 0.50; })(seed),
         // Mostly white. Some carry the brand cyan, fewer carry the K.I.T. gold.
-        tint: (function(r){ return r < 0.20 ? '45,212,255' : (r < 0.31 ? '212,162,76' : '255,255,255'); })(Math.random())
+        tint: seed < 0.20 ? '45,212,255' : (seed < 0.34 ? '212,162,76' : '255,255,255')
       });
-      if (streaks.length > 10) streaks.shift();
+      if (streaks.length > MAX) streaks.shift();
     }
 
     function schedule(){
-      var wait = 700 + Math.random() * 2100;
+      var wait = (TOUCH ? 1100 : 700) + Math.random() * 2100;
       setTimeout(function(){
         if (running && !document.hidden){
           spawn();
           // Sometimes two or three pass together, like traffic.
-          if (Math.random() < 0.42) setTimeout(spawn, 110 + Math.random() * 240);
-          if (Math.random() < 0.16) setTimeout(spawn, 260 + Math.random() * 320);
+          if (Math.random() < (TOUCH ? 0.25 : 0.42)) setTimeout(spawn, 110 + Math.random() * 240);
+          if (!TOUCH && Math.random() < 0.16) setTimeout(spawn, 260 + Math.random() * 320);
         }
         schedule();
       }, wait);
@@ -547,6 +620,13 @@
       if (!running) return;
       requestAnimationFrame(draw);
       if (document.hidden) return;
+
+      // Nothing on screen: clear once, then do no work at all until a streak spawns.
+      if (!streaks.length){
+        if (dirty){ ctx.clearRect(0, 0, W, H); dirty = false; }
+        return;
+      }
+      dirty = true;
 
       ctx.clearRect(0, 0, W, H);
       ctx.lineCap = 'round';
@@ -565,16 +645,24 @@
         g.addColorStop(0.7, 'rgba(' + rgb + ',' + (s.a * 0.5).toFixed(3) + ')');
         g.addColorStop(1,   'rgba(' + rgb + ',' + s.a.toFixed(3) + ')');
 
-        // Glow makes it read as light rather than a hairline.
-        ctx.shadowColor = 'rgba(' + rgb + ',' + (s.a * 0.75).toFixed(3) + ')';
-        ctx.shadowBlur  = 9 * dpr;
+        // Glow: a wide faint pass under a tight bright one. Two cheap strokes
+        // instead of ctx.shadowBlur, which is brutally slow on mobile GPUs.
+        var gw = ctx.createLinearGradient(tx, ty, hx, hy);
+        gw.addColorStop(0,   'rgba(' + rgb + ',0)');
+        gw.addColorStop(1,   'rgba(' + rgb + ',' + (s.a * 0.22).toFixed(3) + ')');
+        ctx.strokeStyle = gw;
+        ctx.lineWidth = s.w * 5;
+        ctx.beginPath();
+        ctx.moveTo(tx, ty);
+        ctx.lineTo(hx, hy);
+        ctx.stroke();
+
         ctx.strokeStyle = g;
         ctx.lineWidth = s.w;
         ctx.beginPath();
         ctx.moveTo(tx, ty);
         ctx.lineTo(hx, hy);
         ctx.stroke();
-        ctx.shadowBlur = 0;
 
         // Retire once the whole streak has cleared the bottom-right.
         if (tx > W + 60 * dpr || ty > H + 60 * dpr) streaks.splice(i, 1);
@@ -601,8 +689,19 @@
     revealed = true;
     loader.classList.add('done');
     app.classList.add('in');
-    try { video.pause(); } catch(e){}
-    setTimeout(function(){ loader.style.display = 'none'; }, 750);
+    setTimeout(function(){
+      loader.style.display = 'none';
+      // Tear the video down properly. Leaving a decoded video parked in the DOM
+      // keeps a hardware decoder pinned, which is what makes Safari feel like
+      // it's buffering long after the intro has finished.
+      try {
+        video.pause();
+        video.removeAttribute('src');
+        video.innerHTML = '';
+        video.load();
+        if (video.parentNode) video.parentNode.removeChild(video);
+      } catch(e){}
+    }, 750);
   }
 
   if (video) {
@@ -622,6 +721,62 @@
     if (sessionStorage.getItem('io_seen') === '1') { reveal(); }
     sessionStorage.setItem('io_seen','1');
   } catch(e){}
+
+  /* ---------- THUMB PRESS ----------
+     iOS will not fire CSS :hover from a finger, and it only fires :active on
+     arbitrary elements if a touch listener exists. So drive it explicitly:
+     touchstart adds .lit, which every hover rule also matches. */
+  var LIT_SEL = '.door, .row, .vent:not(.forge)';
+  var litTimer = null;
+  var touchStartY = 0;
+  var scrolling = false;
+
+  function clearLit(){
+    var on = document.querySelectorAll('.lit');
+    for (var i = 0; i < on.length; i++) on[i].classList.remove('lit');
+  }
+
+  function lightAt(x, y){
+    var node = document.elementFromPoint(x, y);
+    var el = (node && node.closest) ? node.closest(LIT_SEL) : null;
+    if (!el){ clearLit(); return; }
+    if (el.classList.contains('lit')) return;   // already glowing, leave it alone
+    clearLit();
+    el.classList.add('lit');
+  }
+
+  document.addEventListener('touchstart', function(e){
+    clearTimeout(litTimer);
+    scrolling = false;
+    touchStartY = window.pageYOffset;
+    var t = e.touches[0];
+    if (t) lightAt(t.clientX, t.clientY);
+  }, {passive:true});
+
+  // Slide your thumb across the cards and each one lights as you pass over it.
+  // That IS hover on a phone. But if the page is actually scrolling under the
+  // finger, stop lighting things up: that's a scroll, not a browse.
+  document.addEventListener('touchmove', function(e){
+    if (scrolling) return;
+    if (Math.abs(window.pageYOffset - touchStartY) > 6){
+      scrolling = true;
+      clearLit();
+      return;
+    }
+    var t = e.touches[0];
+    if (t) lightAt(t.clientX, t.clientY);
+  }, {passive:true});
+
+  // Hold the glow well after the finger lifts so a light tap is clearly visible.
+  document.addEventListener('touchend', function(){
+    clearTimeout(litTimer);
+    litTimer = setTimeout(clearLit, 1400);
+  }, {passive:true});
+
+  document.addEventListener('touchcancel', function(){
+    clearTimeout(litTimer);
+    litTimer = setTimeout(clearLit, 400);
+  }, {passive:true});
 
   /* ---------- TYPE-IN: the two door labels ---------- */
   var typeTimers = [];
