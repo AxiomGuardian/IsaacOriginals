@@ -199,14 +199,14 @@
     }
     @keyframes caretBlink{0%,49%{opacity:1}50%,100%{opacity:0}}
 
-    /* Photo backdrop, PERSONAL door only. Deliberately not a page background:
-       the streaks need empty black to read, and body text over a mid-tone sky
-       loses contrast. Confined to one card it becomes a signal instead of noise
-       — one door is the man, the other is the work. Dim at rest, lifts on touch. */
+    /* Photo backdrop per door. Deliberately NOT a page background: the light
+       streaks need empty black to read, and body text over a mid-tone sky loses
+       contrast. Confined to the cards it becomes a signal instead of noise.
+       Dim at rest, lifts and brightens on hover or thumb. */
     .door-photo{
       position:absolute; inset:0; z-index:0; pointer-events:none;
-      background:url('/assets/images/isaac-door.jpg') center 22% / cover no-repeat;
-      opacity:.26; transition:opacity .5s ease, transform .6s ease;
+      background-size:cover; background-repeat:no-repeat;
+      transition:opacity .5s ease, transform .6s ease;
       transform:scale(1.02);
     }
     .door-photo::after{
@@ -215,8 +215,27 @@
         radial-gradient(ellipse 78% 52% at 50% 52%, rgba(10,10,10,.92) 0%, rgba(10,10,10,.55) 60%, transparent 100%),
         linear-gradient(to top, rgba(10,10,10,.88) 0%, rgba(10,10,10,.25) 55%, transparent 100%);
     }
-    .door:hover .door-photo,.door:active .door-photo,.door.lit .door-photo{
-      opacity:.60; transform:scale(1.06);
+
+    /* PERSONAL: shuttle carrier, arms crossed, storm sky. Bright image, so it
+       stays low or the white type stops reading against those clouds. */
+    .door-photo.personal{
+      background-image:url('/assets/images/door-personal.jpg');
+      background-position:center 24%;
+      opacity:.17;
+    }
+    /* BUSINESS: silhouette pointing at Orion over the moon, Earth behind.
+       Already near-black, so it carries far more opacity without fighting type. */
+    .door-photo.business{
+      background-image:url('/assets/images/door-business.jpg');
+      background-position:center 42%;
+      opacity:.48;
+    }
+
+    .door:hover .door-photo.personal,.door:active .door-photo.personal,.door.lit .door-photo.personal{
+      opacity:.58; transform:scale(1.06);
+    }
+    .door:hover .door-photo.business,.door:active .door-photo.business,.door.lit .door-photo.business{
+      opacity:.85; transform:scale(1.06);
     }
 
     /* I.O insignia, stamped into the corner. Fills the empty space without shouting. */
@@ -422,7 +441,7 @@
     <section class="view active" id="view-home">
       <div class="doors">
         <button class="door" type="button" data-go="personal">
-          <span class="door-photo" aria-hidden="true"></span>
+          <span class="door-photo personal" aria-hidden="true"></span>
           <img class="door-mark" src="/assets/images/io-insignia.png" alt="" aria-hidden="true" />
           <span class="door-body">
             <span class="label" data-type="Personal"></span>
@@ -432,6 +451,7 @@
         </button>
 
         <button class="door" type="button" data-go="business">
+          <span class="door-photo business" aria-hidden="true"></span>
           <img class="door-mark" src="/assets/images/io-insignia.png" alt="" aria-hidden="true" />
           <span class="door-body">
             <span class="label" data-type="Business"></span>
@@ -559,7 +579,7 @@
 
   /* Build stamp. If Safari shows you something stale, check the console:
      the number below tells you which version you're actually looking at. */
-  var BUILD = '2026-08-11.10';
+  var BUILD = '2026-08-11.12';
   try { console.log('%cIsaac Originals /connect build ' + BUILD, 'color:#2DD4FF'); } catch(e){}
 
   /* ================================================================
