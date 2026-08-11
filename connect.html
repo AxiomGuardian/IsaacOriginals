@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Isaac Originals — Connect</title>
+  <meta name="description" content="Isaac Originals. Seek first the Kingdom. Personal links and the four ventures — Omnis Connect, ApexAERA, K.I.T., Rodriguez Forge." />
+  <meta name="theme-color" content="#0A0A0A" />
+  <meta name="robots" content="index, follow" />
+
+  <meta property="og:title" content="Isaac Originals — Connect" />
+  <meta property="og:description" content="Seek first the Kingdom of God and His righteousness. — Matthew 6:33" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://isaacoriginals.com/connect" />
+  <meta property="og:image" content="/assets/images/og.jpg" />
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32.png?v=2" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/images/favicon-192.png?v=2" />
+  <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Self-contained on purpose. No site nav, no ambient audio engine, no three.js.
+       A card scan has to be usable in under two seconds on cellular data. -->
+  <style>
+    :root{
+      --bg:#0A0A0A; --bg-card:#141414; --line:rgba(255,255,255,.08);
+      --ink:#F5F5F5; --muted:#6B6760;
+      --cyan:#2DD4FF; --gold:#D4A24C;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+    html{background:#0A0A0A;-webkit-text-size-adjust:100%}
+    body{
+      background:var(--bg); color:var(--ink);
+      font-family:'Space Grotesk',system-ui,-apple-system,sans-serif;
+      -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      min-height:100svh; overflow-x:hidden;
+    }
+    a{color:inherit;text-decoration:none}
+    ::selection{background:rgba(255,255,255,.2);color:#fff}
+
+    /* ================= LOADER ================= */
+    #loader{
+      position:fixed; inset:0; z-index:9999; background:#000;
+      display:flex; align-items:center; justify-content:center; flex-direction:column;
+      transition:opacity .7s ease, visibility .7s ease;
+    }
+    #loader.done{opacity:0;visibility:hidden;pointer-events:none}
+    #loader video{width:88vw;max-width:560px;height:auto;opacity:0;animation:fadeIn .5s ease .15s forwards}
+    #skip{
+      position:absolute; bottom:8%; left:50%; transform:translateX(-50%);
+      font-size:.66rem; letter-spacing:.28em; text-transform:uppercase;
+      color:rgba(255,255,255,.35); background:none; border:0; cursor:pointer;
+      font-family:inherit; padding:.75rem 1.25rem; opacity:0;
+      animation:fadeIn .6s ease 1s forwards; transition:color .2s ease;
+    }
+    #skip:hover{color:rgba(255,255,255,.8)}
+    @keyframes fadeIn{to{opacity:1}}
+
+    /* ================= SHELL ================= */
+    #app{
+      opacity:0; transition:opacity .6s ease;
+      min-height:100svh; display:flex; flex-direction:column;
+      padding:2.5rem 1.25rem calc(1.5rem + env(safe-area-inset-bottom));
+      max-width:640px; margin:0 auto; width:100%;
+    }
+    #app.in{opacity:1}
+
+    .brandhead{text-align:center; margin-bottom:2.75rem}
+    .brandhead img{height:84px;width:auto;display:block;margin:0 auto 1.15rem;
+      filter:drop-shadow(0 0 26px rgba(255,255,255,.18)) drop-shadow(0 0 60px rgba(255,255,255,.06))}
+    .wordmark{
+      font-size:.94rem; font-weight:600; letter-spacing:.34em;
+      text-transform:uppercase; color:#fff;
+    }
+    .verse{
+      margin-top:.7rem; font-size:.68rem; letter-spacing:.2em; text-transform:uppercase;
+      color:var(--muted); font-weight:400;
+    }
+
+    /* ================= VIEWS ================= */
+    .view{display:none; flex:1; animation:viewIn .45s cubic-bezier(.16,1,.3,1) both}
+    .view.active{display:block}
+    @keyframes viewIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+    /* ================= DOORS ================= */
+    .doors{display:grid;gap:.9rem}
+    .door{
+      display:flex; align-items:center; justify-content:space-between;
+      background:var(--bg-card); border:1px solid rgba(255,255,255,.10);
+      border-radius:12px; padding:1.55rem 1.5rem; width:100%;
+      cursor:pointer; font-family:inherit; color:inherit; text-align:left;
+      transition:border-color .3s ease, transform .3s ease, box-shadow .3s ease, background .3s ease;
+    }
+    .door:hover,.door:active{
+      border-color:rgba(255,255,255,.42);
+      transform:translateY(-3px);
+      box-shadow:0 0 22px rgba(255,255,255,.10), 0 0 55px rgba(255,255,255,.04);
+    }
+    .door > span:first-child{display:block;min-width:0}
+    .door .label{display:block;font-size:1.02rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase}
+    .door .sub{display:block;font-size:.75rem;color:var(--muted);margin-top:.5rem;letter-spacing:.02em;text-transform:none;font-weight:400;line-height:1.5}
+    .door svg{width:19px;height:19px;color:var(--muted);flex-shrink:0;margin-left:1rem;transition:color .3s ease,transform .3s ease}
+    .door:hover svg{color:#fff;transform:translateX(3px)}
+
+    /* ================= BACK ================= */
+    .back{
+      display:inline-flex; align-items:center; gap:.55rem;
+      font-size:.66rem; letter-spacing:.26em; text-transform:uppercase;
+      color:var(--muted); background:none; border:0; cursor:pointer;
+      font-family:inherit; padding:.4rem 0; margin-bottom:1.6rem;
+      transition:color .2s ease;
+    }
+    .back:hover{color:#fff}
+    .back svg{width:14px;height:14px}
+
+    .eyebrow{
+      font-size:.64rem; letter-spacing:.28em; text-transform:uppercase;
+      color:rgba(255,255,255,.45); margin-bottom:1.1rem; font-weight:500;
+    }
+
+    /* ================= LINK ROWS ================= */
+    .rows{display:grid;gap:.6rem}
+    .row{
+      display:flex; align-items:center; gap:1rem;
+      background:var(--bg-card); border:1px solid rgba(255,255,255,.08);
+      border-radius:10px; padding:1.05rem 1.2rem;
+      transition:border-color .28s ease, transform .28s ease, background .28s ease;
+    }
+    .row:hover,.row:active{
+      border-color:rgba(255,255,255,.35); transform:translateY(-2px);
+      background:#181818;
+    }
+    .row .ico{width:19px;height:19px;flex-shrink:0;color:rgba(255,255,255,.75)}
+    .row .txt{flex:1;min-width:0}
+    .row .t{display:block;font-size:.92rem;font-weight:500;letter-spacing:.01em}
+    .row .d{display:block;font-size:.72rem;color:var(--muted);margin-top:.25rem;line-height:1.4}
+    .row .arw{width:15px;height:15px;color:rgba(255,255,255,.25);flex-shrink:0}
+
+    /* ================= VENTURE CARDS ================= */
+    .vents{display:grid;gap:.75rem}
+    .vent{
+      display:block; position:relative; overflow:hidden;
+      background:var(--bg-card); border:1px solid rgba(255,255,255,.09);
+      border-radius:12px; padding:1.35rem 1.4rem;
+      transition:border-color .3s ease, transform .3s ease, box-shadow .3s ease;
+    }
+    .vent:hover,.vent:active{transform:translateY(-3px)}
+    .vent .top{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+    .vent .name{font-size:1.02rem;font-weight:600;letter-spacing:.01em}
+    .vent .desc{font-size:.78rem;color:var(--muted);margin-top:.5rem;line-height:1.55}
+    .vent .host{
+      font-size:.63rem;letter-spacing:.16em;text-transform:uppercase;
+      color:rgba(255,255,255,.28);margin-top:.75rem;display:block;
+    }
+    .status{
+      display:inline-flex;align-items:center;gap:.42rem;
+      font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;
+      color:rgba(255,255,255,.42);flex-shrink:0;white-space:nowrap;
+    }
+    .dot{width:6px;height:6px;border-radius:999px;background:#fff;box-shadow:0 0 7px rgba(255,255,255,.5)}
+
+    /* per-venture accent on hover only — restraint by default */
+    .vent.omnis:hover{border-color:rgba(255,255,255,.42);box-shadow:0 0 22px rgba(255,255,255,.09)}
+    .vent.apex:hover{border-color:rgba(45,212,255,.45);box-shadow:0 0 22px rgba(45,212,255,.14)}
+    .vent.apex:hover .name{color:var(--cyan)}
+    .vent.kit:hover{border-color:rgba(212,162,76,.45);box-shadow:0 0 22px rgba(212,162,76,.16)}
+    .vent.kit:hover .name{color:var(--gold)}
+
+    /* Rodriguez Forge — in development. Faded, gradient wash, still reachable. */
+    .vent.forge{
+      border-color:rgba(255,255,255,.05);
+      background:linear-gradient(160deg, #141414 0%, rgba(20,20,20,.35) 55%, rgba(10,10,10,0) 100%);
+    }
+    .vent.forge .name,.vent.forge .desc,.vent.forge .host{opacity:.42;transition:opacity .35s ease}
+    .vent.forge .status{color:rgba(255,255,255,.3)}
+    .vent.forge .dot{background:rgba(255,255,255,.3);box-shadow:none}
+    .vent.forge:hover{border-color:rgba(255,255,255,.22);box-shadow:none}
+    .vent.forge:hover .name,.vent.forge:hover .desc,.vent.forge:hover .host{opacity:.85}
+    .vent.forge::after{
+      content:"";position:absolute;inset:0;pointer-events:none;
+      background:linear-gradient(105deg, transparent 40%, rgba(10,10,10,.55) 100%);
+    }
+
+    /* ================= SAVE CONTACT ================= */
+    .save{
+      display:flex;align-items:center;justify-content:center;gap:.6rem;
+      width:100%;margin-top:1.4rem;padding:1.05rem 1.2rem;
+      background:transparent;border:1px solid rgba(255,255,255,.3);border-radius:10px;
+      color:#fff;font-family:inherit;font-size:.72rem;letter-spacing:.24em;
+      text-transform:uppercase;font-weight:500;cursor:pointer;
+      transition:background .25s ease,color .25s ease;
+    }
+    .save:hover{background:#fff;color:#000}
+    .save svg{width:16px;height:16px}
+
+    /* ================= FOOTER ================= */
+    footer{
+      margin-top:3rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.05);
+      text-align:center;font-size:.66rem;color:var(--muted);letter-spacing:.06em;line-height:1.9;
+    }
+    footer a{color:rgba(255,255,255,.55);transition:color .2s ease}
+    footer a:hover{color:#fff}
+
+    @media (max-width:420px){
+      #app{padding-top:2rem}
+      .brandhead{margin-bottom:2.2rem}
+      .brandhead img{height:62px}
+      .wordmark{font-size:.82rem;letter-spacing:.28em}
+      .door{padding:1.35rem 1.25rem}
+    }
+    @media (prefers-reduced-motion:reduce){
+      *{animation:none!important;transition:none!important}
+      #app{opacity:1}
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ============ DELTA LOAD-IN ============ -->
+  <div id="loader">
+    <video id="loader-video" autoplay muted playsinline preload="auto">
+      <source src="/assets/videos/grok-28c19543-1991-48ec-b7e6-c3a55d0549fa.mp4" type="video/mp4" />
+    </video>
+    <button id="skip" type="button">Skip</button>
+  </div>
+
+  <!-- ============ APP ============ -->
+  <div id="app">
+
+    <div class="brandhead">
+      <img src="/assets/images/delta-connect.png" alt="Isaac Originals" />
+      <div class="wordmark">Isaac Originals</div>
+      <div class="verse">Matthew 6:33</div>
+    </div>
+
+    <!-- ---------- HOME ---------- -->
+    <section class="view active" id="view-home">
+      <div class="doors">
+        <button class="door" type="button" data-go="personal">
+          <span>
+            <span class="label">Personal</span>
+            <span class="sub">The journey, the content, the record.</span>
+          </span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </button>
+
+        <button class="door" type="button" data-go="business">
+          <span>
+            <span class="label">Business</span>
+            <span class="sub">Four ventures under one foundation.</span>
+          </span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- ---------- PERSONAL ---------- -->
+    <section class="view" id="view-personal">
+      <button class="back" type="button" data-go="home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 12H5M11 19l-7-7 7-7"/></svg>
+        Back
+      </button>
+      <p class="eyebrow">Isaac Originals</p>
+
+      <div class="rows">
+        <a class="row" href="https://isaacoriginals.com" target="_blank" rel="noopener">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 010 18a15 15 0 010-18"/></svg>
+          <span class="txt"><span class="t">The Site</span><span class="d">isaacoriginals.com</span></span>
+          <svg class="arw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </a>
+
+        <a class="row" href="https://www.youtube.com/@IsaacOriginals" target="_blank" rel="noopener">
+          <svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.9-.5-5.8a3 3 0 00-2.1-2.1C18.5 3.6 12 3.6 12 3.6s-6.5 0-8.4.5A3 3 0 001.5 6.2C1 8.1 1 12 1 12s0 3.9.5 5.8a3 3 0 002.1 2.1c1.9.5 8.4.5 8.4.5s6.5 0 8.4-.5a3 3 0 002.1-2.1c.5-1.9.5-5.8.5-5.8zM9.8 15.5v-7l6.1 3.5-6.1 3.5z"/></svg>
+          <span class="txt"><span class="t">YouTube</span><span class="d">Long-form. The full record.</span></span>
+          <svg class="arw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </a>
+
+        <a class="row" href="https://www.instagram.com/isaacoriginals/" target="_blank" rel="noopener">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          <span class="txt"><span class="t">Instagram</span><span class="d">Field notes.</span></span>
+          <svg class="arw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </a>
+
+        <a class="row" href="https://x.com/IsaacOriginals" target="_blank" rel="noopener">
+          <svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M18.2 2.3h3.3l-7.2 8.3 8.5 11.1h-6.6l-5.2-6.8-6 6.8H1.7l7.7-8.8L1.3 2.3h6.8l4.7 6.2 5.4-6.2zm-1.2 17.5h1.8L7.1 4.1H5.2l11.8 15.7z"/></svg>
+          <span class="txt"><span class="t">X</span><span class="d">Notes &amp; observations.</span></span>
+          <svg class="arw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </a>
+
+        <a class="row" href="https://www.tiktok.com/@isaacoriginals" target="_blank" rel="noopener">
+          <svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.8a4.9 4.9 0 01-1.1-3.1h-3.3v13.2a2.8 2.8 0 11-2-2.7V9.8a6 6 0 105.3 6V9.1a8.2 8.2 0 004.8 1.5V7.3a4.9 4.9 0 01-3.7-1.5z"/></svg>
+          <span class="txt"><span class="t">TikTok</span><span class="d">Short-form logs.</span></span>
+          <svg class="arw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </a>
+      </div>
+
+      <button class="save" type="button" id="save-contact">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v12M7 11l5 5 5-5M4 20h16"/></svg>
+        <span id="save-label">Save Contact</span>
+      </button>
+    </section>
+
+    <!-- ---------- BUSINESS ---------- -->
+    <section class="view" id="view-business">
+      <button class="back" type="button" data-go="home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 12H5M11 19l-7-7 7-7"/></svg>
+        Back
+      </button>
+      <p class="eyebrow">The Ventures</p>
+
+      <div class="vents">
+
+        <a class="vent omnis" href="https://www.omnisconnect.com/" target="_blank" rel="noopener">
+          <div class="top">
+            <span class="name">Omnis Connect</span>
+            <span class="status"><i class="dot"></i>Live</span>
+          </div>
+          <p class="desc">The civic operating system for the modern city. Residents, municipal staff, and field crews on one platform.</p>
+          <span class="host">omnisconnect.com</span>
+        </a>
+
+        <a class="vent apex" href="/apex">
+          <div class="top">
+            <span class="name">ApexAERA</span>
+            <span class="status"><i class="dot"></i>Live</span>
+          </div>
+          <p class="desc">Intelligent marketing systems for Kingdom-minded builders. Clear messaging and automation, so they can do what they were called to do.</p>
+          <span class="host">isaacoriginals.com/apex</span>
+        </a>
+
+        <a class="vent kit" href="/kit">
+          <div class="top">
+            <span class="name">K.I.T.</span>
+            <span class="status"><i class="dot"></i>Live</span>
+          </div>
+          <p class="desc">Kingdom Initiative Technologies. Scripture-rooted discipleship tools for the Church — WisdomWatch and K.C.R.M.</p>
+          <span class="host">isaacoriginals.com/kit</span>
+        </a>
+
+        <a class="vent forge" href="https://rodriguez-forge.vercel.app/" target="_blank" rel="noopener">
+          <div class="top">
+            <span class="name">Rodriguez Forge</span>
+            <span class="status"><i class="dot"></i>Coming Soon</span>
+          </div>
+          <p class="desc">Family-built and taking work now. The site is still being finalized.</p>
+          <span class="host">Book through the site</span>
+        </a>
+
+      </div>
+    </section>
+
+    <footer>
+      <p>Built in obedience. &copy; <span id="year">2026</span> Isaac Originals.</p>
+      <p><a href="/">isaacoriginals.com</a></p>
+    </footer>
+
+  </div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ---------- LOADER ---------- */
+  var loader = document.getElementById('loader');
+  var app    = document.getElementById('app');
+  var video  = document.getElementById('loader-video');
+  var revealed = false;
+
+  function reveal(){
+    if (revealed) return;
+    revealed = true;
+    loader.classList.add('done');
+    app.classList.add('in');
+    try { video.pause(); } catch(e){}
+    setTimeout(function(){ loader.style.display = 'none'; }, 750);
+  }
+
+  if (video) {
+    video.addEventListener('ended', reveal);
+    video.addEventListener('error', reveal);
+    // Failsafe: never trap someone behind the intro.
+    setTimeout(reveal, 4500);
+    var p = video.play();
+    if (p && p.catch) p.catch(reveal);
+  } else {
+    reveal();
+  }
+  document.getElementById('skip').addEventListener('click', reveal);
+
+  // Repeat visitors skip the cinematic — it's great once, tedious twice.
+  try {
+    if (sessionStorage.getItem('io_seen') === '1') { reveal(); }
+    sessionStorage.setItem('io_seen','1');
+  } catch(e){}
+
+  /* ---------- VIEW ROUTING ---------- */
+  var views = {
+    home:     document.getElementById('view-home'),
+    personal: document.getElementById('view-personal'),
+    business: document.getElementById('view-business')
+  };
+
+  function go(name, push){
+    if (!views[name]) name = 'home';
+    for (var k in views) views[k].classList.toggle('active', k === name);
+    if (push !== false) {
+      var hash = (name === 'home') ? ' ' : '#' + name;
+      if (name === 'home') history.pushState({v:'home'}, '', location.pathname);
+      else history.pushState({v:name}, '', hash);
+    }
+    window.scrollTo(0,0);
+  }
+
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest('[data-go]');
+    if (!btn) return;
+    go(btn.getAttribute('data-go'));
+  });
+
+  window.addEventListener('popstate', function(){
+    go((location.hash || '').replace('#','') || 'home', false);
+  });
+
+  // Deep link support: /connect#business goes straight to the ventures.
+  var initial = (location.hash || '').replace('#','');
+  if (initial === 'personal' || initial === 'business') go(initial, false);
+
+  /* ---------- SAVE CONTACT (vCard) ---------- */
+  // NOTE — Isaac: change EMAIL below to whichever address you want on the card.
+  var EMAIL = 'guardian.v.artemis@gmail.com';
+
+  var VCARD = [
+    'BEGIN:VCARD',
+    'VERSION:3.0',
+    'N:;Isaac;;;',
+    'FN:Isaac',
+    'NICKNAME:Isaac Originals',
+    'ORG:Isaac Originals',
+    'TITLE:Founder',
+    'EMAIL;TYPE=INTERNET:' + EMAIL,
+    'URL:https://isaacoriginals.com/connect',
+    'URL;TYPE=Omnis Connect:https://www.omnisconnect.com',
+    'URL;TYPE=YouTube:https://www.youtube.com/@IsaacOriginals',
+    'URL;TYPE=Instagram:https://www.instagram.com/isaacoriginals',
+    'URL;TYPE=X:https://x.com/IsaacOriginals',
+    'NOTE:Seek first the Kingdom of God and His righteousness. — Matthew 6:33',
+    'END:VCARD'
+  ].join('\r\n');
+
+  document.getElementById('save-contact').addEventListener('click', function(){
+    var blob = new Blob([VCARD], {type:'text/vcard;charset=utf-8'});
+    var url  = URL.createObjectURL(blob);
+    var a    = document.createElement('a');
+    a.href = url; a.download = 'Isaac-Originals.vcf';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1500);
+
+    var lbl = document.getElementById('save-label');
+    var was = lbl.textContent;
+    lbl.textContent = 'Saved';
+    setTimeout(function(){ lbl.textContent = was; }, 2200);
+  });
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
