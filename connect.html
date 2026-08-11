@@ -583,7 +583,7 @@
 
   /* Build stamp. If Safari shows you something stale, check the console:
      the number below tells you which version you're actually looking at. */
-  var BUILD = '2026-08-11.13';
+  var BUILD = '2026-08-11.14';
   try { console.log('%cIsaac Originals /connect build ' + BUILD, 'color:#2DD4FF'); } catch(e){}
 
   /* ================================================================
@@ -772,6 +772,21 @@
     if (sessionStorage.getItem('io_seen') === '1') { reveal(); }
     sessionStorage.setItem('io_seen','1');
   } catch(e){}
+
+  /* ---------- MOBILE: DON'T OPEN EXTERNAL LINKS IN A NEW TAB ----------
+     Instagram, TikTok, YouTube and X all publish universal links that hand off
+     to their native app. Chrome on iOS handles that badly from a target=_blank
+     tab: it opens a blank tab, attempts the app handoff, stalls, then discards
+     the tab and drops you back here — exactly the freeze Isaac hit on Instagram.
+     From a normal top-level navigation the handoff is reliable, and Back still
+     returns to this page. Desktop keeps _blank so the funnel stays open. */
+  if (matchMedia('(hover: none)').matches){
+    var ext = document.querySelectorAll('a[target="_blank"]');
+    for (var i = 0; i < ext.length; i++){
+      ext[i].removeAttribute('target');
+      ext[i].setAttribute('rel', 'noopener');
+    }
+  }
 
   /* ---------- THUMB PRESS ----------
      iOS will not fire CSS :hover from a finger, and it only fires :active on
