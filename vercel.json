@@ -135,11 +135,5 @@
         }
       ]
     }
-  ],
-  "rewrites": [
-    {
-      "source": "/social",
-      "destination": "/connect.html"
-    }
   ]
 }
