@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Isaac Originals — Connect</title>
-  <meta name="description" content="Isaac Originals. Seek first the Kingdom. Personal links and the four ventures — Omnis Connect, ApexAERA, K.I.T., Rodriguez Forge." />
+  <title>Isaac Originals | Connect</title>
+  <meta name="description" content="Isaac Originals. Seek first the Kingdom. Personal links and the four ventures: Omnis Connect, ApexAERA, K.I.T., Rodriguez Forge." />
   <meta name="theme-color" content="#0A0A0A" />
   <meta name="robots" content="index, follow" />
 
-  <meta property="og:title" content="Isaac Originals — Connect" />
-  <meta property="og:description" content="Seek first the Kingdom of God and His righteousness. — Matthew 6:33" />
+  <meta property="og:title" content="Isaac Originals | Connect" />
+  <meta property="og:description" content="Seek first the Kingdom of God and His righteousness. Matthew 6:33" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://isaacoriginals.com/connect" />
   <meta property="og:image" content="/assets/images/og.jpg" />
@@ -99,6 +99,41 @@
       color:var(--muted); font-weight:400;
     }
 
+    /* ================= AURA TRIM =================
+       A light gradient that travels around the border of a box while you're
+       on it. Fires on :hover for a mouse and :active for a thumb.
+       Drawn as a 1.5px ring: a conic gradient masked so only the border shows. */
+    @property --aura{ syntax:'<angle>'; initial-value:0deg; inherits:false; }
+
+    .door::before,
+    .row::before,
+    .vent:not(.forge)::before{
+      content:""; position:absolute; inset:0; border-radius:inherit;
+      padding:1.5px; pointer-events:none; opacity:0;
+      transition:opacity .3s ease;
+      background:conic-gradient(from var(--aura),
+        transparent 0deg,
+        rgba(255,255,255,.04) 24deg,
+        var(--auraC, #ffffff) 62deg,
+        rgba(255,255,255,.04) 104deg,
+        transparent 132deg,
+        transparent 360deg);
+      -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+              mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite:xor; mask-composite:exclude;
+    }
+    .door:hover::before, .door:active::before,
+    .row:hover::before,  .row:active::before,
+    .vent:not(.forge):hover::before, .vent:not(.forge):active::before{
+      opacity:1;
+      animation:auraSpin 2.6s linear infinite;
+    }
+    @keyframes auraSpin{ to{ --aura:360deg } }
+
+    /* Each venture's trim carries its own colour. */
+    .vent.apex{--auraC:#2DD4FF}
+    .vent.kit{--auraC:#D4A24C}
+
     /* ================= VIEWS ================= */
     .view{display:none; flex:1; animation:viewIn .45s cubic-bezier(.16,1,.3,1) both}
     .view.active{display:block}
@@ -107,10 +142,11 @@
     /* ================= DOORS ================= */
     .doors{display:grid;gap:.9rem}
     .door{
-      display:flex; align-items:center; justify-content:space-between;
+      position:relative; overflow:hidden;
+      display:flex; align-items:center; justify-content:center; text-align:center;
       background:var(--bg-card); border:1px solid rgba(255,255,255,.10);
-      border-radius:12px; padding:1.55rem 1.5rem; width:100%;
-      cursor:pointer; font-family:inherit; color:inherit; text-align:left;
+      border-radius:12px; padding:2.1rem 1.5rem; width:100%; min-height:176px;
+      cursor:pointer; font-family:inherit; color:inherit;
       transition:border-color .3s ease, transform .3s ease, box-shadow .3s ease, background .3s ease;
     }
     .door:hover,.door:active{
@@ -118,11 +154,36 @@
       transform:translateY(-3px);
       box-shadow:0 0 22px rgba(255,255,255,.10), 0 0 55px rgba(255,255,255,.04);
     }
-    .door > span:first-child{display:block;min-width:0}
-    .door .label{display:block;font-size:1.02rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase}
-    .door .sub{display:block;font-size:.75rem;color:var(--muted);margin-top:.5rem;letter-spacing:.02em;text-transform:none;font-weight:400;line-height:1.5}
-    .door svg{width:19px;height:19px;color:var(--muted);flex-shrink:0;margin-left:1rem;transition:color .3s ease,transform .3s ease}
-    .door:hover svg{color:#fff;transform:translateX(3px)}
+    .door-body{display:block;width:100%;position:relative;z-index:2}
+    .door .label{
+      display:block;font-size:1.08rem;font-weight:600;letter-spacing:.2em;
+      text-transform:uppercase;min-height:1.3em;
+    }
+    .door .sub{display:block;font-size:.76rem;color:var(--muted);margin-top:.6rem;letter-spacing:.02em;text-transform:none;font-weight:400;line-height:1.5}
+
+    /* Typing caret, removed once the word finishes. */
+    .caret{
+      display:inline-block;width:.5em;margin-left:.06em;
+      border-bottom:2px solid rgba(255,255,255,.85);
+      animation:caretBlink .75s steps(1,end) infinite;vertical-align:baseline;
+    }
+    @keyframes caretBlink{0%,49%{opacity:1}50%,100%{opacity:0}}
+
+    /* I.O insignia, stamped into the corner. Fills the empty space without shouting. */
+    .door-mark{
+      position:absolute; right:1.05rem; bottom:.9rem;
+      width:20%; max-width:74px; height:auto;
+      opacity:.085; pointer-events:none; z-index:1;
+      transition:opacity .4s ease;
+    }
+    .door:hover .door-mark,.door:active .door-mark{opacity:.24}
+
+    .door-arrow{
+      position:absolute; top:1.3rem; right:1.3rem; z-index:2;
+      width:19px;height:19px;color:var(--muted);
+      transition:color .3s ease,transform .3s ease;
+    }
+    .door:hover .door-arrow{color:#fff;transform:translateX(3px)}
 
     /* ================= BACK ================= */
     .back{
@@ -188,16 +249,19 @@
     .vent.kit:hover{border-color:rgba(212,162,76,.45);box-shadow:0 0 22px rgba(212,162,76,.16)}
     .vent.kit:hover .name{color:var(--gold)}
 
-    /* Rodriguez Forge — in development. Faded, gradient wash, still reachable. */
+    /* Rodriguez Forge: in development. Faded, gradient wash, NOT clickable.
+       No link, no aura, no hover lift. It reads as a placeholder, not a door. */
     .vent.forge{
       border-color:rgba(255,255,255,.05);
       background:linear-gradient(160deg, #141414 0%, rgba(20,20,20,.35) 55%, rgba(10,10,10,0) 100%);
+      cursor:default;
     }
-    .vent.forge .name,.vent.forge .desc,.vent.forge .host{opacity:.42;transition:opacity .35s ease}
+    .vent.forge .name,.vent.forge .desc,.vent.forge .host{opacity:.42}
     .vent.forge .status{color:rgba(255,255,255,.3)}
     .vent.forge .dot{background:rgba(255,255,255,.3);box-shadow:none}
-    .vent.forge:hover{border-color:rgba(255,255,255,.22);box-shadow:none}
-    .vent.forge:hover .name,.vent.forge:hover .desc,.vent.forge:hover .host{opacity:.85}
+    .vent.forge:hover,.vent.forge:active{
+      transform:none; border-color:rgba(255,255,255,.05); box-shadow:none;
+    }
     .vent.forge::after{
       content:"";position:absolute;inset:0;pointer-events:none;
       background:linear-gradient(105deg, transparent 40%, rgba(10,10,10,.55) 100%);
@@ -231,17 +295,13 @@
       .wordmark{font-size:1.35rem;letter-spacing:.4em}
       .tagline{font-size:.95rem;max-width:30rem}
 
-      /* Two doors, side by side — the page stops looking like a stretched phone. */
+      /* Two doors, side by side. The page stops looking like a stretched phone. */
       .doors{grid-template-columns:1fr 1fr;gap:1.25rem}
-      .door{
-        flex-direction:column; align-items:flex-start; justify-content:flex-end;
-        min-height:230px; padding:2.25rem 2rem;
-      }
-      .door > span:first-child{width:100%}
-      .door .label{font-size:1.45rem;letter-spacing:.2em}
-      .door .sub{font-size:.85rem;margin-top:.75rem}
-      .door svg{position:absolute;top:2rem;right:2rem;margin:0;width:22px;height:22px}
-      .door{position:relative}
+      .door{min-height:250px;padding:2.5rem 2rem}
+      .door .label{font-size:1.6rem;letter-spacing:.24em}
+      .door .sub{font-size:.87rem;margin-top:.85rem}
+      .door-arrow{top:1.75rem;right:1.75rem;width:22px;height:22px}
+      .door-mark{right:1.75rem;bottom:1.6rem;width:26%;max-width:140px}
 
       .rows{max-width:660px;margin:0 auto}
       .save{max-width:660px;margin-left:auto;margin-right:auto}
@@ -295,19 +355,21 @@
     <section class="view active" id="view-home">
       <div class="doors">
         <button class="door" type="button" data-go="personal">
-          <span>
-            <span class="label">Personal</span>
+          <img class="door-mark" src="/assets/images/io-insignia.png" alt="" aria-hidden="true" />
+          <span class="door-body">
+            <span class="label" data-type="Personal"></span>
             <span class="sub">The journey, the content, the record.</span>
           </span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          <svg class="door-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
         </button>
 
         <button class="door" type="button" data-go="business">
-          <span>
-            <span class="label">Business</span>
+          <img class="door-mark" src="/assets/images/io-insignia.png" alt="" aria-hidden="true" />
+          <span class="door-body">
+            <span class="label" data-type="Business"></span>
             <span class="sub">Four ventures under one foundation.</span>
           </span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          <svg class="door-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
         </button>
       </div>
     </section>
@@ -391,18 +453,18 @@
             <span class="name">K.I.T.</span>
             <span class="status"><i class="dot"></i>Live</span>
           </div>
-          <p class="desc">Kingdom Initiative Technologies. Scripture-rooted discipleship tools for the Church — WisdomWatch and K.C.R.M.</p>
+          <p class="desc">Kingdom Initiative Technologies. Scripture-rooted discipleship tools for the Church. WisdomWatch and K.C.R.M.</p>
           <span class="host">isaacoriginals.com/kit</span>
         </a>
 
-        <a class="vent forge" href="https://rodriguez-forge.vercel.app/" target="_blank" rel="noopener">
+        <!-- Deliberately NOT a link. Coming soon only. -->
+        <div class="vent forge" aria-disabled="true">
           <div class="top">
             <span class="name">Rodriguez Forge</span>
             <span class="status"><i class="dot"></i>Coming Soon</span>
           </div>
-          <p class="desc">Family-built and taking work now. The site is still being finalized.</p>
-          <span class="host">Book through the site</span>
-        </a>
+          <p class="desc">Family built. Currently in the works.</p>
+        </div>
 
       </div>
     </section>
@@ -462,8 +524,8 @@
         sp: speed,
         w: (Math.random() < 0.28 ? 2.1 : 1.15) * dpr,
         a: 0.30 + Math.random() * 0.50,
-        // Mostly white; every so often one carries the brand cyan.
-        cyan: Math.random() < 0.22
+        // Mostly white. Some carry the brand cyan, fewer carry the K.I.T. gold.
+        tint: (function(r){ return r < 0.20 ? '45,212,255' : (r < 0.31 ? '212,162,76' : '255,255,255'); })(Math.random())
       });
       if (streaks.length > 10) streaks.shift();
     }
@@ -498,7 +560,7 @@
         var tx = s.x - UX * s.len, ty = s.y - UY * s.len;  // tail
 
         var g = ctx.createLinearGradient(tx, ty, hx, hy);
-        var rgb = s.cyan ? '45,212,255' : '255,255,255';
+        var rgb = s.tint;
         g.addColorStop(0,   'rgba(' + rgb + ',0)');
         g.addColorStop(0.7, 'rgba(' + rgb + ',' + (s.a * 0.5).toFixed(3) + ')');
         g.addColorStop(1,   'rgba(' + rgb + ',' + s.a.toFixed(3) + ')');
@@ -561,6 +623,42 @@
     sessionStorage.setItem('io_seen','1');
   } catch(e){}
 
+  /* ---------- TYPE-IN: the two door labels ---------- */
+  var typeTimers = [];
+
+  function typeLabels(){
+    typeTimers.forEach(clearTimeout);
+    typeTimers = [];
+
+    var labels = document.querySelectorAll('#view-home .label[data-type]');
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    labels.forEach(function(el, idx){
+      var word = el.getAttribute('data-type');
+
+      if (reduce){ el.textContent = word; return; }
+
+      el.textContent = '';
+      var caret = document.createElement('i');
+      caret.className = 'caret';
+      el.appendChild(caret);
+
+      var start = 260 + idx * 520;   // Personal types, then Business follows.
+      for (var i = 0; i < word.length; i++){
+        (function(n){
+          typeTimers.push(setTimeout(function(){
+            caret.remove();
+            el.textContent = word.slice(0, n);
+            el.appendChild(caret);
+          }, start + n * 62));
+        })(i + 1);
+      }
+      // Let the caret blink a beat after the word lands, then drop it.
+      typeTimers.push(setTimeout(function(){ caret.remove(); },
+        start + word.length * 62 + 900));
+    });
+  }
+
   /* ---------- VIEW ROUTING ---------- */
   var views = {
     home:     document.getElementById('view-home'),
@@ -571,6 +669,7 @@
   function go(name, push){
     if (!views[name]) name = 'home';
     for (var k in views) views[k].classList.toggle('active', k === name);
+    if (name === 'home') typeLabels();
     if (push !== false) {
       var hash = (name === 'home') ? ' ' : '#' + name;
       if (name === 'home') history.pushState({v:'home'}, '', location.pathname);
@@ -611,7 +710,7 @@
     'URL;TYPE=YouTube:https://www.youtube.com/@IsaacOriginals',
     'URL;TYPE=Instagram:https://www.instagram.com/isaacoriginals',
     'URL;TYPE=X:https://x.com/IsaacOriginals',
-    'NOTE:Seek first the Kingdom of God and His righteousness. — Matthew 6:33',
+    'NOTE:Seek first the Kingdom of God and His righteousness. Matthew 6:33',
     'END:VCARD'
   ].join('\r\n');
 
@@ -628,6 +727,14 @@
     lbl.textContent = 'Saved';
     setTimeout(function(){ lbl.textContent = was; }, 2200);
   });
+
+  // Start the type-in the moment the intro clears, not before.
+  if (revealed) typeLabels();
+  else {
+    var waitReveal = setInterval(function(){
+      if (revealed){ clearInterval(waitReveal); typeLabels(); }
+    }, 80);
+  }
 
   document.getElementById('year').textContent = new Date().getFullYear();
 })();
