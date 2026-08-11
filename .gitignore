@@ -2,6 +2,9 @@ node_modules/
 .DS_Store
 .vercel
 
+# Local-only preview build (video + logo base64'd inline, ~527KB). Not part of the site.
+connect-preview.html
+
 # Dead files — delete these manually
 assets/js/earth.js
 assets/images/hero-banner.png

@@ -59,8 +59,17 @@
     #skip:hover{color:rgba(255,255,255,.8)}
     @keyframes fadeIn{to{opacity:1}}
 
+    /* ================= LIGHT-SPEED FX ================= */
+    /* Sparse diagonal light streaks. Behind everything, never in the way. */
+    #fx{
+      position:fixed; inset:0; z-index:0; pointer-events:none;
+      opacity:0; transition:opacity 1.4s ease;
+    }
+    #fx.on{opacity:1}
+
     /* ================= SHELL ================= */
     #app{
+      position:relative; z-index:1;
       opacity:0; transition:opacity .6s ease;
       min-height:100svh; display:flex; flex-direction:column;
       padding:2.5rem 1.25rem calc(1.5rem + env(safe-area-inset-bottom));
@@ -69,14 +78,24 @@
     #app.in{opacity:1}
 
     .brandhead{text-align:center; margin-bottom:2.75rem}
-    .brandhead img{height:84px;width:auto;display:block;margin:0 auto 1.15rem;
-      filter:drop-shadow(0 0 26px rgba(255,255,255,.18)) drop-shadow(0 0 60px rgba(255,255,255,.06))}
+    .brandhead img{
+      height:118px;width:auto;display:block;margin:0 auto 1.35rem;
+      animation:breathe 7s ease-in-out infinite;
+    }
+    @keyframes breathe{
+      0%,100%{filter:drop-shadow(0 0 22px rgba(255,255,255,.16)) drop-shadow(0 0 55px rgba(255,255,255,.04))}
+      50%    {filter:drop-shadow(0 0 34px rgba(255,255,255,.34)) drop-shadow(0 0 90px rgba(255,255,255,.11))}
+    }
     .wordmark{
-      font-size:.94rem; font-weight:600; letter-spacing:.34em;
+      font-size:1.02rem; font-weight:600; letter-spacing:.36em;
       text-transform:uppercase; color:#fff;
     }
+    .tagline{
+      margin-top:.85rem; font-size:.83rem; color:rgba(255,255,255,.55);
+      line-height:1.65; max-width:23rem; margin-left:auto; margin-right:auto;
+    }
     .verse{
-      margin-top:.7rem; font-size:.68rem; letter-spacing:.2em; text-transform:uppercase;
+      margin-top:.85rem; font-size:.63rem; letter-spacing:.22em; text-transform:uppercase;
       color:var(--muted); font-weight:400;
     }
 
@@ -204,6 +223,37 @@
     footer a{color:rgba(255,255,255,.55);transition:color .2s ease}
     footer a:hover{color:#fff}
 
+    /* ================= DESKTOP ================= */
+    @media (min-width:800px){
+      #app{max-width:960px; padding:4.5rem 2rem 2rem}
+      .brandhead{margin-bottom:3.75rem}
+      .brandhead img{height:150px}
+      .wordmark{font-size:1.35rem;letter-spacing:.4em}
+      .tagline{font-size:.95rem;max-width:30rem}
+
+      /* Two doors, side by side — the page stops looking like a stretched phone. */
+      .doors{grid-template-columns:1fr 1fr;gap:1.25rem}
+      .door{
+        flex-direction:column; align-items:flex-start; justify-content:flex-end;
+        min-height:230px; padding:2.25rem 2rem;
+      }
+      .door > span:first-child{width:100%}
+      .door .label{font-size:1.45rem;letter-spacing:.2em}
+      .door .sub{font-size:.85rem;margin-top:.75rem}
+      .door svg{position:absolute;top:2rem;right:2rem;margin:0;width:22px;height:22px}
+      .door{position:relative}
+
+      .rows{max-width:660px;margin:0 auto}
+      .save{max-width:660px;margin-left:auto;margin-right:auto}
+      .vents{grid-template-columns:1fr 1fr;gap:1rem}
+      .vent{display:flex;flex-direction:column;padding:1.75rem 1.75rem}
+      .vent .desc{flex:1}
+      .eyebrow{text-align:center;font-size:.7rem}
+      /* Back stays in normal flow. Absolutely positioning it here put it
+         underneath the venture grid's stacking context and killed the click. */
+      .back{margin-bottom:1.9rem}
+    }
+
     @media (max-width:420px){
       #app{padding-top:2rem}
       .brandhead{margin-bottom:2.2rem}
@@ -214,6 +264,7 @@
     @media (prefers-reduced-motion:reduce){
       *{animation:none!important;transition:none!important}
       #app{opacity:1}
+      #fx{display:none}
     }
   </style>
 </head>
@@ -227,6 +278,9 @@
     </video>
     <button id="skip" type="button">Skip</button>
   </div>
+
+  <!-- ============ LIGHT-SPEED STREAKS ============ -->
+  <canvas id="fx" aria-hidden="true"></canvas>
 
   <!-- ============ APP ============ -->
   <div id="app">
@@ -363,6 +417,116 @@
 <script>
 (function(){
   'use strict';
+
+  /* ================================================================
+     LIGHT-SPEED STREAKS
+     Sparse diagonal light trails, like something passing at speed.
+     Rules it has to obey:
+       - never competes with the text (low alpha, sits behind everything)
+       - sleeps when the tab is hidden, so it can't drain a phone battery
+       - off entirely for prefers-reduced-motion
+     ================================================================ */
+  (function fx(){
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var cv  = document.getElementById('fx');
+    var ctx = cv.getContext('2d');
+    var W, H, dpr;
+    var streaks = [];
+    var running = true;
+
+    // Travel direction: up-left to down-right, shallow diagonal.
+    var ANG = 28 * Math.PI / 180;
+    var UX  = Math.cos(ANG), UY = Math.sin(ANG);
+
+    function size(){
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = cv.width  = Math.floor(innerWidth  * dpr);
+      H = cv.height = Math.floor(innerHeight * dpr);
+      cv.style.width  = innerWidth  + 'px';
+      cv.style.height = innerHeight + 'px';
+    }
+    size();
+    addEventListener('resize', size);
+
+    function spawn(){
+      // Enter from the top / upper-left, exit bottom-right. Spread wide enough
+      // that streaks cross the middle of the screen, not just the corner.
+      var len   = (160 + Math.random() * 340) * dpr;
+      var speed = (9 + Math.random() * 13) * dpr;
+
+      streaks.push({
+        x: (-1.15 + Math.random() * 2.05) * W,
+        y: (-0.95 + Math.random() * 0.95) * H,
+        len: len,
+        sp: speed,
+        w: (Math.random() < 0.28 ? 2.1 : 1.15) * dpr,
+        a: 0.30 + Math.random() * 0.50,
+        // Mostly white; every so often one carries the brand cyan.
+        cyan: Math.random() < 0.22
+      });
+      if (streaks.length > 10) streaks.shift();
+    }
+
+    function schedule(){
+      var wait = 700 + Math.random() * 2100;
+      setTimeout(function(){
+        if (running && !document.hidden){
+          spawn();
+          // Sometimes two or three pass together, like traffic.
+          if (Math.random() < 0.42) setTimeout(spawn, 110 + Math.random() * 240);
+          if (Math.random() < 0.16) setTimeout(spawn, 260 + Math.random() * 320);
+        }
+        schedule();
+      }, wait);
+    }
+
+    function draw(){
+      if (!running) return;
+      requestAnimationFrame(draw);
+      if (document.hidden) return;
+
+      ctx.clearRect(0, 0, W, H);
+      ctx.lineCap = 'round';
+
+      for (var i = streaks.length - 1; i >= 0; i--){
+        var s = streaks[i];
+        s.x += UX * s.sp;
+        s.y += UY * s.sp;
+
+        var hx = s.x, hy = s.y;                     // head
+        var tx = s.x - UX * s.len, ty = s.y - UY * s.len;  // tail
+
+        var g = ctx.createLinearGradient(tx, ty, hx, hy);
+        var rgb = s.cyan ? '45,212,255' : '255,255,255';
+        g.addColorStop(0,   'rgba(' + rgb + ',0)');
+        g.addColorStop(0.7, 'rgba(' + rgb + ',' + (s.a * 0.5).toFixed(3) + ')');
+        g.addColorStop(1,   'rgba(' + rgb + ',' + s.a.toFixed(3) + ')');
+
+        // Glow makes it read as light rather than a hairline.
+        ctx.shadowColor = 'rgba(' + rgb + ',' + (s.a * 0.75).toFixed(3) + ')';
+        ctx.shadowBlur  = 9 * dpr;
+        ctx.strokeStyle = g;
+        ctx.lineWidth = s.w;
+        ctx.beginPath();
+        ctx.moveTo(tx, ty);
+        ctx.lineTo(hx, hy);
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        // Retire once the whole streak has cleared the bottom-right.
+        if (tx > W + 60 * dpr || ty > H + 60 * dpr) streaks.splice(i, 1);
+      }
+    }
+
+    document.addEventListener('visibilitychange', function(){
+      if (!document.hidden) ctx.clearRect(0, 0, W, H);
+    });
+
+    schedule();
+    requestAnimationFrame(draw);
+    setTimeout(function(){ cv.classList.add('on'); }, 400);
+  })();
 
   /* ---------- LOADER ---------- */
   var loader = document.getElementById('loader');
