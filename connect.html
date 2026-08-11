@@ -522,6 +522,8 @@
     <footer>
       <p>Built in obedience. &copy; <span id="year">2026</span> Isaac Originals.</p>
       <p><a href="/">isaacoriginals.com</a></p>
+      <!-- Temporary while we're debugging on phones. Say the word and it's gone. -->
+      <p id="buildstamp" style="opacity:.22;font-size:.58rem;letter-spacing:.14em;margin-top:.5rem"></p>
     </footer>
 
   </div>
@@ -532,7 +534,7 @@
 
   /* Build stamp. If Safari shows you something stale, check the console:
      the number below tells you which version you're actually looking at. */
-  var BUILD = '2026-08-11.8';
+  var BUILD = '2026-08-11.9';
   try { console.log('%cIsaac Originals /connect build ' + BUILD, 'color:#2DD4FF'); } catch(e){}
 
   /* ================================================================
@@ -892,6 +894,8 @@
   }
 
   document.getElementById('year').textContent = new Date().getFullYear();
+  var stamp = document.getElementById('buildstamp');
+  if (stamp) stamp.textContent = 'BUILD ' + BUILD;
 })();
 </script>
 </body>
