@@ -1,257 +1,147 @@
-/* ============================================================
-   IsaacOriginals — i18n Language System v1
-   ─ Loads translations from JSON
-   ─ Swaps text via data-i18n attributes
-   ─ Persists language choice in sessionStorage
-   ─ Works with SPA navigation (re-applies on page swap)
-   ─ Clean dropdown in nav bar
-   ============================================================ */
+/* ==========================================================================
+   Isaac Originals — English and Spanish
+
+   Every translatable string carries a data-i18n key and lives in
+   assets/i18n/copy.json. Nothing is machine translated at runtime: the
+   Spanish is written, not generated, so it keeps the same voice.
+
+   Names stay in English on purpose. Omnis Connect, ApexAERA, K.I.T.,
+   WisdomWatch, K.C.R.M., Nexus and N.I.A. are names, not words, and
+   translating a name is how you lose a brand.
+
+   The choice is remembered for the session and re-applied after every soft
+   navigation, since those swap the article without reloading anything.
+   ========================================================================== */
 (function () {
   'use strict';
 
   window.__IO = window.__IO || {};
 
-  var STORAGE_KEY = 'io-lang';
-  var DEFAULT_LANG = 'en';
-  var translations = null;
-  var currentLang = sessionStorage.getItem(STORAGE_KEY) || DEFAULT_LANG;
+  var KEY  = 'io-lang';
+  var LANGS = ['en', 'es'];
+  var NAMES = { en: 'English', es: 'Español' };
+  var dict = null;
+  var lang = sessionStorage.getItem(KEY);
 
-  /* ── Load translations JSON ────────────────────────────── */
-  function loadTranslations(cb) {
-    if (translations) { cb(); return; }
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/assets/i18n/translations.json?v=1', true);
-    xhr.onload = function () {
-      if (xhr.status === 200) {
-        try {
-          translations = JSON.parse(xhr.responseText);
-          cb();
-        } catch (e) {
-          console.warn('i18n: failed to parse translations');
-        }
-      }
-    };
-    xhr.send();
+  if (LANGS.indexOf(lang) === -1) {
+    /* First visit follows the browser, which is the whole point of having a
+       Spanish version: the people who need it should not have to find a
+       menu. */
+    lang = (navigator.language || 'en').toLowerCase().indexOf('es') === 0 ? 'es' : 'en';
   }
 
-  /* ── Apply translations to page ────────────────────────── */
-  function applyLanguage(lang) {
-    if (!translations || !translations[lang]) return;
-    currentLang = lang;
-    sessionStorage.setItem(STORAGE_KEY, lang);
-
-    var dict = translations[lang];
-    var els = document.querySelectorAll('[data-i18n]');
-    for (var i = 0; i < els.length; i++) {
-      var key = els[i].getAttribute('data-i18n');
-      if (dict[key] !== undefined) {
-        var el = els[i];
-        var hasLinks = el.querySelector('a');
-        var hasSvg = el.querySelector('svg');
-
-        if (hasLinks) {
-          // Element has <a> links — use innerHTML so links stay clickable
-          // But only if the translation is plain text (no HTML injection risk — we own the JSON)
-          el.innerHTML = dict[key];
-        } else if (hasSvg) {
-          // Element has SVG child — replace only the text node, keep the SVG
-          var nodes = el.childNodes;
-          for (var j = 0; j < nodes.length; j++) {
-            if (nodes[j].nodeType === 3 && nodes[j].textContent.trim()) {
-              nodes[j].textContent = dict[key] + ' ';
-              break;
-            }
-          }
-        } else {
-          el.textContent = dict[key];
-        }
-      }
-    }
-
-    // Update HTML lang attribute
-    document.documentElement.lang = lang;
-
-    // Update toggle button text
-    var toggleText = document.getElementById('lang-current');
-    if (toggleText) toggleText.textContent = lang.toUpperCase();
+  function t(key) {
+    if (!dict || !dict[lang]) return null;
+    var v = dict[lang][key];
+    return (v === undefined || v === null) ? null : v;
   }
 
-  /* ── Create language switcher UI ───────────────────────── */
-  function createSwitcher() {
-    // Don't duplicate
-    if (document.getElementById('lang-switcher')) return;
+  function apply() {
+    if (!dict) return;
+    document.documentElement.setAttribute('lang', lang);
 
-    var nav = document.querySelector('.glass-nav .max-w-6xl');
-    if (!nav) return;
-
-    // Container
-    var wrap = document.createElement('div');
-    wrap.id = 'lang-switcher';
-    wrap.style.cssText = 'position:absolute;top:50%;transform:translateY(-50%);right:24px;z-index:52;';
-
-    // If music toggle exists, shift lang switcher left
-    var musicToggle = document.getElementById('music-toggle');
-    if (musicToggle) {
-      wrap.style.right = '66px';
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      var v = t(nodes[i].getAttribute('data-i18n'));
+      if (v !== null) nodes[i].textContent = v;
+    }
+    var html = document.querySelectorAll('[data-i18n-html]');
+    for (var j = 0; j < html.length; j++) {
+      var h = t(html[j].getAttribute('data-i18n-html'));
+      if (h !== null) html[j].innerHTML = h;
     }
 
-    // Toggle button
+    var body = document.body;
+    var tk = body.getAttribute('data-i18n-title');
+    if (tk && t(tk)) document.title = t(tk);
+    var mk = body.getAttribute('data-i18n-meta');
+    var meta = document.querySelector('meta[name="description"]');
+    if (mk && meta && t(mk)) meta.setAttribute('content', t(mk));
+
+    paintPicker();
+    /* These two write their own text, so they are told separately rather than
+       being overwritten by the pass above. */
+    if (window.__IO.relabelMusic) window.__IO.relabelMusic();
+    if (window.__IO.relabelViews) window.__IO.relabelViews();
+  }
+
+  /* ---------------- PICKER ---------------- */
+  function paintPicker() {
+    var code = document.getElementById('lang-code');
+    if (code) code.textContent = lang.toUpperCase();
+    var opts = document.querySelectorAll('#lang-menu button');
+    for (var i = 0; i < opts.length; i++) {
+      opts[i].setAttribute('aria-selected', opts[i].getAttribute('data-lang') === lang ? 'true' : 'false');
+    }
+  }
+
+  function buildPicker() {
+    var wrap = document.getElementById('lang');
+    if (!wrap || wrap.dataset.built) return;
+    wrap.dataset.built = '1';
+
     var btn = document.createElement('button');
-    btn.setAttribute('aria-label', 'Change language');
-    btn.setAttribute('data-sound', 'tactile');
-    btn.style.cssText = 'background:none;border:1px solid rgba(255,255,255,0.15);border-radius:4px;padding:4px 10px;cursor:pointer;display:flex;align-items:center;gap:5px;transition:border-color 0.3s,background 0.3s;';
+    btn.type = 'button';
+    btn.id = 'lang-btn';
+    btn.setAttribute('aria-haspopup', 'true');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.innerHTML = '<span id="lang-code">EN</span>' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>';
 
-    var label = document.createElement('span');
-    label.id = 'lang-current';
-    label.style.cssText = 'font-size:12px;font-weight:500;letter-spacing:0.08em;color:rgba(255,255,255,0.55);transition:color 0.3s;';
-    label.textContent = currentLang.toUpperCase();
-
-    var arrow = document.createElement('span');
-    arrow.style.cssText = 'font-size:8px;color:rgba(255,255,255,0.35);transition:transform 0.3s,color 0.3s;display:inline-block;';
-    arrow.textContent = '▼';
-    arrow.id = 'lang-arrow';
-
-    btn.appendChild(label);
-    btn.appendChild(arrow);
-
-    // Dropdown
-    var dropdown = document.createElement('div');
-    dropdown.id = 'lang-dropdown';
-    dropdown.style.cssText = 'position:absolute;top:calc(100% + 8px);right:0;min-width:120px;' +
-      'background:rgba(17,17,17,0.95);border:1px solid rgba(255,255,255,0.1);border-radius:6px;' +
-      'backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);' +
-      'padding:6px 0;opacity:0;visibility:hidden;transform:translateY(-4px);' +
-      'transition:opacity 0.25s,visibility 0.25s,transform 0.25s;z-index:60;';
-
-    var languages = [
-      { code: 'en', label: 'English', flag: 'EN' },
-      { code: 'es', label: 'Español', flag: 'ES' }
-    ];
-
-    languages.forEach(function (lang) {
-      var opt = document.createElement('button');
-      opt.setAttribute('data-lang', lang.code);
-      opt.setAttribute('data-sound', 'tactile');
-      opt.style.cssText = 'display:flex;align-items:center;gap:8px;width:100%;padding:8px 14px;' +
-        'background:none;border:none;cursor:pointer;text-align:left;transition:background 0.2s;';
-
-      var flagSpan = document.createElement('span');
-      flagSpan.style.cssText = 'font-size:11px;font-weight:600;letter-spacing:0.06em;color:rgba(255,255,255,0.4);min-width:22px;';
-      flagSpan.textContent = lang.flag;
-
-      var nameSpan = document.createElement('span');
-      nameSpan.style.cssText = 'font-size:13px;color:rgba(255,255,255,0.75);';
-      nameSpan.textContent = lang.label;
-
-      opt.appendChild(flagSpan);
-      opt.appendChild(nameSpan);
-
-      opt.addEventListener('mouseenter', function () {
-        this.style.background = 'rgba(255,255,255,0.06)';
-      });
-      opt.addEventListener('mouseleave', function () {
-        this.style.background = 'none';
-      });
-
-      opt.addEventListener('click', function (e) {
-        e.stopPropagation();
-        var code = this.getAttribute('data-lang');
-        applyLanguage(code);
-        closeDropdown();
-      });
-
-      dropdown.appendChild(opt);
-    });
+    var menu = document.createElement('div');
+    menu.id = 'lang-menu';
+    menu.setAttribute('role', 'listbox');
+    for (var i = 0; i < LANGS.length; i++) {
+      (function (code) {
+        var o = document.createElement('button');
+        o.type = 'button';
+        o.setAttribute('role', 'option');
+        o.setAttribute('data-lang', code);
+        o.innerHTML = '<i>' + code.toUpperCase() + '</i>' + NAMES[code];
+        o.addEventListener('click', function (e) {
+          e.stopPropagation();
+          set(code);
+          close();
+        });
+        menu.appendChild(o);
+      })(LANGS[i]);
+    }
 
     wrap.appendChild(btn);
-    wrap.appendChild(dropdown);
+    wrap.appendChild(menu);
 
-    // On mobile: insert before hamburger so it flows to its left
-    var menuBtn = document.getElementById('menu-btn');
-    if (menuBtn && menuBtn.parentNode === nav) {
-      nav.insertBefore(wrap, menuBtn);
-    } else {
-      nav.style.position = 'relative';
-      nav.appendChild(wrap);
-    }
-
-    // Toggle dropdown
-    var isOpen = false;
-
-    function openDropdown() {
-      isOpen = true;
-      dropdown.style.opacity = '1';
-      dropdown.style.visibility = 'visible';
-      dropdown.style.transform = 'translateY(0)';
-      arrow.style.transform = 'rotate(180deg)';
-      btn.style.borderColor = 'rgba(255,255,255,0.3)';
-      label.style.color = 'rgba(255,255,255,0.85)';
-      arrow.style.color = 'rgba(255,255,255,0.6)';
-    }
-
-    function closeDropdown() {
-      isOpen = false;
-      dropdown.style.opacity = '0';
-      dropdown.style.visibility = 'hidden';
-      dropdown.style.transform = 'translateY(-4px)';
-      arrow.style.transform = 'rotate(0deg)';
-      btn.style.borderColor = 'rgba(255,255,255,0.15)';
-      label.style.color = 'rgba(255,255,255,0.55)';
-      arrow.style.color = 'rgba(255,255,255,0.35)';
-    }
+    function open()  { wrap.classList.add('open');  btn.setAttribute('aria-expanded', 'true'); }
+    function close() { wrap.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
 
     btn.addEventListener('click', function (e) {
       e.stopPropagation();
-      if (isOpen) closeDropdown();
-      else openDropdown();
+      wrap.classList.contains('open') ? close() : open();
     });
-
-    // Hover states on button
-    btn.addEventListener('mouseenter', function () {
-      if (!isOpen) {
-        btn.style.borderColor = 'rgba(255,255,255,0.25)';
-        label.style.color = 'rgba(255,255,255,0.75)';
-      }
-    });
-    btn.addEventListener('mouseleave', function () {
-      if (!isOpen) {
-        btn.style.borderColor = 'rgba(255,255,255,0.15)';
-        label.style.color = 'rgba(255,255,255,0.55)';
-      }
-    });
-
-    // Close on outside click
-    document.addEventListener('click', function () {
-      if (isOpen) closeDropdown();
-    });
+    document.addEventListener('click', close);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
   }
 
-  /* ── Mobile responsive style ───────────────────────────── */
-  var mobileStyle = document.createElement('style');
-  mobileStyle.textContent =
-    '@media(max-width:767px){' +
-      '#lang-switcher{right:auto!important;left:auto;position:relative!important;' +
-      'transform:none!important;top:auto!important;margin-right:8px;}' +
-      '.glass-nav .max-w-6xl{position:relative;}' +
-    '}';
-  document.head.appendChild(mobileStyle);
+  function set(next) {
+    if (LANGS.indexOf(next) === -1 || next === lang) return;
+    lang = next;
+    sessionStorage.setItem(KEY, lang);
+    apply();
+  }
 
-  /* ── Expose for SPA ────────────────────────────────────── */
-  window.__IO.applyLanguage = function () {
-    if (translations) {
-      applyLanguage(currentLang);
-    }
-  };
+  /* ---------------- BOOT ---------------- */
+  window.__IO.lang = function () { return lang; };
+  window.__IO.t = t;
+  window.__IO.i18n = function () { buildPicker(); apply(); };
 
-  window.__IO.initI18n = function () {
-    createSwitcher();
-    if (translations) applyLanguage(currentLang);
-  };
+  buildPicker();
 
-  /* ── Boot ──────────────────────────────────────────────── */
-  loadTranslations(function () {
-    createSwitcher();
-    applyLanguage(currentLang);
-  });
-
+  fetch('assets/i18n/copy.json')
+    .then(function (r) { return r.json(); })
+    .then(function (j) { dict = j; apply(); })
+    .catch(function () {
+      /* Opened straight off disk the fetch is blocked, so the page simply
+         stays in the English that is already written into the markup. */
+      var wrap = document.getElementById('lang');
+      if (wrap) wrap.style.display = 'none';
+    });
 })();

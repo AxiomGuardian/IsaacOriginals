@@ -3,6 +3,17 @@
   "outputDirectory": ".",
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    { "source": "/rebrand", "destination": "/", "permanent": true },
+    { "source": "/rebrand/", "destination": "/", "permanent": true },
+    { "source": "/rebrand/:path*", "destination": "/", "permanent": true },
+    { "source": "/apex", "destination": "/v1/apex", "permanent": false },
+    { "source": "/apex.html", "destination": "/v1/apex", "permanent": false },
+    { "source": "/journal", "destination": "/v1/journal", "permanent": false },
+    { "source": "/journal.html", "destination": "/v1/journal", "permanent": false },
+    { "source": "/rules", "destination": "/v1/rules", "permanent": false },
+    { "source": "/rules.html", "destination": "/v1/rules", "permanent": false }
+  ],
   "headers": [
     {
       "source": "/assets/(.*).vcf",
@@ -14,6 +25,19 @@
         {
           "key": "Content-Disposition",
           "value": "attachment; filename=\"Isaac-Rodriguez.vcf\""
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/v1/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
         },
         {
           "key": "Cache-Control",
@@ -82,6 +106,15 @@
       ]
     },
     {
+      "source": "/assets/images/(favicon-32|favicon-192|apple-touch-icon).png",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
       "source": "/assets/images/(.*)",
       "headers": [
         {
@@ -119,6 +152,15 @@
     },
     {
       "source": "/assets/js/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/assets/i18n/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
