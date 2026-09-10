@@ -59,7 +59,12 @@
        the gesture that changes that. On Chrome it is already running and
        this call finds it playing and leaves it alone. */
     if (window.__IO.begin) window.__IO.begin();
-    setTimeout(function () { el.remove(); }, 1100);
+    setTimeout(function () {
+      /* Stop the clip before pulling it out of the document, or the pending
+         play promise rejects with an AbortError into the console. */
+      try { if (video) { video.pause(); video.removeAttribute('src'); video.load(); } } catch (e) {}
+      el.remove();
+    }, 1100);
   }
 
   function openGate() {

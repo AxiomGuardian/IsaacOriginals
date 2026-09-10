@@ -25,6 +25,27 @@ does without it.
 site runs through a Web Audio `GainNode` for that reason. It is not
 belt and braces, it is the only thing that works on a phone.
 
+**A user gesture is spent the instant the handler yields.** `play()` must be
+called synchronously inside the click handler. Chaining it off
+`actx.resume().then(...)` puts it one tick too late and Safari refuses it.
+Fire the resume and the play together; await neither.
+
+**Never latch state before playback is confirmed.** An earlier build set a
+`started` flag before attempting to play. The speculative attempt under the
+video marked the bed as started, Safari refused the audio, and the flag stayed
+set, so the Welcome press saw "already started" and did nothing. Music never
+came on. A refused attempt has to leave no trace at all or the retry can never
+happen.
+
+**A resolved `play()` is not proof of sound.** Once an element is routed
+through a `MediaElementSource`, playing into a suspended `AudioContext`
+resolves happily and is completely silent. Check `actx.state === 'running'`
+before believing it.
+
+**Priming a cue at volume zero is not silent on iOS,** because iOS ignores
+`volume` on a media element. Short clicks get away with it. The four second
+delta entrance does not, so it is never primed.
+
 **Phone speakers are quieter.** The bed sits at `0.055` on a desktop and
 `0.16` on touch hardware. Those are in `assets/js/sound.js`.
 

@@ -158,18 +158,52 @@
     if (el.duration - el.currentTime <= XLEAD) handover();
   }, 500);
 
-  function start() {
-    if (started || !enabled || REDUCED) return;
-    started = true;
-    if (!boot()) { started = false; return; }
-    master.gain.setValueAtTime(0, actx.currentTime);
-    var d = decks[live];
-    d.el.src = 'assets/audio/' + TRACKS[idx];
+  /* Two things here are load bearing, and both were learned the hard way.
 
-    function go() {
-      d.el.play().then(function () {
+     One: nothing is latched until the audio is genuinely running. An earlier
+     version set `started` before attempting playback, so the speculative try
+     under the video marked the bed as started, Safari refused it, and the
+     flag stayed set. The Welcome press then saw `started` and did nothing at
+     all. A failed attempt has to leave no trace, or the retry can never
+     happen.
+
+     Two: play() is called synchronously, inside whatever gesture we are
+     already in. Safari spends the user gesture the moment the handler
+     yields, so a play() that waits for resume() to settle first arrives too
+     late and is refused. Fire both, await neither. */
+  var starting = false;
+
+  function start() {
+    if (playing || starting || !enabled || REDUCED) return;
+    starting = true;
+    if (!boot()) { starting = false; return; }
+
+    var d = decks[live];
+    if (!d.el.src) d.el.src = 'assets/audio/' + TRACKS[idx];
+
+    if (actx.state === 'suspended') { try { actx.resume(); } catch (e) {} }
+
+    var pr;
+    try { pr = d.el.play(); } catch (e) { starting = false; return; }
+    if (!pr || !pr.then) { starting = false; return; }
+
+    pr.then(function () {
+      if (actx.state !== 'running') { try { actx.resume(); } catch (e) {} }
+      /* A resolved play() is not proof of sound. Once an element is routed
+         through a MediaElementSource, playback into a suspended context
+         resolves happily and is silent. Confirm the clock is actually
+         running before claiming the bed is on, otherwise the button would
+         say Music on over silence and refuse to retry. */
+      setTimeout(function () {
+        if (actx.state !== 'running' || d.el.paused) { give_up(); return; }
+        starting = false;
+        started = true;
         playing = true;
         sessionStorage.setItem('io-music-playing', '1');
+        /* The gain sat on a frozen clock while the context was suspended, so
+           set the floor again now that time is moving. */
+        try { master.gain.cancelScheduledValues(actx.currentTime); } catch (e) {}
+        try { master.gain.setValueAtTime(0, actx.currentTime); } catch (e) {}
         ramp(master, BED_VOL, FADE_IN);
         paint();
         /* Say it once a session, once the bed is genuinely audible, so the
@@ -178,10 +212,15 @@
           sessionStorage.setItem('io-music-hint', '1');
           setTimeout(function () { announce('music.on', 2400); }, 900);
         }
-      }).catch(function () { started = false; });
+      }, 80);
+    }).catch(give_up);
+
+    /* Refused, or allowed but silent. Leave everything exactly as it was so
+       the next gesture, Welcome or the dot, gets a clean attempt. */
+    function give_up() {
+      starting = false;
+      try { d.el.pause(); } catch (e) {}
     }
-    if (actx.state === 'suspended') actx.resume().then(go).catch(function () { started = false; });
-    else go();
   }
 
   /* ---------------- BACKGROUND TABS ----------------
@@ -214,20 +253,32 @@
      If that first gesture is the music button itself, the bed must not
      auto-start here: the button's own handler decides, and starting it first
      would leave the two fighting over the same press. */
-  function unlock(e) {
-    if (unlocked) return;
-    unlocked = true;
-    sessionStorage.setItem('io-audio-unlocked', '1');
+  function primeCues() {
     for (var k in cues) {
+      /* Never prime the entrance hit. Priming plays a clip at volume zero to
+         get it past the browser's gate, and iOS ignores volume on a media
+         element, so a four second cinematic cue would bleed out loud at the
+         exact moment the curtain drops. It is fired directly by the loader
+         and needs no priming. */
+      if (k === 'entrance') continue;
       (function (s) {
         var v = s.volume; s.volume = 0;
         s.play().then(function () { s.pause(); s.currentTime = 0; s.volume = v; })
                 .catch(function () { s.volume = v; });
       })(cues[k]);
     }
+  }
+
+  function unlock(e) {
+    if (unlocked) return;
+    unlocked = true;
+    sessionStorage.setItem('io-audio-unlocked', '1');
     var t = e && e.target;
     var onBtn = t && t.closest && t.closest('#music');
+    /* Bed first. A user gesture is spent quickly, and five silent cue
+       elements ahead of it can use it up before the music ever gets asked. */
     if (enabled && !onBtn) start();
+    primeCues();
   }
   document.addEventListener('click', unlock, { capture: true, once: true });
   document.addEventListener('touchstart', unlock, { capture: true, once: true });
@@ -325,14 +376,14 @@
     /* Decide from whether anything is actually running, not from the stored
        preference. On a page where the bed never started, the first press has
        to turn it on even though the preference already says it is allowed. */
-    enabled = !(started && enabled);
+    enabled = !(playing && enabled);
     sessionStorage.setItem('io-music-enabled', String(enabled));
     announce(enabled ? 'music.on' : 'music.off', 1500);
 
     if (enabled) {
-      if (!started) { start(); setTimeout(function () { busy = false; paint(); }, 1800); }
+      if (!playing) { start(); setTimeout(function () { busy = false; paint(); }, 1800); }
       else {
-        if (actx && actx.state === 'suspended') actx.resume();
+        if (actx && actx.state === 'suspended') { try { actx.resume(); } catch (e) {} }
         decks[live].el.play().catch(function () {});
         ramp(master, BED_VOL, FADE_TOG);
         playing = true;
@@ -366,18 +417,14 @@
      call is a no op if the first one worked. `quiet` marks the speculative
      attempt so a refusal there is not treated as the visitor saying no. */
   window.__IO.begin = function (quiet) {
-    if (playing || started) return;
+    if (playing || starting) return;
     if (!enabled) return;
     if (!quiet) {
       unlocked = true;
       sessionStorage.setItem('io-audio-unlocked', '1');
-      for (var k in cues) {
-        (function (s) {
-          var v = s.volume; s.volume = 0;
-          s.play().then(function () { s.pause(); s.currentTime = 0; s.volume = v; })
-                  .catch(function () { s.volume = v; });
-        })(cues[k]);
-      }
+      start();
+      primeCues();
+      return;
     }
     start();
   };
