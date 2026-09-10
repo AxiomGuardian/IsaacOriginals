@@ -38,7 +38,10 @@
       <a href="about.html">About</a>
       <a href="https://isaacoriginals.com/social" target="_blank" rel="noopener">Connect</a>
     </nav>
-    <button id="music" type="button" aria-pressed="false" aria-label="Turn music on"><i></i></button>
+    <div class="music-wrap">
+      <span id="music-label" class="music-label" aria-hidden="true"></span>
+      <button id="music" type="button" aria-pressed="false" aria-label="Turn music on"><i></i></button>
+    </div>
   </div>
 </header>
 
@@ -103,9 +106,9 @@
             where most work quietly dies.
           </p>
           <p>
-            This season is that distance closing. Four things under construction, none of
-            them finished. The only number that counts is what actually got built this
-            week.
+            That distance does not close with a decision. It closes with whatever
+            actually got built this week, which is always smaller than the plan and is
+            the only part that counts.
           </p>
         </div>
       </article>
@@ -138,5 +141,6 @@
 
 <script src="assets/js/site.js"></script>
 <script src="assets/js/sound.js"></script>
+<script src="assets/js/nav.js"></script>
 </body>
 </html>

@@ -224,26 +224,24 @@ a.card:hover::before,a.card:active::before,a.card.lit::before{
    reads as a deliberate pause rather than a hole. */
 .phase-solo{
   grid-template-columns:1fr;justify-items:center;text-align:center;
-  padding:8rem 0 8.5rem;position:relative;
+  padding:6.5rem 0 7rem;position:relative;
 }
 .phase-solo p{margin-left:auto;margin-right:auto}
-/* The delta over Earth from the original site sits behind this beat. The
-   transparency is baked into the file itself rather than applied as a CSS
-   mask: a mask that cannot load takes the entire layer down with it, which
-   is exactly what happens to a mask image on a file:// page in Safari. */
+/* Just the traced delta standing behind the year. No panel, no photograph,
+   nothing to crop badly at any width. */
 .phase-solo::before{
   content:"";position:absolute;z-index:0;pointer-events:none;
-  left:50%;top:50%;transform:translate(-50%,-61%);
-  width:min(960px,104%);height:min(442px,48vw);
-  background:url('../images/phase-globe.webp') 50% 50% / contain no-repeat;
-  opacity:.92;
+  left:50%;top:50%;transform:translate(-50%,-66%);
+  width:min(300px,60vw);aspect-ratio:400/420;
+  background:url('../images/delta-connect.png') 50% 50% / contain no-repeat;
+  opacity:.15;
+  filter:drop-shadow(0 0 60px rgba(255,255,255,.3));
 }
 .phase-solo > div{position:relative;z-index:1}
 .phase-solo .phase-year{color:rgba(255,255,255,.66)}
 .phase-solo h3{text-shadow:0 2px 18px rgba(10,10,10,.75)}
 @media (max-width:820px){
-  .phase-solo{padding:5rem 0 5.5rem}
-  .phase-solo::before{width:150%;height:69vw;opacity:.85}
+  .phase-solo{padding:4.5rem 0 5rem}
 }
 @media (max-width:820px){
   .phase{grid-template-columns:1fr;gap:1.5rem;margin-top:3rem}
@@ -282,19 +280,40 @@ a.card:hover::before,a.card:active::before,a.card.lit::before{
 /* ===================== MUSIC TOGGLE ===================== */
 /* Sonar rings, same idea as the original site's visualizer but done in CSS
    so it costs nothing. Rings only expand while the bed is actually playing. */
+/* Grid stacking puts the dot and both rings on exactly one centre. The old
+   half-of-the-width margins drifted by a pixel and it showed. */
+.music-wrap{display:flex;align-items:center;gap:.55rem;margin-left:.4rem;flex-shrink:0}
+/* The label types itself in on the first visit so the dot reads as a control
+   rather than a decoration, then types itself back out. Same face and the
+   same tracking as every other small caption on the site. */
+.music-label{
+  font-size:.56rem;font-weight:500;letter-spacing:.3em;text-transform:uppercase;
+  color:rgba(255,255,255,.5);white-space:nowrap;line-height:1;
+  display:inline-flex;align-items:center;
+  opacity:0;transition:opacity .5s ease;
+}
+.music-label.on{opacity:1}
+.music-label.on::after{
+  content:"";width:1px;height:.85em;margin-left:.34em;
+  background:currentColor;animation:caret 1.05s steps(1) infinite;
+}
+@keyframes caret{0%,55%{opacity:1}56%,100%{opacity:0}}
+@media (max-width:760px){ .music-label{display:none} }
+@media (prefers-reduced-motion: reduce){ .music-label.on::after{animation:none} }
+
 #music{
-  position:relative;width:30px;height:30px;flex-shrink:0;
-  background:none;border:0;padding:0;cursor:pointer;margin-left:.4rem;
+  display:grid;place-items:center;width:32px;height:32px;flex-shrink:0;
+  background:none;border:0;padding:0;cursor:pointer;
   -webkit-tap-highlight-color:transparent;
 }
+#music i,#music::before,#music::after{grid-area:1/1}
 #music i{
-  position:absolute;left:50%;top:50%;width:4px;height:4px;margin:-2px 0 0 -2px;
-  border-radius:50%;background:rgba(255,255,255,.45);
+  width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.45);
   transition:background .3s ease,box-shadow .3s ease;
 }
 #music.on i{background:#fff;box-shadow:0 0 8px rgba(255,255,255,.7)}
 #music::before,#music::after{
-  content:"";position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;
+  content:"";width:6px;height:6px;
   border:1px solid rgba(255,255,255,.5);border-radius:50%;opacity:0;
 }
 #music.on::before,#music.on::after{animation:sonar 2.4s ease-out infinite}

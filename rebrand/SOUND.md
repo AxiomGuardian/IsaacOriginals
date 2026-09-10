@@ -19,11 +19,19 @@ The three tracks from the Website Rebrand folder, in this order:
 2. Sci-Fi Dramatic
 3. Modern Sci-Fi Trailer
 
-They play straight through, one after another, then round again. Dead silence
-at each end is trimmed off, all three are matched to the same loudness so none
-of them jumps out, and only the track currently playing is ever downloaded.
-Nothing is crossfaded into anything else. Roughly seven minutes total, about
-1.4 MB per track.
+Track one fades into track two, two into three, three back into one, six
+seconds of overlap each time. There are two audio decks for exactly this: one
+plays out while the next comes up underneath it, and they trade places on
+every handover. Dead silence at each end is trimmed off and all three are
+matched to the same loudness so none of them jumps out. Roughly seven minutes
+total, about 1.4 MB per track, and only the track being listened to is ever
+downloaded.
+
+Page changes do not interrupt any of it. Links inside the site fetch the next
+page and swap the article, so the document never reloads and the bed simply
+keeps going. That lives in `assets/js/nav.js`. If the fetch fails, the browser
+navigates normally and the music restarts, which is what happens when the
+pages are opened straight off disk rather than served.
 
 The old Hyperion track from the previous site is not used here at all.
 
@@ -44,7 +52,10 @@ Browsers refuse audio until someone interacts, so nothing plays until the first
 click or tap. After that the choice is remembered for the session and the bed
 carries its track and playhead across pages instead of restarting on every one.
 The toggle sits at the right end of the nav: a dim dot when off, a lit dot with
-expanding rings when on. Reduced motion turns the bed off entirely.
+expanding rings when on. On the first visit of a session the word MUSIC types
+itself in beside it, holds, then types itself back out, so the dot reads as a
+control rather than a decoration. Pressing it types MUSIC ON or MUSIC OFF the
+same way. Reduced motion skips the typing and turns the bed off entirely.
 
 ## Sounds still unused
 

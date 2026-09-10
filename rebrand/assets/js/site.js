@@ -149,32 +149,39 @@
     clearTimeout(litTimer); litTimer = setTimeout(clearLit, 400);
   }, { passive: true });
 
-  /* ---------------- EXTERNAL LINKS ON MOBILE ----------------
-     Instagram, TikTok, YouTube and X publish universal links that hand off to
-     their app. Chrome on iOS handles that badly from a target=_blank tab: blank
-     tab, stall, bounce back. A normal top-level navigation works every time. */
-  if (TOUCH) {
-    var ext = document.querySelectorAll('a[target="_blank"]');
-    for (var i = 0; i < ext.length; i++) {
-      ext[i].removeAttribute('target');
-      ext[i].setAttribute('rel', 'noopener');
+  /* ---------------- PER PAGE SETUP ----------------
+     Everything below has to run again after a soft navigation swaps <main>,
+     so it lives in one function the router can call. */
+  window.__IO = window.__IO || {};
+
+  window.__IO.page = function () {
+    /* Instagram, TikTok, YouTube and X publish universal links that hand off
+       to their app. Chrome on iOS handles that badly from a target=_blank
+       tab: blank tab, stall, bounce back. A normal top level navigation
+       works every time. */
+    if (TOUCH) {
+      var ext = document.querySelectorAll('a[target="_blank"]');
+      for (var i = 0; i < ext.length; i++) {
+        ext[i].removeAttribute('target');
+        ext[i].setAttribute('rel', 'noopener');
+      }
     }
-  }
 
-  /* ---------------- SCROLL REVEAL ---------------- */
-  var reveals = document.querySelectorAll('.reveal');
-  if (REDUCED || !('IntersectionObserver' in window)) {
-    for (var r = 0; r < reveals.length; r++) reveals[r].classList.add('in');
-  } else {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
-      });
-    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.08 });
-    for (var k = 0; k < reveals.length; k++) io.observe(reveals[k]);
-  }
+    var reveals = document.querySelectorAll('.reveal:not(.in)');
+    if (REDUCED || !('IntersectionObserver' in window)) {
+      for (var r = 0; r < reveals.length; r++) reveals[r].classList.add('in');
+    } else {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+        });
+      }, { rootMargin: '0px 0px -12% 0px', threshold: 0.08 });
+      for (var k = 0; k < reveals.length; k++) io.observe(reveals[k]);
+    }
 
-  /* ---------------- FOOTER YEAR ---------------- */
-  var y = document.getElementById('year');
-  if (y) y.textContent = new Date().getFullYear();
+    var y = document.getElementById('year');
+    if (y) y.textContent = new Date().getFullYear();
+  };
+
+  window.__IO.page();
 })();
