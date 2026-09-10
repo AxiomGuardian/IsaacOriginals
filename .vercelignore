@@ -1,0 +1,4 @@
+# Notes and documentation live in the repo but are not part of the website.
+docs/
+*.md
+.DS_Store

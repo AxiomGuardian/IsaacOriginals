@@ -7,12 +7,12 @@
     { "source": "/rebrand", "destination": "/", "permanent": true },
     { "source": "/rebrand/", "destination": "/", "permanent": true },
     { "source": "/rebrand/:path*", "destination": "/", "permanent": true },
-    { "source": "/apex", "destination": "/v1/apex", "permanent": false },
-    { "source": "/apex.html", "destination": "/v1/apex", "permanent": false },
-    { "source": "/journal", "destination": "/v1/journal", "permanent": false },
-    { "source": "/journal.html", "destination": "/v1/journal", "permanent": false },
-    { "source": "/rules", "destination": "/v1/rules", "permanent": false },
-    { "source": "/rules.html", "destination": "/v1/rules", "permanent": false }
+    { "source": "/apex", "destination": "/old-website-v1/apex", "permanent": false },
+    { "source": "/apex.html", "destination": "/old-website-v1/apex", "permanent": false },
+    { "source": "/journal", "destination": "/old-website-v1/journal", "permanent": false },
+    { "source": "/journal.html", "destination": "/old-website-v1/journal", "permanent": false },
+    { "source": "/rules", "destination": "/old-website-v1/rules", "permanent": false },
+    { "source": "/rules.html", "destination": "/old-website-v1/rules", "permanent": false }
   ],
   "headers": [
     {
@@ -33,7 +33,7 @@
       ]
     },
     {
-      "source": "/v1/(.*)",
+      "source": "/old-website-v1/(.*)",
       "headers": [
         {
           "key": "X-Robots-Tag",
