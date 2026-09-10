@@ -13,7 +13,6 @@
     "status.dev": "In development",
     "status.soon": "Coming soon",
     "cta.about": "About Isaac",
-
     "index.title": "Isaac Originals",
     "index.meta": "Systems architecture under Christ. Omnis Connect, ApexAERA, K.I.T. and Rodriguez Forge.",
     "index.hero.h1": "Seek first<br />the Kingdom.",
@@ -36,14 +35,13 @@
     "index.why.pull": "The enemy has used technology to disciple a generation into anxiety, comparison and isolation.",
     "index.why.p1": "The Church does not need to hide from the tools. She needs people willing to rebuild them.",
     "index.why.cta": "Get in touch",
-
     "journey.title": "The Journey | Isaac Originals",
     "journey.meta": "Three seasons. What actually happened in each one.",
     "journey.eyebrow": "The Journey",
     "journey.h1": "Three seasons.",
     "journey.p1.year": "2021 to 2024",
     "journey.p1.h3": "Learning and breaking.",
-    "journey.p1.a": "Cadet years. Uniforms, encampments, gear laid out on the pavement before sunrise. Discipline arrives for most people the way it arrived here. Not chosen. Handed over by somebody who will not take an excuse.",
+    "journey.p1.a": "Cadet years. Discipline arrives for most people the way it arrived here. Not chosen. Handed over by somebody who will not take an excuse.",
     "journey.p1.b": "The rest of that stretch went into chasing things that do not carry any weight. That lesson only teaches one way. You get the thing you were certain would change how you feel, and then you feel the same.",
     "journey.p2.h3": "Discipline and return.",
     "journey.p3.year": "2026 to now",
@@ -51,7 +49,6 @@
     "journey.p3.a": "Knowing what to do and not doing it is the oldest problem there is. Almost nobody is short on information. The distance between knowing and doing is where most work quietly dies.",
     "journey.p3.b": "That distance does not close with a decision. It closes with whatever actually got built this week, which is always smaller than the plan and is the only part that counts.",
     "journey.cta": "See the work",
-
     "about.title": "About | Isaac Originals",
     "about.meta": "Isaac Rodriguez. Systems architect. Building under Christ.",
     "about.eyebrow": "About",
@@ -62,7 +59,6 @@
     "about.p5": "Not a pastor. Not a guru. Not selling a system. If any of it is useful to you, take it and go build something.",
     "about.reach": "Reach out",
     "about.links": "All links",
-
     "kit.title": "K.I.T. | Isaac Originals",
     "kit.meta": "Kingdom Initiative Technologies. Scripture rooted software to disciple, equip and connect the Church.",
     "kit.h1": "Technology bent toward the Church.",
@@ -82,7 +78,6 @@
     "kit.cta": "Talk about K.I.T.",
     "kit.cta2": "The other ventures"
   },
-
   "es": {
     "nav.home": "Inicio",
     "nav.journey": "El Camino",
@@ -97,7 +92,6 @@
     "status.dev": "En desarrollo",
     "status.soon": "Próximamente",
     "cta.about": "Sobre Isaac",
-
     "index.title": "Isaac Originals",
     "index.meta": "Arquitectura de sistemas bajo Cristo. Omnis Connect, ApexAERA, K.I.T. y Rodriguez Forge.",
     "index.hero.h1": "Buscad primero<br />el Reino.",
@@ -120,14 +114,13 @@
     "index.why.pull": "El enemigo ha usado la tecnología para discipular a una generación en la ansiedad, la comparación y el aislamiento.",
     "index.why.p1": "La Iglesia no necesita esconderse de las herramientas. Necesita gente dispuesta a reconstruirlas.",
     "index.why.cta": "Ponte en contacto",
-
     "journey.title": "El Camino | Isaac Originals",
     "journey.meta": "Tres temporadas. Lo que realmente pasó en cada una.",
     "journey.eyebrow": "El Camino",
     "journey.h1": "Tres temporadas.",
     "journey.p1.year": "2021 a 2024",
     "journey.p1.h3": "Aprender y quebrarse.",
-    "journey.p1.a": "Años de cadete. Uniformes, campamentos, equipo tendido sobre el pavimento antes del amanecer. La disciplina le llega a casi todos como llegó aquí. Sin elegirla. Entregada por alguien que no acepta excusas.",
+    "journey.p1.a": "Años de cadete. La disciplina le llega a casi todos como llegó aquí. Sin elegirla. Entregada por alguien que no acepta excusas.",
     "journey.p1.b": "El resto de ese tramo se fue persiguiendo cosas que no pesan nada. Esa lección solo se aprende de una manera. Consigues aquello que estabas seguro que cambiaría cómo te sientes, y luego te sientes igual.",
     "journey.p2.h3": "Disciplina y regreso.",
     "journey.p3.year": "2026 al presente",
@@ -135,7 +128,6 @@
     "journey.p3.a": "Saber qué hacer y no hacerlo es el problema más viejo que existe. A casi nadie le falta información. La distancia entre saber y hacer es donde la mayoría del trabajo muere en silencio.",
     "journey.p3.b": "Esa distancia no se cierra con una decisión. Se cierra con lo que de verdad se construyó esta semana, que siempre es menos que el plan y es la única parte que cuenta.",
     "journey.cta": "Ver el trabajo",
-
     "about.title": "Sobre mí | Isaac Originals",
     "about.meta": "Isaac Rodriguez. Arquitecto de sistemas. Construyendo bajo Cristo.",
     "about.eyebrow": "Sobre mí",
@@ -146,7 +138,6 @@
     "about.p5": "No soy pastor. No soy gurú. No vendo un sistema. Si algo de esto te sirve, tómalo y ve a construir algo.",
     "about.reach": "Escríbeme",
     "about.links": "Todos los enlaces",
-
     "kit.title": "K.I.T. | Isaac Originals",
     "kit.meta": "Kingdom Initiative Technologies. Software arraigado en la Escritura para discipular, equipar y conectar a la Iglesia.",
     "kit.h1": "Tecnología inclinada hacia la Iglesia.",
