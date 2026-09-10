@@ -44,11 +44,15 @@
     return a;
   }
   var cues = {
-    tab:      cue('tab-selection.mp3', 0.26),
-    tactile:  cue('tactile-cta.mp3',   0.26),
-    missions: cue('two-missions.mp3',  0.30),
-    contact:  cue('get-in-touch.mp3',  0.30)
+    tab:      cue('tab-selection.mp3',    0.26),
+    tactile:  cue('tactile-cta.mp3',      0.26),
+    missions: cue('two-missions.mp3',     0.30),
+    contact:  cue('get-in-touch.mp3',     0.30),
+    entrance: cue('delta-entrance.mp3',   0.45)
   };
+
+  /* The loader calls this the moment Welcome is pressed. */
+  window.__IO.entrance = function () { play('entrance'); };
 
   function play(key) {
     var s = cues[key];
@@ -141,7 +145,7 @@
   /* Watch the playhead rather than waiting for 'ended', because by the time
      a track has ended there is nothing left to fade out of. */
   setInterval(function () {
-    if (!playing || !enabled || handing) return;
+    if (!playing || !enabled || handing || parked || document.hidden) return;
     var el = decks[live].el;
     if (!el.duration || isNaN(el.duration)) return;
     if (el.duration - el.currentTime <= XLEAD) handover();
@@ -161,11 +165,43 @@
         sessionStorage.setItem('io-music-playing', '1');
         ramp(master, BED_VOL, FADE_IN);
         paint();
+        /* Say it once a session, once the bed is genuinely audible, so the
+           dot reads as a control rather than a decoration. */
+        if (!sessionStorage.getItem('io-music-hint')) {
+          sessionStorage.setItem('io-music-hint', '1');
+          setTimeout(function () { say('Music on', 2400); }, 900);
+        }
       }).catch(function () { started = false; });
     }
     if (actx.state === 'suspended') actx.resume().then(go).catch(function () { started = false; });
     else go();
   }
+
+  /* ---------------- BACKGROUND TABS ----------------
+     A backgrounded tab gets its timers throttled while the media element
+     keeps buffering. The browser then resamples to catch up, and that is the
+     pitch and tempo warble you hear on coming back. Park the decks and the
+     audio clock instead, then bring them up again on return. */
+  var parked = false;
+
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) {
+      if (!playing || parked) return;
+      parked = true;
+      ramp(master, 0, 0.3);
+      setTimeout(function () {
+        if (!document.hidden) return;
+        for (var i = 0; i < 2; i++) { try { decks[i].el.pause(); } catch (e) {} }
+        if (actx && actx.state === 'running') actx.suspend();
+      }, 340);
+    } else if (parked) {
+      parked = false;
+      if (!enabled) return;
+      if (actx && actx.state === 'suspended') actx.resume();
+      decks[live].el.play().catch(function () {});
+      ramp(master, BED_VOL, 0.9);
+    }
+  });
 
   /* ---------------- FIRST GESTURE ----------------
      If that first gesture is the music button itself, the bed must not
@@ -299,13 +335,5 @@
   };
 
   window.__IO.sound();
-
-  /* Once a session, and only after the page has settled, so it reads as a
-     cue rather than as part of the load. */
-  if (!sessionStorage.getItem('io-music-hint')) {
-    sessionStorage.setItem('io-music-hint', '1');
-    setTimeout(function () { say('Music', 2400); }, 1400);
-  }
-
   if (unlocked && enabled && sessionStorage.getItem('io-music-playing') === '1') start();
 })();

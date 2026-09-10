@@ -46,10 +46,26 @@ Cues sit around a quarter of full scale. The bed sits at 0.055 on a desktop
 and 0.16 on a phone, since phone speakers are quieter. If it is ever noticeable
 as music, it is too loud; those numbers live at the top of `assets/js/sound.js`.
 
+## The load in
+
+`assets/js/loader.js` holds a black curtain over the page while the delta
+plays, then fades up a Welcome button. Pressing it drops the curtain, fires
+`delta-entrance.mp3` and starts the music. That press is doing real work:
+browsers refuse to make any sound until someone interacts with the page, so
+it is the only moment the bed is allowed to begin. Once per session; a reload
+inside the same session skips straight past it.
+
+## Background tabs
+
+Switching away throttles the page's timers while the audio element keeps
+buffering, and the browser then resamples to catch up. That is what the pitch
+and tempo warble was. Both decks now pause and the audio clock suspends while
+the tab is hidden, and everything fades back up on return.
+
 ## How it behaves
 
-Browsers refuse audio until someone interacts, so nothing plays until the first
-click or tap. After that the choice is remembered for the session and the bed
+Browsers refuse audio until someone interacts, so nothing plays until Welcome
+is pressed. After that the choice is remembered for the session and the bed
 carries its track and playhead across pages instead of restarting on every one.
 The toggle sits at the right end of the nav: a dim dot when off, a lit dot with
 expanding rings when on. On the first visit of a session the word MUSIC types
@@ -59,6 +75,5 @@ same way. Reduced motion skips the typing and turns the bed off entirely.
 
 ## Sounds still unused
 
-`UI Sound/` holds a Delta load-in set, a startup set, a deeper drone and a
-binary interface loop. The rebrand has no load screen yet, so the Delta
-entrance has nowhere to fire. If a load-in gets built, that is where it goes.
+`UI Sound/` holds a startup set, a deeper drone and a binary interface loop.
+Nothing on the site calls for them yet.

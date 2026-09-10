@@ -24,6 +24,19 @@
 </head>
 <body>
 
+<!-- ============ LOAD IN ============ -->
+<div class="loader" id="loader">
+  <video id="loader-video" muted playsinline preload="auto" aria-hidden="true">
+    <source src="assets/videos/delta-entrance.mp4" type="video/mp4" />
+  </video>
+  <div id="welcome-gate">
+    <button class="btn" id="welcome-btn" type="button">
+      Welcome
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+    </button>
+  </div>
+</div>
+
 <canvas id="fx" aria-hidden="true"></canvas>
 
 <header class="nav">
@@ -114,6 +127,7 @@
   </div>
 </footer>
 
+<script src="assets/js/loader.js"></script>
 <script src="assets/js/site.js"></script>
 <script src="assets/js/sound.js"></script>
 <script src="assets/js/nav.js"></script>

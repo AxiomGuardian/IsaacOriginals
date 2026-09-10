@@ -27,6 +27,43 @@ a{color:inherit;text-decoration:none}
 img{max-width:100%;display:block}
 ::selection{background:rgba(255,255,255,.2);color:#fff}
 
+/* ===================== LOAD IN ===================== */
+/* Sits above everything until the visitor presses Welcome. That press is the
+   gesture the browser needs before any sound is allowed, so the music and the
+   entrance hit are both hung off it rather than off page load. */
+.loader{
+  position:fixed;inset:0;z-index:9999;background:#000;
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .9s ease,visibility .9s ease;
+}
+.loader.done{opacity:0;visibility:hidden;pointer-events:none}
+.loader video{
+  width:94vw;max-width:760px;height:auto;
+  opacity:0;animation:deltaIn 1s ease .25s forwards;
+}
+@keyframes deltaIn{to{opacity:1}}
+#welcome-gate{
+  position:absolute;left:50%;bottom:16%;transform:translateX(-50%);
+  opacity:0;pointer-events:none;transition:opacity 1.3s ease;
+}
+#welcome-gate.visible{opacity:1;pointer-events:auto}
+/* Against pure black the normal button border all but disappears, so this one
+   carries a little more weight and breathes until it is pressed. */
+#welcome-btn{
+  border-color:rgba(255,255,255,.55);
+  box-shadow:0 0 0 rgba(255,255,255,0);
+  animation:welcomePulse 3.2s ease-in-out infinite;
+}
+#welcome-btn:hover{animation:none}
+@keyframes welcomePulse{
+  0%,100%{box-shadow:0 0 22px rgba(255,255,255,.05);border-color:rgba(255,255,255,.5)}
+  50%    {box-shadow:0 0 34px rgba(255,255,255,.16);border-color:rgba(255,255,255,.8)}
+}
+@media (prefers-reduced-motion: reduce){ #welcome-btn{animation:none} }
+/* Nothing behind the curtain should scroll while it is up. */
+body.loading{overflow:hidden}
+@media (max-width:700px){ #welcome-gate{bottom:12%} }
+
 /* ===================== LIGHT STREAKS ===================== */
 #fx{
   position:fixed; inset:0; z-index:0; pointer-events:none; opacity:0;
@@ -264,6 +301,10 @@ a.card:hover::before,a.card:active::before,a.card.lit::before{
   padding:.95rem 1.6rem;border:1px solid rgba(255,255,255,.3);border-radius:10px;
   font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;font-weight:500;color:#fff;
   transition:background .25s ease,color .25s ease,border-color .25s ease;
+  /* A real <button> arrives with the browser's own grey fill and its own
+     font. Both have to be cleared or the Welcome button renders white text
+     on a near-white slab. */
+  background:transparent;font-family:inherit;cursor:pointer;
 }
 .btn:hover,.btn.lit{background:#fff;color:#000;border-color:#fff}
 .btn.ghost{border-color:rgba(255,255,255,.14);color:rgba(255,255,255,.7)}
