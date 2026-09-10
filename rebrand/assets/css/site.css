@@ -1,0 +1,289 @@
+/* ==========================================================================
+   Isaac Originals site design system
+   Ported from the /connect funnel: rounded cards, travelling aura trim,
+   light streaks, one accent per venture. One stylesheet for every page.
+   ========================================================================== */
+
+:root{
+  --bg:#0A0A0A;
+  --bg-card:#141414;
+  --line:rgba(255,255,255,.09);
+  --ink:#F5F5F5;
+  --muted:#6B6760;
+  --cyan:#2DD4FF;
+  --gold:#D4A24C;
+  --max:1080px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{background:var(--bg);-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:'Space Grotesk',system-ui,-apple-system,sans-serif;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  overflow-x:hidden; line-height:1.6;
+}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+::selection{background:rgba(255,255,255,.2);color:#fff}
+
+/* ===================== LIGHT STREAKS ===================== */
+#fx{
+  position:fixed; inset:0; z-index:0; pointer-events:none; opacity:0;
+  transition:opacity 1.4s ease;
+  transform:translateZ(0);
+  -webkit-backface-visibility:hidden; backface-visibility:hidden;
+}
+#fx.on{opacity:1}
+
+/* ===================== SHELL ===================== */
+.wrap{max-width:var(--max);margin:0 auto;padding:0 1.5rem;position:relative;z-index:1}
+main{position:relative;z-index:1}
+section{padding:5.5rem 0}
+@media (max-width:700px){ section{padding:4rem 0} }
+
+/* ===================== NAV ===================== */
+.nav{
+  position:sticky; top:0; z-index:50;
+  background:rgba(10,10,10,.86);
+  backdrop-filter:saturate(140%) blur(14px);
+  -webkit-backdrop-filter:saturate(140%) blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.nav-in{
+  max-width:var(--max); margin:0 auto; padding:0 1.5rem;
+  height:76px; display:flex; align-items:center; gap:2rem;
+}
+.nav-mark{display:flex;align-items:center;gap:.7rem;flex-shrink:0}
+.nav-mark img{height:34px;width:auto}
+.nav-mark span{
+  font-size:.72rem;font-weight:600;letter-spacing:.26em;text-transform:uppercase;
+  color:#fff;white-space:nowrap;
+}
+.nav-links{margin-left:auto;display:flex;align-items:center;gap:.3rem}
+.nav-links a{
+  font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(255,255,255,.55); padding:.6rem .9rem; border-radius:8px;
+  transition:color .25s ease, background .25s ease;
+}
+.nav-links a:hover,.nav-links a.lit{color:#fff;background:rgba(255,255,255,.07)}
+.nav-links a[aria-current="page"]{color:#fff}
+@media (max-width:760px){
+  .nav-in{height:66px;gap:1rem;padding:0 1.1rem}
+  .nav-mark span{display:none}
+  .nav-links{gap:0}
+  .nav-links a{padding:.55rem .6rem;font-size:.66rem;letter-spacing:.14em}
+}
+
+/* ===================== TYPE ===================== */
+.eyebrow{
+  font-size:.66rem;letter-spacing:.3em;text-transform:uppercase;
+  color:rgba(255,255,255,.42);font-weight:500;
+}
+h1,h2,h3{font-weight:700;letter-spacing:-.02em;line-height:1.08}
+h1{font-size:clamp(2.4rem,6.5vw,4.4rem)}
+h2{font-size:clamp(1.9rem,4.2vw,3rem)}
+h3{font-size:1.15rem;letter-spacing:0;line-height:1.3}
+.lede{font-size:clamp(1rem,1.6vw,1.18rem);color:rgba(255,255,255,.72);max-width:46ch}
+.body{color:rgba(255,255,255,.68);max-width:62ch}
+.body p + p{margin-top:1.15rem}
+.verse{
+  font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);
+}
+.rule{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.09),transparent)}
+
+/* ===================== HERO ===================== */
+.hero{
+  position:relative; min-height:92svh; display:flex; align-items:center;
+  overflow:hidden; padding:6rem 0 5rem;
+}
+.hero-photo{
+  position:absolute; inset:0; z-index:0;
+  background:url('../images/hero.jpg') 34% 42% / cover no-repeat;
+  opacity:.46;
+}
+.hero-photo::after{
+  content:""; position:absolute; inset:0;
+  background:
+    linear-gradient(to right, rgba(10,10,10,.92) 0%, rgba(10,10,10,.66) 42%, rgba(10,10,10,.18) 100%),
+    linear-gradient(to top, var(--bg) 0%, rgba(10,10,10,.2) 52%, rgba(10,10,10,.55) 100%);
+}
+/* The delta sits IN the sky rather than above the headline: large, faded,
+   blended into the photograph like something in orbit. */
+.hero-mark{
+  position:absolute; right:9%; top:34%; transform:translateY(-50%);
+  height:34vh; width:auto; z-index:1; pointer-events:none;
+  opacity:.11;
+  filter:drop-shadow(0 0 70px rgba(255,255,255,.35));
+}
+.hero .wrap{position:relative;z-index:2;max-width:1340px;width:100%}
+.hero-copy{max-width:32rem}
+@media (max-width:1100px){
+  .hero-mark{right:4%;height:28vh;opacity:.1}
+}
+@media (max-width:700px){
+  .hero{min-height:88svh}
+  .hero-photo{background-position:62% 26%;opacity:.3}
+  .hero-mark{right:50%;transform:translate(50%,-50%);top:26%;height:22vh;opacity:.1}
+  .hero-copy{max-width:100%}
+}
+
+/* ===================== CARDS + AURA TRIM ===================== */
+@property --aura{ syntax:'<angle>'; initial-value:0deg; inherits:false; }
+
+.card{
+  position:relative; overflow:hidden;
+  background:var(--bg-card); border:1px solid var(--line); border-radius:14px;
+  padding:1.9rem 1.75rem; display:block;
+  transition:border-color .3s ease, transform .3s ease, box-shadow .3s ease;
+}
+.card::before{
+  content:""; position:absolute; inset:0; border-radius:inherit;
+  padding:2px; pointer-events:none; opacity:0; z-index:5;
+  transition:opacity .3s ease;
+  filter:drop-shadow(0 0 7px var(--auraC,#fff)) drop-shadow(0 0 16px var(--auraGlow,rgba(255,255,255,.45)));
+  background:conic-gradient(from var(--aura),
+    transparent 0deg, var(--auraC,#fff) 18deg, #fff 46deg,
+    var(--auraC,#fff) 74deg, rgba(255,255,255,.06) 108deg, transparent 146deg, transparent 360deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor; mask-composite:exclude;
+}
+a.card:hover,a.card:active,a.card.lit{transform:translateY(-3px)}
+a.card:hover::before,a.card:active::before,a.card.lit::before{
+  opacity:1; animation:auraSpin 2.2s linear infinite;
+}
+@keyframes auraSpin{ to{ --aura:360deg } }
+/* Touch devices skip the two drop-shadow passes: same read, far cheaper. */
+@media (hover:none){ .card::before{filter:none} }
+
+/* ===================== VENTURES ===================== */
+.ventures{display:grid;gap:1rem;grid-template-columns:1fr 1fr;margin-top:2.75rem}
+@media (max-width:760px){ .ventures{grid-template-columns:1fr} }
+
+.vent{display:flex;flex-direction:column;min-height:210px}
+.vent-top{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.vent-name{font-size:1.22rem;font-weight:600;letter-spacing:.01em;transition:color .3s ease,text-shadow .3s ease}
+.vent-desc{font-size:.86rem;color:rgba(255,255,255,.62);margin-top:.75rem;flex:1;line-height:1.6}
+.vent-host{
+  font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(255,255,255,.3);margin-top:1.15rem;
+}
+.status{
+  display:inline-flex;align-items:center;gap:.45rem;flex-shrink:0;white-space:nowrap;
+  font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.44);
+}
+.dot{width:6px;height:6px;border-radius:999px;background:#fff;box-shadow:0 0 7px rgba(255,255,255,.5)}
+
+.vent.omnis:hover,.vent.omnis.lit{border-color:rgba(255,255,255,.5);
+  box-shadow:0 0 30px rgba(255,255,255,.14),0 0 70px rgba(255,255,255,.05)}
+.vent.apex{--auraC:#2DD4FF;--auraGlow:rgba(45,212,255,.55)}
+.vent.apex:hover,.vent.apex.lit{border-color:rgba(45,212,255,.55);
+  box-shadow:0 0 34px rgba(45,212,255,.28),0 0 80px rgba(45,212,255,.1)}
+.vent.apex:hover .vent-name,.vent.apex.lit .vent-name{color:var(--cyan);text-shadow:0 0 18px rgba(45,212,255,.55)}
+.vent.kit{--auraC:#D4A24C;--auraGlow:rgba(212,162,76,.55)}
+.vent.kit:hover,.vent.kit.lit{border-color:rgba(212,162,76,.55);
+  box-shadow:0 0 34px rgba(212,162,76,.3),0 0 80px rgba(212,162,76,.12)}
+.vent.kit:hover .vent-name,.vent.kit.lit .vent-name{color:var(--gold);text-shadow:0 0 18px rgba(212,162,76,.6)}
+
+/* Not a link. In development, and it should not look like a door. */
+.vent.forge{
+  border-color:rgba(255,255,255,.05);cursor:default;
+  background:linear-gradient(160deg,#141414 0%,rgba(20,20,20,.35) 55%,rgba(10,10,10,0) 100%);
+}
+.vent.forge .vent-name,.vent.forge .vent-desc,.vent.forge .vent-host{opacity:.42}
+.vent.forge .status{color:rgba(255,255,255,.3)}
+.vent.forge .dot{background:rgba(255,255,255,.3);box-shadow:none}
+
+/* I.O insignia stamped into a card corner */
+.stamp{
+  position:absolute;right:1.15rem;bottom:1rem;width:19%;max-width:78px;
+  opacity:.07;pointer-events:none;z-index:1;transition:opacity .4s ease;
+}
+.card:hover .stamp,.card.lit .stamp{opacity:.2}
+
+/* ===================== THESIS BLOCK ===================== */
+.thesis{position:relative;overflow:hidden}
+.thesis-photo{
+  position:absolute;inset:0;z-index:0;
+  background:url('../images/orion.jpg') 62% 30% / cover no-repeat;opacity:.4;
+}
+.thesis-photo::after{
+  content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(to left, rgba(10,10,10,.95) 0%, rgba(10,10,10,.7) 45%, rgba(10,10,10,.35) 100%),
+    linear-gradient(to bottom, var(--bg) 0%, transparent 26%, transparent 74%, var(--bg) 100%);
+}
+.thesis .wrap{position:relative;z-index:2}
+.pull{
+  font-size:clamp(1.3rem,2.6vw,1.9rem);line-height:1.45;font-weight:500;
+  color:#fff;max-width:26ch;letter-spacing:-.01em;
+}
+
+/* ===================== PHASES (Journey) ===================== */
+.phase{display:grid;gap:2.5rem;grid-template-columns:1fr 1fr;align-items:center;margin-top:4rem}
+.phase:nth-child(even) .phase-media{order:2}
+/* A phase with no image spans the column and centres, so the missing photo
+   reads as a deliberate pause rather than a hole. */
+.phase-solo{grid-template-columns:1fr;justify-items:center;text-align:center;padding:1.5rem 0}
+.phase-solo p{margin-left:auto;margin-right:auto}
+@media (max-width:820px){
+  .phase{grid-template-columns:1fr;gap:1.5rem;margin-top:3rem}
+  .phase:nth-child(even) .phase-media{order:0}
+}
+.phase-media{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);aspect-ratio:4/3}
+.phase-media img{width:100%;height:100%;object-fit:cover;filter:grayscale(.35) contrast(1.05)}
+@media (max-width:820px){ .phase-media{aspect-ratio:3/2} }
+.phase-media::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(10,10,10,.65),transparent 60%);
+}
+.phase-year{font-size:.66rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+.phase h3{font-size:clamp(1.5rem,3vw,2.1rem);letter-spacing:-.02em;margin-top:.7rem}
+.phase p{margin-top:1.1rem;color:rgba(255,255,255,.66);max-width:52ch}
+
+/* ===================== BUTTONS ===================== */
+.btn{
+  display:inline-flex;align-items:center;gap:.65rem;
+  padding:.95rem 1.6rem;border:1px solid rgba(255,255,255,.3);border-radius:10px;
+  font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;font-weight:500;color:#fff;
+  transition:background .25s ease,color .25s ease,border-color .25s ease;
+}
+.btn:hover,.btn.lit{background:#fff;color:#000;border-color:#fff}
+.btn.ghost{border-color:rgba(255,255,255,.14);color:rgba(255,255,255,.7)}
+.btn.ghost:hover,.btn.ghost.lit{background:transparent;color:#fff;border-color:rgba(255,255,255,.4)}
+.btn svg{width:15px;height:15px}
+.btns{display:flex;flex-wrap:wrap;gap:.85rem;margin-top:2.5rem}
+
+/* ===================== PORTRAIT (About) ===================== */
+.portrait-grid{display:grid;gap:3rem;grid-template-columns:minmax(0,320px) 1fr;align-items:start}
+@media (max-width:820px){ .portrait-grid{grid-template-columns:1fr;gap:2rem} }
+.portrait{border-radius:14px;overflow:hidden;border:1px solid var(--line);position:relative}
+.portrait img{width:100%;filter:grayscale(.2)}
+
+/* Flat facts, no commentary. */
+.facts{margin-top:2.5rem;border-top:1px solid var(--line)}
+.fact{display:flex;gap:1.5rem;padding:.95rem 0;border-bottom:1px solid var(--line);font-size:.88rem}
+.fact dt{width:9rem;flex-shrink:0;color:var(--muted);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;padding-top:.2rem}
+.fact dd{color:rgba(255,255,255,.8)}
+
+/* ===================== FOOTER ===================== */
+footer{border-top:1px solid var(--line);padding:2.75rem 0;position:relative;z-index:1}
+.foot-in{
+  max-width:var(--max);margin:0 auto;padding:0 1.5rem;
+  display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;align-items:center;
+  font-size:.72rem;color:var(--muted);
+}
+.foot-in a{color:rgba(255,255,255,.55);transition:color .2s ease}
+.foot-in a:hover{color:#fff}
+
+/* ===================== REVEAL ===================== */
+.reveal{opacity:0;transform:translateY(16px);
+  transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
+.reveal.in{opacity:1;transform:none}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .reveal{opacity:1;transform:none}
+  #fx{display:none}
+}
