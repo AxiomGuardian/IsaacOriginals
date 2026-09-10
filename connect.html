@@ -300,6 +300,9 @@
       background:#181818;
     }
     .row .ico{width:19px;height:19px;flex-shrink:0;color:rgba(255,255,255,.75)}
+    /* The I.O. lockup is a wide wordmark, not a glyph, so it gets its own
+       box: same 19px slot for alignment, natural ratio inside it. */
+    .row .ico-io{width:26px;height:auto;opacity:1}
     .row .txt{flex:1;min-width:0}
     .row .t{display:block;font-size:.92rem;font-weight:500;letter-spacing:.01em}
     .row .d{display:block;font-size:.72rem;color:var(--muted);margin-top:.25rem;line-height:1.4}
@@ -489,7 +492,7 @@
 
       <div class="rows">
         <a class="row" href="https://isaacoriginals.com" target="_blank" rel="noopener">
-          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 010 18a15 15 0 010-18"/></svg>
+          <img class="ico ico-io" src="/assets/images/io-insignia.png" alt="" aria-hidden="true" />
           <span class="txt"><span class="t">The Site</span><span class="d">isaacoriginals.com</span></span>
           <svg class="arw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 17L17 7M9 7h8v8"/></svg>
         </a>
