@@ -26,13 +26,23 @@
     var ANG = 28 * Math.PI / 180, UX = Math.cos(ANG), UY = Math.sin(ANG);
     var lastW = 0, resizeTimer = null;
 
+    /* Measure the element, never innerWidth. On a phone innerWidth is the
+       visual viewport, which grows the moment anything on the page runs a few
+       pixels too wide. Writing that number back as an explicit CSS width made
+       the canvas wider than the page, which made the page wider again. The two
+       fed each other and the whole document slid sideways under the thumb.
+       #fx is pinned to all four edges, so its own box is already correct. */
+    function measure() {
+      var r = cv.getBoundingClientRect();
+      return { w: Math.max(1, Math.round(r.width)), h: Math.max(1, Math.round(r.height)) };
+    }
+
     function size() {
       dpr = Math.min(window.devicePixelRatio || 1, TOUCH ? 1.25 : 2);
-      W = cv.width = Math.floor(innerWidth * dpr);
-      H = cv.height = Math.floor(innerHeight * dpr);
-      cv.style.width = innerWidth + 'px';
-      cv.style.height = innerHeight + 'px';
-      lastW = innerWidth;
+      var m = measure();
+      W = cv.width = Math.floor(m.w * dpr);
+      H = cv.height = Math.floor(m.h * dpr);
+      lastW = m.w;
     }
     size();
 
@@ -40,7 +50,7 @@
        full-resolution canvas on each one is what locks the page up, so ignore
        height-only changes and debounce the rest. */
     addEventListener('resize', function () {
-      if (innerWidth === lastW) return;
+      if (measure().w === lastW) return;
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(size, 220);
     }, { passive: true });
@@ -148,6 +158,47 @@
   document.addEventListener('touchcancel', function () {
     clearTimeout(litTimer); litTimer = setTimeout(clearLit, 400);
   }, { passive: true });
+
+  /* ---------------- PHONE MENU ----------------
+     Four links, a language picker and a music dot never fit one phone row, and
+     Spanish is longer than English in every label. So below the breakpoint the
+     links drop into a panel under the bar. The router never swaps the header,
+     so this binds once and stays bound. */
+  (function menu() {
+    var nav = document.querySelector('.nav');
+    var btn = document.getElementById('menu');
+    if (!nav || !btn) return;
+
+    function shut() {
+      if (!nav.classList.contains('open')) return;
+      nav.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var open = nav.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+
+    /* Tapping a link closes the panel, including the ones the router handles
+       without a page load. */
+    nav.addEventListener('click', function (e) {
+      if (e.target.closest && e.target.closest('.nav-links a')) shut();
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!nav.contains(e.target)) shut();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' || e.keyCode === 27) shut();
+    });
+    addEventListener('popstate', shut);
+    /* Turning the phone sideways can put the links back in the bar. */
+    addEventListener('resize', function () {
+      if (innerWidth > 760) shut();
+    }, { passive: true });
+  })();
 
   /* ---------------- PER PAGE SETUP ----------------
      Everything below has to run again after a soft navigation swaps <main>,

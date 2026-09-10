@@ -50,6 +50,13 @@
       var h = t(html[j].getAttribute('data-i18n-html'));
       if (h !== null) html[j].innerHTML = h;
     }
+    /* Controls that carry their whole meaning in a label a screen reader
+       announces, such as the phone menu button. */
+    var aria = document.querySelectorAll('[data-i18n-aria]');
+    for (var a = 0; a < aria.length; a++) {
+      var av = t(aria[a].getAttribute('data-i18n-aria'));
+      if (av !== null) aria[a].setAttribute('aria-label', av);
+    }
 
     var body = document.body;
     var tk = body.getAttribute('data-i18n-title');

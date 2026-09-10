@@ -112,6 +112,16 @@
         decks[i].src.connect(decks[i].gain);
         decks[i].gain.connect(master);
       }
+      /* A phone call, an alarm or another app grabbing the audio session
+         interrupts the context while the page is still on screen. Nothing
+         fires visibilitychange for that, so listen to the context itself. */
+      actx.onstatechange = function () {
+        if (!playing || document.hidden) return;
+        if (actx.state === 'interrupted' || actx.state === 'suspended') {
+          parked = true;
+          setTimeout(unpark, 250);
+        }
+      };
       booted = true;
       return true;
     } catch (e) { return false; }
@@ -228,26 +238,90 @@
      keeps buffering. The browser then resamples to catch up, and that is the
      pitch and tempo warble you hear on coming back. Park the decks and the
      audio clock instead, then bring them up again on return. */
-  var parked = false;
+  var parked = false, waking = 0;
+
+  /* Hold the master at exactly zero, right now, on whatever clock we have. */
+  function silence() {
+    if (!actx || !master) return;
+    try {
+      var t = actx.currentTime;
+      master.gain.cancelScheduledValues(t);
+      master.gain.setValueAtTime(0, t);
+    } catch (e) {}
+  }
+
+  function park() {
+    if (!playing || parked) return;
+    parked = true;
+    waking++;                       /* cancels any wake still in flight */
+    ramp(master, 0, 0.25);
+    setTimeout(function () {
+      if (!parked) return;
+      for (var i = 0; i < 2; i++) { try { decks[i].el.pause(); } catch (e) {} }
+      if (actx && actx.state === 'running') { try { actx.suspend(); } catch (e) {} }
+    }, 280);
+  }
+
+  /* Coming back is where this used to fall apart. The old version scheduled
+     the fade up against actx.currentTime while the context was still
+     suspended, and a suspended clock does not advance. By the time iOS
+     actually resumed, the whole ramp was already in the past, so the gain
+     jumped straight to full and you heard the element's stale buffer at full
+     volume. That is the distorted stab on returning to the app.
+
+     So: pin the gain to zero, resume, wait for the context to genuinely
+     report running, start the element, give it a beat to produce real
+     samples, and only then fade up. */
+  function unpark() {
+    if (!parked) return;
+    parked = false;
+    if (!enabled || !actx || !playing) return;
+
+    var mine = ++waking;
+    silence();
+
+    var tries = 0;
+    (function rise() {
+      if (mine !== waking || parked) return;
+
+      var st = actx.state;
+      /* iOS reports 'interrupted' rather than 'suspended' when another app
+         takes the audio session, and it needs the same resume. */
+      if (st === 'suspended' || st === 'interrupted') {
+        try { actx.resume(); } catch (e) {}
+      }
+      if (actx.state !== 'running') {
+        if (tries++ < 40) setTimeout(rise, 100);
+        return;
+      }
+
+      var el = decks[live].el, pr;
+      silence();
+      try { pr = el.play(); } catch (e) { return; }
+
+      function up() {
+        setTimeout(function () {
+          if (mine !== waking || parked || !playing) return;
+          silence();
+          ramp(master, BED_VOL, 0.9);
+        }, 140);
+      }
+      if (pr && pr.then) pr.then(up).catch(function () {}); else up();
+    })();
+  }
 
   document.addEventListener('visibilitychange', function () {
-    if (document.hidden) {
-      if (!playing || parked) return;
-      parked = true;
-      ramp(master, 0, 0.3);
-      setTimeout(function () {
-        if (!document.hidden) return;
-        for (var i = 0; i < 2; i++) { try { decks[i].el.pause(); } catch (e) {} }
-        if (actx && actx.state === 'running') actx.suspend();
-      }, 340);
-    } else if (parked) {
-      parked = false;
-      if (!enabled) return;
-      if (actx && actx.state === 'suspended') actx.resume();
-      decks[live].el.play().catch(function () {});
-      ramp(master, BED_VOL, 0.9);
-    }
+    if (document.hidden) park(); else unpark();
   });
+
+  /* Closing the app and returning does not always come through
+     visibilitychange on iOS, and a page restored from the back forward cache
+     never fires it at all. These are the backstops. Both paths are guarded by
+     the parked flag, so extra firings cost nothing. */
+  addEventListener('pagehide', park);
+  addEventListener('pageshow', function () { if (!document.hidden) unpark(); });
+  addEventListener('blur', function () { if (document.hidden) park(); });
+  addEventListener('focus', function () { if (!document.hidden) unpark(); });
 
   /* ---------------- FIRST GESTURE ----------------
      If that first gesture is the music button itself, the bed must not

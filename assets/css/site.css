@@ -105,11 +105,55 @@ section{padding:5.5rem 0}
 }
 .nav-links a:hover,.nav-links a.lit{color:#fff;background:rgba(255,255,255,.07)}
 .nav-links a[aria-current="page"]{color:#fff}
+/* Only exists on phones. Two hairlines rather than a graphic, so it carries
+   the same stroke weight as the delta and the picker outline. */
+.menu-btn{display:none}
+
 @media (max-width:760px){
-  .nav-in{height:66px;gap:1rem;padding:0 1.1rem}
+  .nav-in{
+    height:62px; gap:0;
+    padding-left:max(1rem,env(safe-area-inset-left));
+    padding-right:max(1rem,env(safe-area-inset-right));
+  }
   .nav-mark span{display:none}
-  .nav-links{gap:0}
-  .nav-links a{padding:.55rem .6rem;font-size:.66rem;letter-spacing:.14em}
+  .nav-mark img{height:30px}
+
+  .lang{margin-left:auto;margin-right:0}
+  .music-wrap{margin-left:.55rem}
+
+  .menu-btn{
+    display:inline-flex;flex-direction:column;justify-content:center;gap:5px;
+    width:34px;height:40px;padding:0 5px;margin-left:.5rem;flex-shrink:0;
+    background:transparent;border:0;cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .menu-btn span{
+    display:block;height:1.5px;border-radius:2px;
+    background:rgba(255,255,255,.78);
+    transition:transform .3s cubic-bezier(.2,.7,.2,1);
+  }
+  .nav.open .menu-btn span:first-child{transform:translateY(3.25px) rotate(45deg)}
+  .nav.open .menu-btn span:last-child{transform:translateY(-3.25px) rotate(-45deg)}
+
+  /* The panel hangs off the bar, which is the sticky positioned box. */
+  .nav-links{
+    position:absolute;left:0;right:0;top:100%;
+    margin-left:0;
+    flex-direction:column;align-items:stretch;gap:0;
+    background:rgba(10,10,10,.97);
+    backdrop-filter:saturate(140%) blur(14px);
+    -webkit-backdrop-filter:saturate(140%) blur(14px);
+    border-bottom:1px solid var(--line);
+    padding:.45rem .7rem calc(.9rem + env(safe-area-inset-bottom));
+    opacity:0;visibility:hidden;transform:translateY(-10px);
+    transition:opacity .24s ease,transform .24s ease,visibility .24s ease;
+  }
+  .nav.open .nav-links{opacity:1;visibility:visible;transform:translateY(0)}
+  .nav-links a{
+    padding:.95rem 1rem;font-size:.72rem;letter-spacing:.2em;border-radius:10px;
+    color:rgba(255,255,255,.62);
+  }
+  .nav-links a[aria-current="page"]{color:#fff;background:rgba(255,255,255,.06)}
 }
 
 /* ===================== TYPE ===================== */
@@ -196,7 +240,7 @@ a.card:hover::before,a.card:active::before,a.card.lit::before{
 @media (max-width:760px){ .ventures{grid-template-columns:1fr} }
 
 .vent{display:flex;flex-direction:column;min-height:210px}
-.vent-top{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.vent-top{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
 .vent-name{font-size:1.22rem;font-weight:600;letter-spacing:.01em;transition:color .3s ease,text-shadow .3s ease}
 .vent-desc{font-size:.86rem;color:rgba(255,255,255,.62);margin-top:.75rem;flex:1;line-height:1.6}
 .vent-host{
@@ -478,4 +522,17 @@ footer{border-top:1px solid var(--line);padding:2.75rem 0;position:relative;z-in
   *{animation:none!important;transition:none!important}
   .reveal{opacity:1;transform:none}
   #fx{display:none}
+}
+
+/* ===================== PHONE NAV OVERRIDES =====================
+   These have to sit at the end of the file. The language picker and the music
+   dot declare their own margins further down than the nav block does, and at
+   equal specificity the later rule wins, which pinned both controls to the
+   left of the bar with a hole on the right. */
+@media (max-width:760px){
+  .lang{margin-left:auto;margin-right:0}
+  .music-wrap{margin-left:.6rem;margin-right:0}
+  /* Fully opaque. At 97% the headline behind it ghosted through the panel. */
+  .nav.open .nav-links{background:#0A0A0A}
+  .nav-links{background:#0A0A0A}
 }
