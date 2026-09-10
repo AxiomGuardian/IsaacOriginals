@@ -49,11 +49,20 @@ as music, it is too loud; those numbers live at the top of `assets/js/sound.js`.
 ## The load in
 
 `assets/js/loader.js` holds a black curtain over the page while the delta
-plays, then fades up a Welcome button. Pressing it drops the curtain, fires
-`delta-entrance.mp3` and starts the music. That press is doing real work:
-browsers refuse to make any sound until someone interacts with the page, so
-it is the only moment the bed is allowed to begin. Once per session; a reload
-inside the same session skips straight past it.
+plays. Welcome fades up about a second and a half before the clip ends, so
+the two overlap instead of leaving a gap.
+
+Sound splits by browser here:
+
+- **Chrome** allows audio once the video is already playing. The entrance hit
+  and the music both start under the clip, and Welcome only drops the curtain.
+- **Safari** refuses any sound until someone interacts. Nothing plays under
+  the clip. The music starts on the Welcome press, and the entrance hit is
+  skipped rather than fired late, because a cinematic cue that lands after the
+  animation is over reads as a mistake.
+
+Either way the visitor sees the same thing. Once per session; a reload inside
+the same session skips straight past it.
 
 ## Background tabs
 

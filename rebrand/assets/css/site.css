@@ -318,6 +318,55 @@ a.card:hover::before,a.card:active::before,a.card.lit::before{
 .portrait{border-radius:14px;overflow:hidden;border:1px solid var(--line);position:relative}
 .portrait img{width:100%;filter:grayscale(.2)}
 
+/* ===================== LANGUAGE ===================== */
+/* Sits between the nav links and the music dot. Same small caps treatment as
+   every other control up there, so it reads as part of the set. */
+.lang{position:relative;flex-shrink:0;margin-left:1.1rem}
+#lang-btn{
+  display:inline-flex;align-items:center;gap:.4rem;
+  background:transparent;border:1px solid rgba(255,255,255,.16);border-radius:8px;
+  padding:.42rem .6rem;cursor:pointer;font-family:inherit;
+  font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;font-weight:500;
+  color:rgba(255,255,255,.6);
+  transition:color .25s ease,border-color .25s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+#lang-btn:hover{color:#fff;border-color:rgba(255,255,255,.4)}
+#lang-btn svg{width:11px;height:11px;transition:transform .25s ease}
+.lang.open #lang-btn{color:#fff;border-color:rgba(255,255,255,.4)}
+.lang.open #lang-btn svg{transform:rotate(180deg)}
+
+#lang-menu{
+  position:absolute;top:calc(100% + .5rem);right:0;min-width:9.5rem;
+  background:rgba(16,16,16,.97);
+  backdrop-filter:saturate(140%) blur(14px);
+  -webkit-backdrop-filter:saturate(140%) blur(14px);
+  border:1px solid var(--line);border-radius:10px;padding:.3rem;
+  opacity:0;visibility:hidden;transform:translateY(-6px);
+  transition:opacity .22s ease,transform .22s ease,visibility .22s ease;
+  z-index:60;
+}
+.lang.open #lang-menu{opacity:1;visibility:visible;transform:translateY(0)}
+#lang-menu button{
+  display:flex;align-items:center;gap:.7rem;width:100%;
+  background:transparent;border:0;border-radius:7px;cursor:pointer;
+  padding:.6rem .7rem;font-family:inherit;font-size:.78rem;
+  color:rgba(255,255,255,.62);text-align:left;
+  transition:background .2s ease,color .2s ease;
+}
+#lang-menu button i{
+  font-style:normal;font-size:.58rem;letter-spacing:.16em;
+  color:rgba(255,255,255,.32);min-width:1.5rem;
+}
+#lang-menu button:hover{background:rgba(255,255,255,.07);color:#fff}
+#lang-menu button[aria-selected="true"]{color:#fff}
+#lang-menu button[aria-selected="true"] i{color:rgba(255,255,255,.6)}
+
+@media (max-width:760px){
+  .lang{margin-left:.5rem}
+  #lang-btn{padding:.36rem .45rem;font-size:.56rem;gap:.28rem}
+}
+
 /* ===================== MUSIC TOGGLE ===================== */
 /* Sonar rings, same idea as the original site's visualizer but done in CSS
    so it costs nothing. Rings only expand while the bed is actually playing. */
@@ -366,6 +415,26 @@ a.card:hover::before,a.card:active::before,a.card.lit::before{
 }
 @media (prefers-reduced-motion: reduce){
   #music.on::before,#music.on::after{animation:none}
+}
+
+/* ===================== K.I.T. ===================== */
+/* These used to sit in a <style> block inside kit.html. Soft navigation swaps
+   the article and nothing else, so a page that carries its own styles in its
+   head loses them the moment you arrive by clicking rather than by loading.
+   Anything page specific belongs here, in the one sheet every page already
+   has. */
+.kit-page .card{--auraC:#D4A24C;--auraGlow:rgba(212,162,76,.5)}
+.kit-page .card:hover,.kit-page .card.lit{
+  border-color:rgba(212,162,76,.5);
+  box-shadow:0 0 30px rgba(212,162,76,.22),0 0 70px rgba(212,162,76,.08);
+}
+.kit-page .eyebrow{color:rgba(212,162,76,.7)}
+.kit-page .dot{background:var(--gold);box-shadow:0 0 7px rgba(212,162,76,.6)}
+.tools{display:grid;gap:1rem;grid-template-columns:1fr 1fr;margin-top:2.75rem}
+@media (max-width:760px){ .tools{grid-template-columns:1fr} }
+.scripture{
+  border-left:2px solid rgba(212,162,76,.5);padding-left:1.5rem;
+  font-weight:300;color:rgba(255,255,255,.8);max-width:44ch;
 }
 
 /* ===================== FOOTER ===================== */

@@ -22,7 +22,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="assets/css/site.css" />
 </head>
-<body>
+<body data-i18n-title="about.title" data-i18n-meta="about.meta">
 
 <!-- ============ LOAD IN ============ -->
 <div class="loader" id="loader">
@@ -31,7 +31,7 @@
   </video>
   <div id="welcome-gate">
     <button class="btn" id="welcome-btn" type="button">
-      Welcome
+      <span data-i18n="welcome.btn">Welcome</span>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
     </button>
   </div>
@@ -46,11 +46,12 @@
       <span>Isaac Originals</span>
     </a>
     <nav class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="journey.html">Journey</a>
-      <a href="about.html" aria-current="page">About</a>
-      <a href="https://isaacoriginals.com/social" target="_blank" rel="noopener">Connect</a>
+      <a href="index.html" data-i18n="nav.home">Home</a>
+      <a href="journey.html" data-i18n="nav.journey">Journey</a>
+      <a href="about.html" aria-current="page" data-i18n="nav.about">About</a>
+      <a href="https://isaacoriginals.com/social" target="_blank" rel="noopener" data-i18n="nav.connect">Connect</a>
     </nav>
+    <div id="lang" class="lang"></div>
     <div class="music-wrap">
       <span id="music-label" class="music-label" aria-hidden="true"></span>
       <button id="music" type="button" aria-pressed="false" aria-label="Turn music on"><i></i></button>
@@ -62,7 +63,7 @@
 
   <section style="padding-top:5rem">
     <div class="wrap">
-      <p class="eyebrow">About</p>
+      <p class="eyebrow" data-i18n="about.eyebrow">About</p>
       <h1 style="margin-top:1.2rem;max-width:12ch">Isaac Rodriguez.</h1>
 
       <div class="portrait-grid" style="margin-top:3.5rem">
@@ -73,27 +74,27 @@
 
         <div>
           <div class="body reveal">
-            <p>
+            <p data-i18n="about.p1">
               Systems architect. The job is looking at how something was put together and
               finding the part that should not be there.
             </p>
-            <p>
+            <p data-i18n="about.p2">
               Nobody actually wants more software. They want the thing to work once,
               without a workaround, without a second login, without somebody in another
               department retyping what was already typed.
             </p>
-            <p>
+            <p data-i18n="about.p3">
               There was a long stretch of chasing whatever looks impressive from the
               outside. Some of it worked. None of it filled the thing it promised to fill.
               That part is worth handing to somebody else, because it saves years: the win
               you are counting on to change how you feel is not going to change how you
               feel.
             </p>
-            <p>
+            <p data-i18n="about.p4">
               Christ settles who I am. Everything after that is context, this page
               included.
             </p>
-            <p>
+            <p data-i18n="about.p5">
               Not a pastor. Not a guru. Not selling a system. If any of it is useful to
               you, take it and go build something.
             </p>
@@ -108,12 +109,12 @@
 
   <section>
     <div class="wrap">
-      <p class="eyebrow reveal">Reach out</p>
+      <p class="eyebrow reveal" data-i18n="about.reach">Reach out</p>
       <div class="btns" style="margin-top:1.9rem">
         <a class="btn" data-sound="contact" href="mailto:isaac@isaacoriginals.com">
           isaac@isaacoriginals.com
         </a>
-        <a class="btn ghost" href="https://isaacoriginals.com/social" target="_blank" rel="noopener">All links</a>
+        <a class="btn ghost" href="https://isaacoriginals.com/social" target="_blank" rel="noopener" data-i18n="about.links">All links</a>
       </div>
     </div>
   </section>
@@ -122,14 +123,15 @@
 
 <footer>
   <div class="foot-in">
-    <p>Built in obedience. &copy; <span id="year">2026</span> Isaac Originals.</p>
-    <p><a href="https://isaacoriginals.com/social" target="_blank" rel="noopener">Connect</a></p>
+    <p><span data-i18n="foot.built">Built in obedience.</span> &copy; <span id="year">2026</span> Isaac Originals.</p>
+    <p><a href="https://isaacoriginals.com/social" target="_blank" rel="noopener" data-i18n="nav.connect">Connect</a></p>
   </div>
 </footer>
 
 <script src="assets/js/loader.js"></script>
 <script src="assets/js/site.js"></script>
 <script src="assets/js/sound.js"></script>
+<script src="assets/js/i18n.js"></script>
 <script src="assets/js/nav.js"></script>
 </body>
 </html>

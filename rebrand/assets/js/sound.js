@@ -51,8 +51,15 @@
     entrance: cue('delta-entrance.mp3',   0.45)
   };
 
-  /* The loader calls this the moment Welcome is pressed. */
-  window.__IO.entrance = function () { play('entrance'); };
+  /* The loader fires this under the video. Chrome allows it, Safari refuses
+     and the promise simply rejects, which is fine: a cue that lands after the
+     animation has finished is worse than no cue at all, so it is never
+     retried on the Welcome press. */
+  window.__IO.entrance = function () {
+    var s = cues.entrance;
+    if (!s) return;
+    try { s.currentTime = 0; s.play().catch(function () {}); } catch (e) {}
+  };
 
   function play(key) {
     var s = cues[key];
@@ -169,7 +176,7 @@
            dot reads as a control rather than a decoration. */
         if (!sessionStorage.getItem('io-music-hint')) {
           sessionStorage.setItem('io-music-hint', '1');
-          setTimeout(function () { say('Music on', 2400); }, 900);
+          setTimeout(function () { announce('music.on', 2400); }, 900);
         }
       }).catch(function () { started = false; });
     }
@@ -232,6 +239,26 @@
      up writing over each other. */
   var label = document.getElementById('music-label');
   var ticket = 0;
+  var lastSaid = null;
+
+  /* The label is written by script, not markup, so it cannot carry a
+     data-i18n key. It asks the dictionary directly and falls back to English
+     if the dictionary has not landed yet. */
+  function word(key) {
+    var v = window.__IO.t && window.__IO.t(key);
+    if (v) return v;
+    return key === 'music.off' ? 'Music off' : 'Music on';
+  }
+
+  /* Called when the language changes, so a label sitting on screen updates
+     rather than finishing its hold in the old language. */
+  window.__IO.relabelMusic = function () {
+    if (!label || !lastSaid || !label.classList.contains('on')) return;
+    say(word(lastSaid), 1500);
+  };
+
+  /* Remembers which phrase is on screen so a language change can rewrite it. */
+  function announce(key, hold) { lastSaid = key; say(word(key), hold); }
 
   function say(text, hold) {
     if (!label) return;
@@ -300,7 +327,7 @@
        to turn it on even though the preference already says it is allowed. */
     enabled = !(started && enabled);
     sessionStorage.setItem('io-music-enabled', String(enabled));
-    say(enabled ? 'Music on' : 'Music off', 1500);
+    announce(enabled ? 'music.on' : 'music.off', 1500);
 
     if (enabled) {
       if (!started) { start(); setTimeout(function () { busy = false; paint(); }, 1800); }
@@ -332,6 +359,27 @@
     bind('a.card, .tools .card', 'missions');
     bind('[data-sound="contact"]', 'contact');
     paint();
+  };
+
+  /* The loader's way in. Called once under the video, where Chrome will take
+     it, and again on the Welcome press, where Safari finally will. The second
+     call is a no op if the first one worked. `quiet` marks the speculative
+     attempt so a refusal there is not treated as the visitor saying no. */
+  window.__IO.begin = function (quiet) {
+    if (playing || started) return;
+    if (!enabled) return;
+    if (!quiet) {
+      unlocked = true;
+      sessionStorage.setItem('io-audio-unlocked', '1');
+      for (var k in cues) {
+        (function (s) {
+          var v = s.volume; s.volume = 0;
+          s.play().then(function () { s.pause(); s.currentTime = 0; s.volume = v; })
+                  .catch(function () { s.volume = v; });
+        })(cues[k]);
+      }
+    }
+    start();
   };
 
   window.__IO.sound();

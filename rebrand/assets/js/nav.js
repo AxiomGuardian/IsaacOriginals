@@ -45,13 +45,39 @@
     if (!next) { location.href = url.href; return; }
 
     document.title = doc.title || document.title;
+    /* Keep the loader's scroll lock out of this: it belongs to the document,
+       not to the page being swapped in. */
+    var wasLoading = document.body.classList.contains('loading');
     if (doc.body.className !== document.body.className) document.body.className = doc.body.className;
+    if (wasLoading) document.body.classList.add('loading');
+
+    /* Belt and braces. Page specific rules belong in site.css, but if a page
+       ever carries its own <style> again, bring it along rather than silently
+       arriving without it. */
+    var styles = doc.head.querySelectorAll('style');
+    for (var i = 0; i < styles.length; i++) {
+      var css = styles[i].textContent;
+      if (!css || document.__pageCss === css) continue;
+      var tag = document.getElementById('page-css');
+      if (!tag) {
+        tag = document.createElement('style');
+        tag.id = 'page-css';
+        document.head.appendChild(tag);
+      }
+      tag.textContent = css;
+      document.__pageCss = css;
+    }
+    if (!styles.length) {
+      var stale = document.getElementById('page-css');
+      if (stale) { stale.remove(); document.__pageCss = null; }
+    }
     main.replaceWith(next);
     main = next;
 
     markNav(url);
     if (window.__IO && window.__IO.page)  window.__IO.page();
     if (window.__IO && window.__IO.sound) window.__IO.sound();
+    if (window.__IO && window.__IO.i18n)  window.__IO.i18n();
 
     if (hash) {
       var t = document.getElementById(hash.slice(1));

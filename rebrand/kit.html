@@ -21,24 +21,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="assets/css/site.css" />
-<style>
-  /* K.I.T. carries the gold accent throughout, the way Apex carries cyan. */
-  .kit-page .card{--auraC:#D4A24C;--auraGlow:rgba(212,162,76,.5)}
-  .kit-page .card:hover,.kit-page .card.lit{
-    border-color:rgba(212,162,76,.5);
-    box-shadow:0 0 30px rgba(212,162,76,.22),0 0 70px rgba(212,162,76,.08);
-  }
-  .kit-page .eyebrow{color:rgba(212,162,76,.7)}
-  .kit-page .dot{background:var(--gold);box-shadow:0 0 7px rgba(212,162,76,.6)}
-  .tools{display:grid;gap:1rem;grid-template-columns:1fr 1fr;margin-top:2.75rem}
-  @media (max-width:760px){ .tools{grid-template-columns:1fr} }
-  .scripture{
-    border-left:2px solid rgba(212,162,76,.5);padding-left:1.5rem;
-    font-weight:300;color:rgba(255,255,255,.8);max-width:44ch;
-  }
-</style>
 </head>
-<body class="kit-page">
+<body class="kit-page" data-i18n-title="kit.title" data-i18n-meta="kit.meta">
 
 <!-- ============ LOAD IN ============ -->
 <div class="loader" id="loader">
@@ -47,7 +31,7 @@
   </video>
   <div id="welcome-gate">
     <button class="btn" id="welcome-btn" type="button">
-      Welcome
+      <span data-i18n="welcome.btn">Welcome</span>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
     </button>
   </div>
@@ -62,11 +46,12 @@
       <span>Isaac Originals</span>
     </a>
     <nav class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="journey.html">Journey</a>
-      <a href="about.html">About</a>
-      <a href="https://isaacoriginals.com/social" target="_blank" rel="noopener">Connect</a>
+      <a href="index.html" data-i18n="nav.home">Home</a>
+      <a href="journey.html" data-i18n="nav.journey">Journey</a>
+      <a href="about.html" data-i18n="nav.about">About</a>
+      <a href="https://isaacoriginals.com/social" target="_blank" rel="noopener" data-i18n="nav.connect">Connect</a>
     </nav>
+    <div id="lang" class="lang"></div>
     <div class="music-wrap">
       <span id="music-label" class="music-label" aria-hidden="true"></span>
       <button id="music" type="button" aria-pressed="false" aria-label="Turn music on"><i></i></button>
@@ -79,21 +64,21 @@
   <section style="padding-top:5rem">
     <div class="wrap">
       <p class="eyebrow">Kingdom Initiative Technologies</p>
-      <h1 style="margin-top:1.2rem;max-width:15ch">Technology bent toward the Church.</h1>
+      <h1 style="margin-top:1.2rem;max-width:15ch" data-i18n="kit.h1">Technology bent toward the Church.</h1>
       <div class="body" style="margin-top:2rem">
-        <p>
+        <p data-i18n="kit.p1">
           The enemy has used technology to disciple a generation into anxiety, comparison
           and isolation. The Church does not need to hide from the tools. She needs saints
           willing to rebuild them.
         </p>
-        <p>
+        <p data-i18n="kit.p2">
           K.I.T. is my attempt at that. A slow, prayerful body of work. Real systems for
           real believers, rooted in Scripture and built to last. Every tool points back to
           the local church. Every line of code is stewardship.
         </p>
       </div>
       <p class="scripture reveal" style="margin-top:2.5rem">
-        "For God is not a God of disorder but of peace." 1 Corinthians 14:40
+        <span data-i18n="kit.scripture">&ldquo;For God is not a God of disorder but of peace.&rdquo; 1 Corinthians 14:33</span>
       </p>
     </div>
   </section>
@@ -102,9 +87,9 @@
 
   <section>
     <div class="wrap">
-      <p class="eyebrow reveal">Being built now</p>
-      <h2 class="reveal" style="margin-top:1.1rem;max-width:14ch">Two tools in development.</h2>
-      <p class="body reveal" style="margin-top:1.5rem">
+      <p class="eyebrow reveal" data-i18n="kit.now.eyebrow">Being built now</p>
+      <h2 class="reveal" style="margin-top:1.1rem;max-width:14ch" data-i18n="kit.now.h2">Two tools in development.</h2>
+      <p class="body reveal" style="margin-top:1.5rem" data-i18n="kit.now.p">
         These support your daily walk with Christ and your local church. They do not
         replace the Holy Spirit or the local church, and they are not finished products
         yet.
@@ -115,9 +100,9 @@
           <img class="stamp" src="assets/images/io-insignia.png" alt="" aria-hidden="true" />
           <div class="vent-top">
             <span class="vent-name">WisdomWatch</span>
-            <span class="status"><i class="dot"></i>In development</span>
+            <span class="status"><i class="dot"></i><span data-i18n="status.dev">In development</span></span>
           </div>
-          <p class="vent-desc">
+          <p class="vent-desc" data-i18n="kit.ww.desc">
             A personal discipleship journal. Your honest thoughts, met with Scripture
             rooted insight and a clear next step rather than another feed to scroll.
           </p>
@@ -127,9 +112,9 @@
           <img class="stamp" src="assets/images/io-insignia.png" alt="" aria-hidden="true" />
           <div class="vent-top">
             <span class="vent-name">K.C.R.M.</span>
-            <span class="status"><i class="dot"></i>In development</span>
+            <span class="status"><i class="dot"></i><span data-i18n="status.dev">In development</span></span>
           </div>
-          <p class="vent-desc">
+          <p class="vent-desc" data-i18n="kit.kcrm.desc">
             Kingdom Church Relationship Management. For pastors and leaders who need to
             disciple real people with clarity, track spiritual growth, and build community
             that holds.
@@ -143,9 +128,9 @@
 
   <section>
     <div class="wrap">
-      <p class="eyebrow reveal">Praying over</p>
-      <h2 class="reveal" style="margin-top:1.1rem;max-width:16ch">Infrastructure for the Kingdom.</h2>
-      <p class="body reveal" style="margin-top:1.5rem">
+      <p class="eyebrow reveal" data-i18n="kit.pray.eyebrow">Praying over</p>
+      <h2 class="reveal" style="margin-top:1.1rem;max-width:16ch" data-i18n="kit.pray.h2">Infrastructure for the Kingdom.</h2>
+      <p class="body reveal" style="margin-top:1.5rem" data-i18n="kit.pray.p">
         What is being built today is the beginning. These are directions under prayer.
         Whatever the Lord confirms is what gets built.
       </p>
@@ -153,7 +138,7 @@
       <div class="tools">
         <div class="card reveal">
           <div class="vent-top"><span class="vent-name">Nexus</span></div>
-          <p class="vent-desc">
+          <p class="vent-desc" data-i18n="kit.nexus.desc">
             A collaboration hub where churches and leaders connect, share resources, host
             joint teaching and build relationship across distance. Anti scroll, anti
             clout, pro presence.
@@ -161,7 +146,7 @@
         </div>
         <div class="card reveal">
           <div class="vent-top"><span class="vent-name">N.I.A.</span></div>
-          <p class="vent-desc">
+          <p class="vent-desc" data-i18n="kit.nia.desc">
             Neural Interface Architecture. Immersive tools that let churches plant, train
             and disciple in shared space when distance would otherwise win.
           </p>
@@ -170,10 +155,10 @@
 
       <div class="btns">
         <a class="btn" data-sound="contact" href="mailto:isaac@isaacoriginals.com">
-          Talk about K.I.T.
+          <span data-i18n="kit.cta">Talk about K.I.T.</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
         </a>
-        <a class="btn ghost" href="index.html">The other ventures</a>
+        <a class="btn ghost" href="index.html" data-i18n="kit.cta2">The other ventures</a>
       </div>
     </div>
   </section>
@@ -182,14 +167,15 @@
 
 <footer>
   <div class="foot-in">
-    <p>Built in obedience. &copy; <span id="year">2026</span> Isaac Originals.</p>
-    <p><a href="https://isaacoriginals.com/social" target="_blank" rel="noopener">Connect</a></p>
+    <p><span data-i18n="foot.built">Built in obedience.</span> &copy; <span id="year">2026</span> Isaac Originals.</p>
+    <p><a href="https://isaacoriginals.com/social" target="_blank" rel="noopener" data-i18n="nav.connect">Connect</a></p>
   </div>
 </footer>
 
 <script src="assets/js/loader.js"></script>
 <script src="assets/js/site.js"></script>
 <script src="assets/js/sound.js"></script>
+<script src="assets/js/i18n.js"></script>
 <script src="assets/js/nav.js"></script>
 </body>
 </html>
