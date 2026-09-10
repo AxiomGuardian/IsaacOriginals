@@ -227,25 +227,23 @@ a.card:hover::before,a.card:active::before,a.card.lit::before{
   padding:8rem 0 8.5rem;position:relative;
 }
 .phase-solo p{margin-left:auto;margin-right:auto}
-/* The delta over Earth from the original site sits behind this beat. Its own
-   brightness is cut out as a mask, so empty space carries no pixels at all
-   and there is no panel edge to see, only the mark and the limb. A blend mode
-   would have been simpler but every ancestor stacking context isolates it. */
+/* The delta over Earth from the original site sits behind this beat. The
+   transparency is baked into the file itself rather than applied as a CSS
+   mask: a mask that cannot load takes the entire layer down with it, which
+   is exactly what happens to a mask image on a file:// page in Safari. */
 .phase-solo::before{
   content:"";position:absolute;z-index:0;pointer-events:none;
   left:50%;top:50%;transform:translate(-50%,-61%);
-  width:min(960px,104%);aspect-ratio:1500/690;
-  background:url('../images/phase-globe.jpg') 50% 50% / contain no-repeat;
-  -webkit-mask:url('../images/phase-globe-mask.png') 50% 50% / contain no-repeat;
-          mask:url('../images/phase-globe-mask.png') 50% 50% / contain no-repeat;
-  opacity:.9;
+  width:min(960px,104%);height:min(442px,48vw);
+  background:url('../images/phase-globe.webp') 50% 50% / contain no-repeat;
+  opacity:.92;
 }
 .phase-solo > div{position:relative;z-index:1}
 .phase-solo .phase-year{color:rgba(255,255,255,.66)}
 .phase-solo h3{text-shadow:0 2px 18px rgba(10,10,10,.75)}
 @media (max-width:820px){
   .phase-solo{padding:5rem 0 5.5rem}
-  .phase-solo::before{width:150%;opacity:.8}
+  .phase-solo::before{width:150%;height:69vw;opacity:.85}
 }
 @media (max-width:820px){
   .phase{grid-template-columns:1fr;gap:1.5rem;margin-top:3rem}

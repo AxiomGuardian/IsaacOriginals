@@ -1,36 +1,53 @@
 # Sound map
 
-Which file plays where. This was reverse engineered out of the old site's
-`assets/js/sounds.js`, so it is written down here to stay found.
+Which file plays where. Recovered from the old site's `assets/js/sounds.js`
+and written down here so it stays found.
 
 | Sound | File | Fires on |
 |---|---|---|
 | Tab | `tab-selection.mp3` | Nav links, footer link |
 | Tactile | `tactile-cta.mp3` | Every `.btn` that is not a contact button |
 | Missions | `two-missions.mp3` | Venture cards and K.I.T. tool cards, on press |
-| Hover | `hover-over.mp3` | Card hover, pointer devices only |
 | Contact | `get-in-touch.mp3` | Anything marked `data-sound="contact"` |
-| Bed | `ambient.mp3` | Background, nav toggle |
+| Bed | `bed-1.mp3`, `bed-2.mp3`, `bed-3.mp3` | Background, nav toggle |
 
-Same five cues as the original site, same jobs. Two changes:
+## The bed
 
-- `hover-over.mp3` was 4 seconds. Moving across a four card grid stacked four
-  of those on top of each other, so it is trimmed to 1.3 with a fade.
-- The bed is `Solemn Sci-Fi Atmosphere` from the Website Rebrand folder, cut
-  down to its steady middle and crossfaded end to end, so it loops with no
-  seam and no swell under reading. 106 seconds, 1.2 MB, down from the old
-  11.7 MB Hyperion track.
+The three tracks from the Website Rebrand folder, in this order:
+
+1. Solemn Sci-Fi Atmosphere
+2. Sci-Fi Dramatic
+3. Modern Sci-Fi Trailer
+
+They play straight through, one after another, then round again. Dead silence
+at each end is trimmed off, all three are matched to the same loudness so none
+of them jumps out, and only the track currently playing is ever downloaded.
+Nothing is crossfaded into anything else. Roughly seven minutes total, about
+1.4 MB per track.
+
+The old Hyperion track from the previous site is not used here at all.
+
+## What was removed
+
+There is no hover sound. Sweeping a cursor across the four venture cards fired
+it four times in a row, which read as noise rather than texture.
+
+## Levels
+
+Cues sit around a quarter of full scale. The bed sits at 0.055 on a desktop
+and 0.16 on a phone, since phone speakers are quieter. If it is ever noticeable
+as music, it is too loud; those numbers live at the top of `assets/js/sound.js`.
 
 ## How it behaves
 
-Browsers refuse audio until someone interacts, so nothing plays until the
-first click or tap. After that the choice is remembered for the session and
-the bed carries its playhead across pages instead of restarting on every one.
-The toggle sits at the right end of the nav: a dim dot when off, a lit dot
-with expanding rings when on. Reduced motion turns the bed off entirely.
+Browsers refuse audio until someone interacts, so nothing plays until the first
+click or tap. After that the choice is remembered for the session and the bed
+carries its track and playhead across pages instead of restarting on every one.
+The toggle sits at the right end of the nav: a dim dot when off, a lit dot with
+expanding rings when on. Reduced motion turns the bed off entirely.
 
 ## Sounds still unused
 
-In `UI Sound/` there is a Delta load-in set, a startup set, a deeper drone,
-and a binary interface loop. The rebrand has no load screen yet, so the Delta
+`UI Sound/` holds a Delta load-in set, a startup set, a deeper drone and a
+binary interface loop. The rebrand has no load screen yet, so the Delta
 entrance has nowhere to fire. If a load-in gets built, that is where it goes.

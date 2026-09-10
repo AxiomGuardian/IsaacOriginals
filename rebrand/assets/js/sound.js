@@ -1,34 +1,34 @@
 /* ==========================================================================
    Isaac Originals — sound
-   Ported from the original site's sounds.js + ambient.js. The mapping of
-   which file belongs to which control is written down here on purpose, so
-   it never has to be reverse engineered again:
+   Which file plays where, written down so it never has to be dug out of the
+   code again:
 
      tab-selection.mp3  nav links and the footer link
-     tactile-cta.mp3    every .btn
+     tactile-cta.mp3    every .btn that is not a contact button
      two-missions.mp3   venture cards and K.I.T. tool cards, on press
-     hover-over.mp3     card hover, pointer devices only
      get-in-touch.mp3   contact buttons, [data-sound="contact"]
-     ambient.mp3        background bed, 106s seamless loop, nav toggle
+     bed-1/2/3.mp3      the three rebrand tracks, played straight through
+                        in order and then round again
 
-   Browsers refuse audio until the visitor interacts, so nothing plays until
-   the first click or tap. The choice is remembered for the session, which
-   means the bed carries across pages instead of restarting on every one.
+   There is no hover sound. Sweeping a cursor across a grid of cards fired it
+   four times in a row and it read as noise rather than texture.
+
+   Levels are deliberately low. Background music that you notice is background
+   music that is too loud.
    ========================================================================== */
 (function () {
   'use strict';
 
   var REDUCED = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var TOUCH   = matchMedia('(hover: none)').matches;
-  var ua      = navigator.userAgent;
-  var IOSISH  = /iPad|iPhone|iPod/.test(ua) ||
-                (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) ||
-                /^((?!chrome|android).)*safari/i.test(ua);
+  /* Real touch hardware, not a user-agent guess. The old Safari sniff matched
+     desktop Safari too and handed a laptop the phone-speaker gain. */
+  var TOUCH = matchMedia('(hover: none)').matches;
 
-  var AMBIENT_VOL = IOSISH ? 0.30 : 0.11;   /* phone speakers need more gain */
-  var FADE_IN     = 2.5;
-  var FADE_RESUME = 1.0;
-  var FADE_TOGGLE = 1.2;
+  var BED_VOL     = TOUCH ? 0.16 : 0.055;
+  var FADE_IN     = 3.0;
+  var FADE_RESUME = 1.2;
+  var FADE_TOGGLE = 1.4;
+  var TRACKS      = ['bed-1.mp3', 'bed-2.mp3', 'bed-3.mp3'];
 
   /* ---------------- ONE SHOTS ---------------- */
   function cue(src, vol) {
@@ -37,11 +37,10 @@
     return a;
   }
   var cues = {
-    tab:      cue('tab-selection.mp3', 0.8),
-    tactile:  cue('tactile-cta.mp3',   0.8),
-    missions: cue('two-missions.mp3',  0.85),
-    hover:    cue('hover-over.mp3',    0.55),
-    contact:  cue('get-in-touch.mp3',  0.85)
+    tab:      cue('tab-selection.mp3', 0.26),
+    tactile:  cue('tactile-cta.mp3',   0.26),
+    missions: cue('two-missions.mp3',  0.30),
+    contact:  cue('get-in-touch.mp3',  0.30)
   };
 
   function play(key) {
@@ -50,28 +49,39 @@
     try { s.currentTime = 0; s.play().catch(function () {}); } catch (e) {}
   }
 
-  /* Fires on mousedown rather than click so the sound lands with the press,
-     not after the navigation has already started. */
-  function bind(sel, key, evt) {
+  /* Fires on the press rather than the click so the sound lands with the
+     finger, not after the navigation has already started. */
+  function bind(sel, key) {
     var els = document.querySelectorAll(sel);
     for (var i = 0; i < els.length; i++) {
       (function (el) {
         if (el['__snd_' + key]) return;
         el['__snd_' + key] = true;
-        if (evt === 'enter') {
-          if (!TOUCH) el.addEventListener('mouseenter', function () { play(key); });
-        } else {
-          el.addEventListener('mousedown', function () { play(key); });
-          el.addEventListener('touchstart', function () { play(key); }, { passive: true });
-        }
+        el.addEventListener('mousedown', function () { play(key); });
+        el.addEventListener('touchstart', function () { play(key); }, { passive: true });
       })(els[i]);
     }
   }
 
-  /* ---------------- AMBIENT BED ---------------- */
-  var bed = new Audio('assets/audio/ambient.mp3');
+  /* ---------------- MUSIC BED ----------------
+     One element, three tracks. When a track ends the next one is loaded into
+     the same element, which keeps the Web Audio graph intact and means only
+     the track being listened to is ever downloaded. Nothing is crossfaded
+     into itself, so it never sounds like two pieces of music at once. */
+  var idx = parseInt(sessionStorage.getItem('io-bed-index') || '0', 10);
+  if (!(idx >= 0 && idx < TRACKS.length)) idx = 0;
+
+  var bed = new Audio();
   bed.preload = 'auto';
-  bed.loop = true;                 /* the file is already crossfaded end to end */
+  bed.src = 'assets/audio/' + TRACKS[idx];
+
+  bed.addEventListener('ended', function () {
+    idx = (idx + 1) % TRACKS.length;
+    sessionStorage.setItem('io-bed-index', String(idx));
+    sessionStorage.setItem('io-bed-pos', '0');
+    bed.src = 'assets/audio/' + TRACKS[idx];
+    if (enabled) bed.play().catch(function () {});
+  });
 
   var actx, gain, srcNode, booted = false;
   var unlocked = sessionStorage.getItem('io-audio-unlocked') === '1';
@@ -107,16 +117,21 @@
     if (!boot()) { started = false; return; }
     gain.gain.setValueAtTime(0, actx.currentTime);
 
-    var at = parseFloat(sessionStorage.getItem('io-ambient-position') || '0');
-    if (at > 0 && at < bed.duration) { try { bed.currentTime = at; } catch (e) {} }
-
-    function go() {
+    var at = parseFloat(sessionStorage.getItem('io-bed-pos') || '0');
+    function seekThenPlay() {
+      if (at > 0 && bed.duration && at < bed.duration - 2) {
+        try { bed.currentTime = at; } catch (e) {}
+      }
       bed.play().then(function () {
         playing = true;
         sessionStorage.setItem('io-music-playing', '1');
-        fade(AMBIENT_VOL, at > 0 ? FADE_RESUME : FADE_IN);
+        fade(BED_VOL, at > 0 ? FADE_RESUME : FADE_IN);
         paint();
       }).catch(function () { started = false; });
+    }
+    function go() {
+      if (at > 0 && !bed.duration) bed.addEventListener('loadedmetadata', seekThenPlay, { once: true });
+      else seekThenPlay();
     }
     if (actx.state === 'suspended') actx.resume().then(go).catch(function () { started = false; });
     else go();
@@ -124,7 +139,8 @@
 
   function remember() {
     if (playing) {
-      sessionStorage.setItem('io-ambient-position', String(bed.currentTime));
+      sessionStorage.setItem('io-bed-pos', String(bed.currentTime));
+      sessionStorage.setItem('io-bed-index', String(idx));
       sessionStorage.setItem('io-music-playing', '1');
     }
   }
@@ -133,9 +149,9 @@
   document.addEventListener('visibilitychange', function () { if (document.hidden) remember(); });
 
   /* ---------------- FIRST GESTURE ----------------
-     If that very first gesture happens to be the music button itself, the bed
-     must not auto-start here: the button's own handler decides, and starting
-     it first would leave the two fighting over the same press. */
+     If that first gesture is the music button itself, the bed must not
+     auto-start here: the button's own handler decides, and starting it first
+     would leave the two fighting over the same press. */
   function unlock(e) {
     if (unlocked) return;
     unlocked = true;
@@ -177,11 +193,11 @@
       sessionStorage.setItem('io-music-enabled', String(enabled));
 
       if (enabled) {
-        if (!started) { start(); setTimeout(function () { busy = false; paint(); }, 1600); }
+        if (!started) { start(); setTimeout(function () { busy = false; paint(); }, 1800); }
         else {
           if (actx && actx.state === 'suspended') actx.resume();
           bed.play().catch(function () {});
-          fade(AMBIENT_VOL, FADE_TOGGLE);
+          fade(BED_VOL, FADE_TOGGLE);
           playing = true;
           sessionStorage.setItem('io-music-playing', '1');
           setTimeout(function () { busy = false; paint(); }, FADE_TOGGLE * 1000 + 150);
@@ -202,10 +218,8 @@
   bind('.nav-links a, .foot-in a', 'tab');
   bind('.btn:not([data-sound])', 'tactile');
   bind('a.card, .tools .card', 'missions');
-  bind('.card', 'hover', 'enter');
   bind('[data-sound="contact"]', 'contact');
 
   paint();
-  /* Carry the bed straight over from the previous page. */
   if (unlocked && enabled && sessionStorage.getItem('io-music-playing') === '1') start();
 })();
