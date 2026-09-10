@@ -26,6 +26,33 @@
 
   window.__IO = window.__IO || {};
 
+  /* ---------------- ALWAYS OPEN AT THE TOP ----------------
+     Sharing a page out of Safari copies whatever sits in the address bar, and
+     that includes the fragment. Tap THE WORK, then share, and the link your
+     friend receives is /#ventures, which drops them halfway down the page
+     with nothing to explain why. Browsers also restore the last scroll
+     position on their own.
+
+     Internal links never reach here, because the router swaps <main> without
+     a document load. So any full load of this page is somebody arriving from
+     outside, and they should land at the top every time. */
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
+  function toTop() {
+    var html = document.documentElement;
+    var smooth = html.style.scrollBehavior;
+    html.style.scrollBehavior = 'auto';    /* never animate the correction */
+    window.scrollTo(0, 0);
+    html.style.scrollBehavior = smooth;
+  }
+
+  if (location.hash) {
+    try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+  }
+  toTop();
+  addEventListener('DOMContentLoaded', toTop);
+  addEventListener('load', toTop);
+
   var el = document.getElementById('loader');
   if (!el) return;
 
@@ -42,6 +69,10 @@
   function clear() {
     el.classList.add('done');
     document.body.classList.remove('loading');
+    /* Releasing the scroll lock is the other moment a browser can put the
+       page back where it thinks it was. */
+    toTop();
+    setTimeout(toTop, 60);
   }
 
   function skip() { el.style.transition = 'none'; clear(); done = true; }
