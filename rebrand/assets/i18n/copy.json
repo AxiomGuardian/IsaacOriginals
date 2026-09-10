@@ -76,7 +76,8 @@
     "kit.nia.desc": "Neural Interface Architecture. Immersive tools that let churches plant, train and disciple in shared space when distance would otherwise win.",
     "kit.cta": "Talk about K.I.T.",
     "kit.cta2": "The other ventures",
-    "views.label": "views"
+    "views.label": "views",
+    "views.one": "view"
   },
   "es": {
     "nav.home": "Inicio",
@@ -155,6 +156,7 @@
     "kit.nia.desc": "Neural Interface Architecture. Herramientas inmersivas que permiten a las iglesias plantar, capacitar y discipular en un espacio compartido cuando la distancia ganaría de otro modo.",
     "kit.cta": "Hablemos de K.I.T.",
     "kit.cta2": "Los otros proyectos",
-    "views.label": "vistas"
+    "views.label": "vistas",
+    "views.one": "vista"
   }
 }

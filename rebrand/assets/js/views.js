@@ -21,12 +21,30 @@
   if (!el || !window.fetch) return;
 
   var num = el.querySelector('b');
+  var lab = el.querySelector('[data-i18n]');
   if (!num) return;
+
+  var current = null;
+
+  /* One view should not read "1 views". The label is owned here rather than
+     by the translation pass, so i18n calls back into this after a language
+     change instead of overwriting it with the plural. */
+  function label() {
+    if (!lab || current === null) return;
+    var key = current === 1 ? 'views.one' : 'views.label';
+    var word = (window.__IO && window.__IO.t && window.__IO.t(key));
+    if (!word) word = current === 1 ? 'view' : 'views';
+    lab.textContent = word;
+  }
+  window.__IO = window.__IO || {};
+  window.__IO.relabelViews = label;
 
   function paint(n) {
     if (typeof n !== 'number' || !isFinite(n) || n < 0) return;
+    current = n;
     try { sessionStorage.setItem('io-views', String(n)); } catch (e) {}
     num.textContent = n.toLocaleString();
+    label();
     el.classList.add('on');
   }
 

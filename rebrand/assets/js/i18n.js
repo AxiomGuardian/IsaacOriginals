@@ -59,8 +59,10 @@
     if (mk && meta && t(mk)) meta.setAttribute('content', t(mk));
 
     paintPicker();
-    /* The music label writes itself, so it has to be told separately. */
+    /* These two write their own text, so they are told separately rather than
+       being overwritten by the pass above. */
     if (window.__IO.relabelMusic) window.__IO.relabelMusic();
+    if (window.__IO.relabelViews) window.__IO.relabelViews();
   }
 
   /* ---------------- PICKER ---------------- */
