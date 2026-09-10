@@ -318,6 +318,27 @@ a.card:hover::before,a.card:active::before,a.card.lit::before{
 .portrait{border-radius:14px;overflow:hidden;border:1px solid var(--line);position:relative}
 .portrait img{width:100%;filter:grayscale(.2)}
 
+/* ===================== VIEW COUNT ===================== */
+/* Same small caps treatment as the nav links, so it reads as part of the set
+   rather than as a widget bolted on. Hidden until a real number arrives: an
+   empty or zero counter looks broken, and no counter looks deliberate. */
+.views{
+  display:none;align-items:center;gap:.45rem;flex-shrink:0;
+  margin-left:1rem;
+  font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;font-weight:500;
+  color:rgba(255,255,255,.4);white-space:nowrap;
+}
+.views.on{display:inline-flex}
+.views b{font-weight:600;color:rgba(255,255,255,.72);letter-spacing:.14em}
+.views i{
+  width:5px;height:5px;border-radius:50%;background:#2DD4FF;
+  box-shadow:0 0 7px rgba(45,212,255,.7);flex-shrink:0;
+  animation:viewPulse 2.6s ease-in-out infinite;
+}
+@keyframes viewPulse{0%,100%{opacity:1}50%{opacity:.35}}
+@media (prefers-reduced-motion: reduce){ .views i{animation:none} }
+@media (max-width:900px){ .views{display:none !important} }
+
 /* ===================== LANGUAGE ===================== */
 /* Sits between the nav links and the music dot. Same small caps treatment as
    every other control up there, so it reads as part of the set. */

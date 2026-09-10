@@ -53,8 +53,8 @@
     "about.meta": "Isaac Rodriguez. Systems architect. Building under Christ.",
     "about.eyebrow": "About",
     "about.p1": "Systems architect. Anything with more than one moving part is a system, and every system either carries weight or leaks it. The work is knowing which, and knowing early.",
-    "about.p2": "Software usually gets bought the way it gets sold: whatever was in front of the person holding the budget. It was designed around somebody else's company, so from the first day the work has to bend to fit the tool. After that the technology problem and the people problem are the same problem. Nobody is on the same page, because the system was never built around the people who have to run it.",
-    "about.p3": "So the order gets reversed. Watch how the work actually moves, then build to that. Cut whatever is being done twice. Give every handoff one owner and one place the work lives. Done right, nobody thinks about the tool at all. They think about the job, which is the only thing they wanted to think about in the first place.",
+    "about.p2": "Most systems end up being served instead of serving. The tool gets chosen first, so the work bends to fit the tool, and the people bend to fit the work. Nothing is broken. Everyone is busy. Nothing gets easier.",
+    "about.p3": "Build it the other way around. Watch how the work actually moves, learn who carries what, then shape the system to them. Cut what repeats, give every handoff one owner, and the thing starts to disappear. That is the goal. Nobody should have to think about the system in order to use it.",
     "about.p4": "Christ settles the identity. Everything after that is obedience and execution.",
     "about.reach": "Reach out",
     "about.links": "All links",
@@ -75,7 +75,8 @@
     "kit.nexus.desc": "A collaboration hub where churches and leaders connect, share resources, host joint teaching and build relationship across distance. Anti scroll, anti clout, pro presence.",
     "kit.nia.desc": "Neural Interface Architecture. Immersive tools that let churches plant, train and disciple in shared space when distance would otherwise win.",
     "kit.cta": "Talk about K.I.T.",
-    "kit.cta2": "The other ventures"
+    "kit.cta2": "The other ventures",
+    "views.label": "views"
   },
   "es": {
     "nav.home": "Inicio",
@@ -131,8 +132,8 @@
     "about.meta": "Isaac Rodriguez. Arquitecto de sistemas. Construyendo bajo Cristo.",
     "about.eyebrow": "Sobre mí",
     "about.p1": "Arquitecto de sistemas. Todo lo que tiene más de una pieza en movimiento es un sistema, y todo sistema o carga peso o lo pierde. El oficio es saber cuál de los dos, y saberlo temprano.",
-    "about.p2": "El software se suele comprar como se vende: lo que tenía enfrente la persona con el presupuesto. Fue diseñado alrededor de la empresa de alguien más, así que desde el primer día el trabajo se tiene que doblar para caber en la herramienta. A partir de ahí, el problema de tecnología y el problema de personas son el mismo problema. Nadie está en la misma página, porque el sistema nunca se construyó alrededor de la gente que tiene que operarlo.",
-    "about.p3": "Así que el orden se invierte. Observar cómo se mueve el trabajo de verdad, y después construir para eso. Quitar todo lo que se hace dos veces. Darle a cada traspaso un responsable y un solo lugar donde vive el trabajo. Bien hecho, nadie piensa en la herramienta. Piensan en el trabajo, que es lo único en lo que querían pensar desde el principio.",
+    "about.p2": "La mayoría de los sistemas terminan siendo servidos en lugar de servir. Se elige primero la herramienta, así que el trabajo se dobla para caber en ella, y la gente se dobla para caber en el trabajo. Nada está roto. Todos están ocupados. Nada se vuelve más fácil.",
+    "about.p3": "Constrúyelo al revés. Observa cómo se mueve el trabajo de verdad, aprende quién carga qué, y luego dale forma al sistema alrededor de ellos. Quita lo que se repite, dale a cada traspaso un solo responsable, y la cosa empieza a desaparecer. Ese es el objetivo. Nadie debería tener que pensar en el sistema para poder usarlo.",
     "about.p4": "Cristo resuelve la identidad. Todo lo que viene después es obediencia y ejecución.",
     "about.reach": "Escríbeme",
     "about.links": "Todos los enlaces",
@@ -153,6 +154,7 @@
     "kit.nexus.desc": "Un centro de colaboración donde iglesias y líderes se conectan, comparten recursos, imparten enseñanza conjunta y construyen relación a la distancia. Anti scroll, anti fama, a favor de la presencia.",
     "kit.nia.desc": "Neural Interface Architecture. Herramientas inmersivas que permiten a las iglesias plantar, capacitar y discipular en un espacio compartido cuando la distancia ganaría de otro modo.",
     "kit.cta": "Hablemos de K.I.T.",
-    "kit.cta2": "Los otros proyectos"
+    "kit.cta2": "Los otros proyectos",
+    "views.label": "vistas"
   }
 }

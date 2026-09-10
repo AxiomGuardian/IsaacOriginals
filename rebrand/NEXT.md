@@ -53,6 +53,27 @@ belong on Journey rather than About.
   startup set, the drone and the binary interface loop in `UI Sound/` are
   still unused.
 
+## The view counter
+
+The number in the nav is backed by Supabase. It lives in the **apex-aera**
+project, in `public.io_page_views`, reached through `io_bump_view` and
+`io_get_views`.
+
+It is there and not in its own project only because the org is at its free
+project limit of two. Everything it uses is prefixed `io_` and touches nothing
+belonging to ApexAERA. To move it later: create a project, run the same
+migration, change the two constants at the top of `assets/js/views.js`.
+
+The table has row level security on with no policies, so nothing can read or
+write it directly. The only way in is those two functions, which run as their
+owner and do one thing each. The key in `views.js` is a publishable key and is
+meant to be public.
+
+Supabase's linter flags both the empty policy list and the anon-callable
+functions. Both are deliberate for a public counter, not oversights.
+
+Counting is once per visitor per session, not per page load.
+
 ## Read these first
 
 - `SOUND.md` for what plays where and why.
